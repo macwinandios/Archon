@@ -1,0 +1,10 @@
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\bin\Debug\netstandard2.0\Archon.Shared.deps.json
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\bin\Debug\netstandard2.0\Archon.Shared.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\bin\Debug\netstandard2.0\Archon.Shared.pdb
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.csproj.AssemblyReference.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.AssemblyInfoInputs.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.AssemblyInfo.cs
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.csproj.CoreCompileInputs.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Shared\obj\Debug\netstandard2.0\Archon.Shared.pdb

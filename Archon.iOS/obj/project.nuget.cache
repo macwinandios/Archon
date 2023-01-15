@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "EWvRc7shIbmTUBDx1OeUZ/RbS7A6CpkbrA4y7SAEEP0LFgHm7O8muDu83WWY/GBcUwh0OOpotBu+atd0crXsJQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon\\Archon.iOS\\Archon.iOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Jonathan\\.nuget\\packages\\system.data.sqlclient\\4.8.5\\system.data.sqlclient.4.8.5.nupkg.sha512",
+    "C:\\Users\\Jonathan\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\Jonathan\\.nuget\\packages\\xamarin.essentials\\1.7.0\\xamarin.essentials.1.7.0.nupkg.sha512",
+    "C:\\Users\\Jonathan\\.nuget\\packages\\xamarin.forms\\5.0.0.2196\\xamarin.forms.5.0.0.2196.nupkg.sha512"
+  ],
+  "logs": []
+}

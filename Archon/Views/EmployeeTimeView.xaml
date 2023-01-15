@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Archon.Views.EmployeeTimeView">
+    <ContentPage.BindingContext>
+        <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        
+        <StackLayout>
+            <Label>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Signed in as:  "
+                              TextColor="Red"
+                              FontSize="Medium"/>
+                        <Span Text="{Binding Username}"
+                              TextColor="Blue"
+                              FontSize="Medium"
+                              FontAttributes="Bold"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <Button Text="CLOCK IN"
+                    Command="{Binding ClockInCommand}"
+                    TextColor="Red"
+                    FontSize="Medium"
+                    />
+            <Button Text="CLOCK OUT"
+                    Command="{Binding ClockOutCommand}"
+                    TextColor="Red"
+                    FontSize="Medium"
+                    />
+
+
+            <Button Text="SEE TIME DETAILS"
+                    Command="{Binding GoToEmployeeDetailsPageCommand}"
+                    TextColor="Red"
+                    FontSize="Medium"
+                    />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
