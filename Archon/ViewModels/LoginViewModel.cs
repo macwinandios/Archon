@@ -14,7 +14,7 @@ using Xamarin.Forms;
 namespace Archon.ViewModels
 {
     public class LoginViewModel : ViewModelBase, ILoginViewModel
-    {
+    {//gittest
         int? _id;
         int? _companyId;
         string _username;
