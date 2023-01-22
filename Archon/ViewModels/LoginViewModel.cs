@@ -1,5 +1,6 @@
 ﻿
 using Archon.DataAccessLayer;
+using Archon.Services;
 using Archon.Shared.Interfaces;
 using Archon.ViewModels.Base;
 using Archon.Views;
@@ -29,12 +30,12 @@ namespace Archon.ViewModels
         bool _managerButtons;
         private readonly IRepository<ILoginViewModel> _iRepository;
         private readonly ILoginRepository<ILoginViewModel> _iLoginRepository;
+
         public LoginViewModel() { }
         public LoginViewModel(IRepository<ILoginViewModel> iRepository,ILoginRepository<ILoginViewModel> iLoginRepository)
         {
             _iRepository = iRepository;
             _iLoginRepository = iLoginRepository;
-
         }
         public bool ManagerButtons
         {
@@ -85,18 +86,12 @@ namespace Archon.ViewModels
         public async void LoginAsync()
         {
 
-           // if (await _iRepository.Login(this))
             if (await _iLoginRepository.Login(this))
 
-                {
-                    await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
             }
         }
-        //public void LoginAsync()
-        //{
-        //    Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeDetailsView());
-
-        //}
         public async void SignUpAsync()
         {
             GetUserByIdIsVisible = false;

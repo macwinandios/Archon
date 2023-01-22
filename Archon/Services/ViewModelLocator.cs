@@ -17,7 +17,7 @@ namespace Archon.Services
         {
             _container = new TinyIoCContainer();
 
-            //LOGIN REPOSITORYILoginRepository<ILoginViewModel>
+            //LOGIN REPOSITORY
             _container.Register<IRepository<ILoginViewModel>, LoginRepository>();
             _container.Register<ILoginRepository<ILoginViewModel>, LoginRepository >();
 

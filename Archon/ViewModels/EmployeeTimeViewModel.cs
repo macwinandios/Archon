@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Archon.ViewModels.Base;
 using Archon.Views;
 using System.Collections.ObjectModel;
+using Archon.Services;
 
 namespace Archon.ViewModels
 {
@@ -21,7 +22,7 @@ namespace Archon.ViewModels
         DateTime _dateClockedIn;
         DateTime _dateClockedOut;
         float _hourlyWage;
-        float _wagesEarned;
+        float _totalWagesEarnedThisWeek;
         TimeSpan _durationOfClockIn;
         ICommand _goToEmployeeDetailsPage;
         ICommand _logoutCommand;
@@ -30,8 +31,9 @@ namespace Archon.ViewModels
         private readonly ILoginViewModel _iLoginViewModel;
         private readonly IEmployeeTimeRepository<IEmployeeTimeViewModel> _iEmployeeTimeRepository;
         private readonly IPostRepository<IEmployeeTimeViewModel> _iPostRepository;
+
         public EmployeeTimeViewModel() { }
-        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository,IPostRepository<IEmployeeTimeViewModel> iPostRepository)
+        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IPostRepository<IEmployeeTimeViewModel> iPostRepository)
         {
             _iLoginViewModel = loginViewModel;
             _iEmployeeTimeRepository = iEmployeeTimeRepository;
@@ -49,10 +51,10 @@ namespace Archon.ViewModels
             get => _hourlyWage;
             set => SetProperty(ref _hourlyWage, value);
         }
-        public float WagesEarned
+        public float TotalWagesEarnedThisWeek
         {
-            get => _wagesEarned;
-            set => SetProperty(ref _wagesEarned, value);
+            get => _totalWagesEarnedThisWeek;
+            set => SetProperty(ref _totalWagesEarnedThisWeek, value);
         }
         public DateTime CurrentTime
         {
@@ -71,12 +73,12 @@ namespace Archon.ViewModels
         }
         public DateTime DateClockedIn
         {
-            get => _dateClockedIn;
+            get => _dateClockedIn = ClockedInAt.Date;
             set => SetProperty(ref _dateClockedIn, value);
         }
         public DateTime DateClockedOut
         {
-            get => _dateClockedOut = DateTime.Today;
+            get => _dateClockedOut = ClockedOutAt.Date;
             set => SetProperty(ref _dateClockedOut, value);
         }
         public TimeSpan DurationOfClockIn
@@ -89,31 +91,11 @@ namespace Archon.ViewModels
             get => _totalTimeClockedInToday;
             set => SetProperty(ref _totalTimeClockedInToday, value);
         }
-        
-        private static DateTime GetStartOfWeek(DateTime date)
-        {
-            var dayOfWeek = (int)date.DayOfWeek;
-            return date.AddDays(-dayOfWeek).Date;
-        }
         public TimeSpan TotalTimeClockedInThisWeek
         {
             get
             {
-                var currentWeekStart = GetStartOfWeek(DateTime.Now);
-                var currentWeekEnd = currentWeekStart.AddDays(7);
-                if (ClockedOutAt > currentWeekStart && ClockedInAt < currentWeekEnd)
-                {
-                    if (ClockedOutAt > currentWeekEnd)
-                    {
-                        _totalTimeClockedInThisWeek += currentWeekEnd - ClockedInAt;
-                    }
-                    else
-                    {
-                        _totalTimeClockedInThisWeek += ClockedOutAt - ClockedInAt;
-                    }
-                }
-                return _totalTimeClockedInThisWeek;
-
+                return _totalTimeClockedInToday;
             }
             set => SetProperty(ref _totalTimeClockedInThisWeek, value);
         }
@@ -157,13 +139,14 @@ namespace Archon.ViewModels
             }
             
         }
-        private void GoToEmployeeDetailsPageAsync()
+        private async void GoToEmployeeDetailsPageAsync()
         {
-            Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeDetailsView());
+            await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeDetailsView());
         }
-        private void LogoutAsync()
+        private async void LogoutAsync()
         {
-            Application.Current.MainPage.Navigation.PopAsync();
+            await Application.Current.MainPage.Navigation.PopAsync();
+
         }
 
 
