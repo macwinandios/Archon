@@ -1,0 +1,1110 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.Extensions.ApiDescription.Server.props": {},
+          "build/Microsoft.Extensions.ApiDescription.Server.targets": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.props": {},
+          "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/3.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "Microsoft.OpenApi/1.2.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {}
+        }
+      },
+      "Microsoft.Win32.Registry/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Security.AccessControl": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "runtime.native.System.Data.SqlClient.sni/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
+          "runtime.win-x86.runtime.native.System.Data.SqlClient.sni": "4.4.0"
+        }
+      },
+      "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          }
+        }
+      },
+      "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x64/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/win-x86/native/sni.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Swashbuckle.AspNetCore/6.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.ApiDescription.Server": "3.0.0",
+          "Swashbuckle.AspNetCore.Swagger": "6.2.3",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.2.3",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.2.3"
+        },
+        "build": {
+          "build/Swashbuckle.AspNetCore.props": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.OpenApi": "1.2.3"
+        },
+        "compile": {
+          "lib/net6.0/Swashbuckle.AspNetCore.Swagger.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.Swagger.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Swashbuckle.AspNetCore.Swagger": "6.2.3"
+        },
+        "compile": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {}
+        }
+      },
+      "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "System.Data.SqlClient/4.8.5": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0",
+          "runtime.native.System.Data.SqlClient.sni": "4.7.0"
+        },
+        "compile": {
+          "ref/netcoreapp2.1/System.Data.SqlClient.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/System.Data.SqlClient.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/_._": {}
+        }
+      },
+      "System.Security.AccessControl/4.7.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.AccessControl.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Security.Principal.Windows/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp3.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Security.Principal.Windows.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "Xamarin.Essentials/1.7.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Numerics.Vectors": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Xamarin.Essentials.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Xamarin.Essentials.dll": {}
+        }
+      },
+      "Xamarin.Forms/5.0.0.2196": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Platform.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Xamarin.Forms.Core.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Platform.dll": {},
+          "lib/netstandard2.0/Xamarin.Forms.Xaml.dll": {}
+        },
+        "build": {
+          "buildTransitive/Xamarin.Forms.props": {},
+          "buildTransitive/Xamarin.Forms.targets": {}
+        }
+      },
+      "Archon.DataAccessLayer/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Archon.Shared": "1.0.0",
+          "System.Data.SqlClient": "4.8.5",
+          "Xamarin.Essentials": "1.7.0",
+          "Xamarin.Forms": "5.0.0.2196"
+        },
+        "compile": {
+          "bin/placeholder/Archon.DataAccessLayer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Archon.DataAccessLayer.dll": {}
+        }
+      },
+      "Archon.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Archon.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Archon.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
+      "sha512": "LH4OE/76F6sOCslif7+Xh3fS/wUUrE5ryeXAMcoCnuwOQGT5Smw0p57IgDh/pHgHaGz/e+AmEQb7pRgb++wt0w==",
+      "type": "package",
+      "path": "microsoft.extensions.apidescription.server/3.0.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Microsoft.Extensions.ApiDescription.Server.props",
+        "build/Microsoft.Extensions.ApiDescription.Server.targets",
+        "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.props",
+        "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets",
+        "microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+        "microsoft.extensions.apidescription.server.nuspec",
+        "tools/Newtonsoft.Json.dll",
+        "tools/dotnet-getdocument.deps.json",
+        "tools/dotnet-getdocument.dll",
+        "tools/dotnet-getdocument.runtimeconfig.json",
+        "tools/net461-x86/GetDocument.Insider.exe",
+        "tools/net461-x86/GetDocument.Insider.exe.config",
+        "tools/net461/GetDocument.Insider.exe",
+        "tools/net461/GetDocument.Insider.exe.config",
+        "tools/netcoreapp2.1/GetDocument.Insider.deps.json",
+        "tools/netcoreapp2.1/GetDocument.Insider.dll",
+        "tools/netcoreapp2.1/GetDocument.Insider.runtimeconfig.json"
+      ]
+    },
+    "Microsoft.NETCore.Platforms/3.1.0": {
+      "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Microsoft.OpenApi/1.2.3": {
+      "sha512": "Nug3rO+7Kl5/SBAadzSMAVgqDlfGjJZ0GenQrLywJ84XGKO0uRqkunz5Wyl0SDwcR71bAATXvSdbdzPrYRYKGw==",
+      "type": "package",
+      "path": "microsoft.openapi/1.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net46/Microsoft.OpenApi.dll",
+        "lib/net46/Microsoft.OpenApi.pdb",
+        "lib/net46/Microsoft.OpenApi.xml",
+        "lib/netstandard2.0/Microsoft.OpenApi.dll",
+        "lib/netstandard2.0/Microsoft.OpenApi.pdb",
+        "lib/netstandard2.0/Microsoft.OpenApi.xml",
+        "microsoft.openapi.1.2.3.nupkg.sha512",
+        "microsoft.openapi.nuspec"
+      ]
+    },
+    "Microsoft.Win32.Registry/4.7.0": {
+      "sha512": "KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
+      "type": "package",
+      "path": "microsoft.win32.registry/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/Microsoft.Win32.Registry.dll",
+        "lib/net461/Microsoft.Win32.Registry.dll",
+        "lib/net461/Microsoft.Win32.Registry.xml",
+        "lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "microsoft.win32.registry.4.7.0.nupkg.sha512",
+        "microsoft.win32.registry.nuspec",
+        "ref/net46/Microsoft.Win32.Registry.dll",
+        "ref/net461/Microsoft.Win32.Registry.dll",
+        "ref/net461/Microsoft.Win32.Registry.xml",
+        "ref/net472/Microsoft.Win32.Registry.dll",
+        "ref/net472/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "ref/netstandard1.3/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/de/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/es/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/fr/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/it/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ja/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ko/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/ru/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/zh-hans/Microsoft.Win32.Registry.xml",
+        "ref/netstandard1.3/zh-hant/Microsoft.Win32.Registry.xml",
+        "ref/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "ref/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/unix/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/net46/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/net461/Microsoft.Win32.Registry.xml",
+        "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll",
+        "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.native.System.Data.SqlClient.sni/4.7.0": {
+      "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
+      "type": "package",
+      "path": "runtime.native.system.data.sqlclient.sni/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+        "runtime.native.system.data.sqlclient.sni.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "LbrynESTp3bm5O/+jGL8v0Qg5SJlTV08lpIpFesXjF6uGNMWqFnUQbYBJwZTeua6E/Y7FIM1C54Ey1btLWupdg==",
+      "type": "package",
+      "path": "runtime.win-arm64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-arm64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-arm64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x64.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "38ugOfkYJqJoX9g6EYRlZB5U2ZJH51UP8ptxZgdpS07FgOEToV+lS11ouNK2PM12Pr6X/PpT5jK82G3DwH/SxQ==",
+      "type": "package",
+      "path": "runtime.win-x64.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x64.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x64/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "runtime.win-x86.runtime.native.System.Data.SqlClient.sni/4.4.0": {
+      "sha512": "YhEdSQUsTx+C8m8Bw7ar5/VesXvCFMItyZF7G1AUY+OM0VPZUOeAVpJ4Wl6fydBGUYZxojTDR3I6Bj/+BPkJNA==",
+      "type": "package",
+      "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+        "runtime.win-x86.runtime.native.system.data.sqlclient.sni.nuspec",
+        "runtimes/win-x86/native/sni.dll",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Swashbuckle.AspNetCore/6.2.3": {
+      "sha512": "cnzQDn0Le+hInsw2SYwlOhOCPXpYi/szcvnyqZJ12v+QyrLBwAmWXBg6RIyHB18s/mLeywC+Rg2O9ndz0IUNYQ==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore/6.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/Swashbuckle.AspNetCore.props",
+        "swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+        "swashbuckle.aspnetcore.nuspec"
+      ]
+    },
+    "Swashbuckle.AspNetCore.Swagger/6.2.3": {
+      "sha512": "qOF7j1sL0bWm8g/qqHVPCvkO3JlVvUIB8WfC98kSh6BT5y5DAnBNctfac7XR5EZf+eD7/WasvANncTqwZYfmWQ==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swagger/6.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/net5.0/Swashbuckle.AspNetCore.Swagger.pdb",
+        "lib/net5.0/Swashbuckle.AspNetCore.Swagger.xml",
+        "lib/net6.0/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/net6.0/Swashbuckle.AspNetCore.Swagger.pdb",
+        "lib/net6.0/Swashbuckle.AspNetCore.Swagger.xml",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Swagger.pdb",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.Swagger.xml",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.dll",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.pdb",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.Swagger.xml",
+        "swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+        "swashbuckle.aspnetcore.swagger.nuspec"
+      ]
+    },
+    "Swashbuckle.AspNetCore.SwaggerGen/6.2.3": {
+      "sha512": "+Xq7WdMCCfcXlnbLJVFNgY8ITdP2TRYIlpbt6IKzDw5FwFxdi9lBfNDtcT+/wkKwX70iBBFmXldnnd02/VO72A==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerGen.pdb",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.pdb",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerGen.pdb",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.dll",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.pdb",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerGen.xml",
+        "swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggergen.nuspec"
+      ]
+    },
+    "Swashbuckle.AspNetCore.SwaggerUI/6.2.3": {
+      "sha512": "bCRI87uKJVb4G+KURWm8LQrL64St04dEFZcF6gIM67Zc0Sr/N47EO83ybLMYOvfNdO1DCv8xwPcrz9J/VEhQ5g==",
+      "type": "package",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerUI.pdb",
+        "lib/net5.0/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.pdb",
+        "lib/net6.0/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerUI.pdb",
+        "lib/netcoreapp3.0/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.dll",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.pdb",
+        "lib/netstandard2.0/Swashbuckle.AspNetCore.SwaggerUI.xml",
+        "swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
+        "swashbuckle.aspnetcore.swaggerui.nuspec"
+      ]
+    },
+    "System.Data.SqlClient/4.8.5": {
+      "sha512": "fRqxut4lrndPHrXD+ht1XRmCL3obuKldm4XjCRYS9p5f7FSR7shBxAwTkDrpFMsHC9BhNgjjmUtiIjvehn5zkg==",
+      "type": "package",
+      "path": "system.data.sqlclient/4.8.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net451/System.Data.SqlClient.dll",
+        "lib/net46/System.Data.SqlClient.dll",
+        "lib/net461/System.Data.SqlClient.dll",
+        "lib/net461/System.Data.SqlClient.xml",
+        "lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "lib/netcoreapp2.1/System.Data.SqlClient.xml",
+        "lib/netstandard1.2/System.Data.SqlClient.dll",
+        "lib/netstandard1.2/System.Data.SqlClient.xml",
+        "lib/netstandard1.3/System.Data.SqlClient.dll",
+        "lib/netstandard1.3/System.Data.SqlClient.xml",
+        "lib/netstandard2.0/System.Data.SqlClient.dll",
+        "lib/netstandard2.0/System.Data.SqlClient.xml",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net451/System.Data.SqlClient.dll",
+        "ref/net46/System.Data.SqlClient.dll",
+        "ref/net461/System.Data.SqlClient.dll",
+        "ref/net461/System.Data.SqlClient.xml",
+        "ref/netcoreapp2.1/System.Data.SqlClient.dll",
+        "ref/netcoreapp2.1/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/System.Data.SqlClient.dll",
+        "ref/netstandard1.2/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/de/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/es/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/fr/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/it/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/ja/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/ko/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/ru/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/zh-hans/System.Data.SqlClient.xml",
+        "ref/netstandard1.2/zh-hant/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/System.Data.SqlClient.dll",
+        "ref/netstandard1.3/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/de/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/es/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/fr/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/it/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/ja/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/ko/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/ru/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/zh-hans/System.Data.SqlClient.xml",
+        "ref/netstandard1.3/zh-hant/System.Data.SqlClient.xml",
+        "ref/netstandard2.0/System.Data.SqlClient.dll",
+        "ref/netstandard2.0/System.Data.SqlClient.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netcoreapp2.1/System.Data.SqlClient.xml",
+        "runtimes/unix/lib/netstandard1.3/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.dll",
+        "runtimes/unix/lib/netstandard2.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/net451/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net46/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net461/System.Data.SqlClient.dll",
+        "runtimes/win/lib/net461/System.Data.SqlClient.xml",
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netcoreapp2.1/System.Data.SqlClient.xml",
+        "runtimes/win/lib/netstandard1.3/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netstandard2.0/System.Data.SqlClient.dll",
+        "runtimes/win/lib/netstandard2.0/System.Data.SqlClient.xml",
+        "runtimes/win/lib/uap10.0.16299/System.Data.SqlClient.dll",
+        "runtimes/win/lib/uap10.0.16299/System.Data.SqlClient.xml",
+        "system.data.sqlclient.4.8.5.nupkg.sha512",
+        "system.data.sqlclient.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Numerics.Vectors/4.5.0": {
+      "sha512": "QQTlPTl06J/iiDbJCiepZ4H//BVraReU4O4EoRw1U02H5TLUIT7xn3GnDp9AXPSlJUDyFs4uWjWafNX6WrAojQ==",
+      "type": "package",
+      "path": "system.numerics.vectors/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Numerics.Vectors.dll",
+        "lib/net46/System.Numerics.Vectors.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.0/System.Numerics.Vectors.dll",
+        "lib/netstandard1.0/System.Numerics.Vectors.xml",
+        "lib/netstandard2.0/System.Numerics.Vectors.dll",
+        "lib/netstandard2.0/System.Numerics.Vectors.xml",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.dll",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.xml",
+        "lib/uap10.0.16299/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/System.Numerics.Vectors.dll",
+        "ref/net45/System.Numerics.Vectors.xml",
+        "ref/net46/System.Numerics.Vectors.dll",
+        "ref/net46/System.Numerics.Vectors.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/System.Numerics.Vectors.dll",
+        "ref/netstandard1.0/System.Numerics.Vectors.xml",
+        "ref/netstandard2.0/System.Numerics.Vectors.dll",
+        "ref/netstandard2.0/System.Numerics.Vectors.xml",
+        "ref/uap10.0.16299/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "system.numerics.vectors.4.5.0.nupkg.sha512",
+        "system.numerics.vectors.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Security.AccessControl/4.7.0": {
+      "sha512": "JECvTt5aFF3WT3gHpfofL2MNNP6v84sxtXxpqhLBCcDRzqsPBmHhQ6shv4DwwN2tRlzsUxtb3G9M3763rbXKDg==",
+      "type": "package",
+      "path": "system.security.accesscontrol/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.dll",
+        "lib/net461/System.Security.AccessControl.xml",
+        "lib/netstandard1.3/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.dll",
+        "lib/netstandard2.0/System.Security.AccessControl.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.dll",
+        "ref/net461/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/System.Security.AccessControl.dll",
+        "ref/netstandard1.3/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/de/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/es/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/fr/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/it/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ja/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ko/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/ru/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.AccessControl.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.AccessControl.xml",
+        "ref/netstandard2.0/System.Security.AccessControl.dll",
+        "ref/netstandard2.0/System.Security.AccessControl.xml",
+        "ref/uap10.0.16299/_._",
+        "runtimes/win/lib/net46/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.dll",
+        "runtimes/win/lib/net461/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.AccessControl.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.accesscontrol.4.7.0.nupkg.sha512",
+        "system.security.accesscontrol.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Security.Principal.Windows/4.7.0": {
+      "sha512": "ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
+      "type": "package",
+      "path": "system.security.principal.windows/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.dll",
+        "lib/net461/System.Security.Principal.Windows.xml",
+        "lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.dll",
+        "lib/netstandard2.0/System.Security.Principal.Windows.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net46/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.dll",
+        "ref/net461/System.Security.Principal.Windows.xml",
+        "ref/netcoreapp3.0/System.Security.Principal.Windows.dll",
+        "ref/netcoreapp3.0/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/System.Security.Principal.Windows.dll",
+        "ref/netstandard1.3/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/de/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/es/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/fr/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/it/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ja/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ko/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/ru/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/zh-hans/System.Security.Principal.Windows.xml",
+        "ref/netstandard1.3/zh-hant/System.Security.Principal.Windows.xml",
+        "ref/netstandard2.0/System.Security.Principal.Windows.dll",
+        "ref/netstandard2.0/System.Security.Principal.Windows.xml",
+        "ref/uap10.0.16299/_._",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/unix/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/net46/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/net461/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/netcoreapp2.1/System.Security.Principal.Windows.xml",
+        "runtimes/win/lib/netstandard1.3/System.Security.Principal.Windows.dll",
+        "runtimes/win/lib/uap10.0.16299/_._",
+        "system.security.principal.windows.4.7.0.nupkg.sha512",
+        "system.security.principal.windows.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Xamarin.Essentials/1.7.0": {
+      "sha512": "xfUJNxtfMC05VBej7fVUg6Zd9VwM2kqW9LH0tcrSA6IsBTl0EsIGkYUOz1BoKT2rseWW8o3kTi5WH/yZV4GgJw==",
+      "type": "package",
+      "path": "xamarin.essentials/1.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "icon.png",
+        "lib/monoandroid10.0/Xamarin.Essentials.dll",
+        "lib/monoandroid10.0/Xamarin.Essentials.pdb",
+        "lib/monoandroid10.0/Xamarin.Essentials.xml",
+        "lib/netstandard1.0/Xamarin.Essentials.dll",
+        "lib/netstandard1.0/Xamarin.Essentials.pdb",
+        "lib/netstandard1.0/Xamarin.Essentials.xml",
+        "lib/netstandard2.0/Xamarin.Essentials.dll",
+        "lib/netstandard2.0/Xamarin.Essentials.pdb",
+        "lib/netstandard2.0/Xamarin.Essentials.xml",
+        "lib/tizen40/Xamarin.Essentials.dll",
+        "lib/tizen40/Xamarin.Essentials.pdb",
+        "lib/tizen40/Xamarin.Essentials.xml",
+        "lib/uap10.0.16299/Xamarin.Essentials.dll",
+        "lib/uap10.0.16299/Xamarin.Essentials.pdb",
+        "lib/uap10.0.16299/Xamarin.Essentials.pri",
+        "lib/uap10.0.16299/Xamarin.Essentials.xml",
+        "lib/xamarinios10/Xamarin.Essentials.dll",
+        "lib/xamarinios10/Xamarin.Essentials.pdb",
+        "lib/xamarinios10/Xamarin.Essentials.xml",
+        "lib/xamarinmac20/Xamarin.Essentials.dll",
+        "lib/xamarinmac20/Xamarin.Essentials.pdb",
+        "lib/xamarinmac20/Xamarin.Essentials.xml",
+        "lib/xamarintvos10/Xamarin.Essentials.dll",
+        "lib/xamarintvos10/Xamarin.Essentials.pdb",
+        "lib/xamarintvos10/Xamarin.Essentials.xml",
+        "lib/xamarinwatchos10/Xamarin.Essentials.dll",
+        "lib/xamarinwatchos10/Xamarin.Essentials.pdb",
+        "lib/xamarinwatchos10/Xamarin.Essentials.xml",
+        "readme.txt",
+        "xamarin.essentials.1.7.0.nupkg.sha512",
+        "xamarin.essentials.nuspec"
+      ]
+    },
+    "Xamarin.Forms/5.0.0.2196": {
+      "sha512": "zSXDiZukojtEBmZKUUG1yYBwlB9tI8JLPkc6n+Sm1PAX01QyzErWE9AaFJgP7usyoGHn92l4HnQF7A+/MPI6VA==",
+      "type": "package",
+      "path": "xamarin.forms/5.0.0.2196",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Assets/xamarin_128x128.png",
+        "build/MonoAndroid10/proguard.cfg",
+        "build/Xamarin.Forms.DefaultItems.props",
+        "build/Xamarin.Forms.DefaultItems.targets",
+        "build/Xamarin.Forms.props",
+        "build/Xamarin.Forms.targets",
+        "build/net46/Mono.Cecil.Mdb.dll",
+        "build/net46/Mono.Cecil.Pdb.dll",
+        "build/net46/Mono.Cecil.Rocks.dll",
+        "build/net46/Mono.Cecil.dll",
+        "build/net46/System.ValueTuple.dll",
+        "build/net46/Xamarin.Forms.Build.Tasks.dll",
+        "build/net46/Xamarin.Forms.Core.dll",
+        "build/net46/Xamarin.Forms.Xaml.dll",
+        "build/netstandard2.0/Mono.Cecil.Mdb.dll",
+        "build/netstandard2.0/Mono.Cecil.Pdb.dll",
+        "build/netstandard2.0/Mono.Cecil.Rocks.dll",
+        "build/netstandard2.0/Mono.Cecil.dll",
+        "build/netstandard2.0/System.CodeDom.dll",
+        "build/netstandard2.0/Xamarin.Forms.Build.Tasks.dll",
+        "build/netstandard2.0/Xamarin.Forms.Core.dll",
+        "build/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "buildTransitive/MonoAndroid10/proguard.cfg",
+        "buildTransitive/Xamarin.Forms.DefaultItems.props",
+        "buildTransitive/Xamarin.Forms.DefaultItems.targets",
+        "buildTransitive/Xamarin.Forms.props",
+        "buildTransitive/Xamarin.Forms.targets",
+        "buildTransitive/net46/Mono.Cecil.Mdb.dll",
+        "buildTransitive/net46/Mono.Cecil.Pdb.dll",
+        "buildTransitive/net46/Mono.Cecil.Rocks.dll",
+        "buildTransitive/net46/Mono.Cecil.dll",
+        "buildTransitive/net46/System.ValueTuple.dll",
+        "buildTransitive/net46/Xamarin.Forms.Build.Tasks.dll",
+        "buildTransitive/net46/Xamarin.Forms.Core.dll",
+        "buildTransitive/net46/Xamarin.Forms.Xaml.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Mdb.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Pdb.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.Rocks.dll",
+        "buildTransitive/netstandard2.0/Mono.Cecil.dll",
+        "buildTransitive/netstandard2.0/System.CodeDom.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Build.Tasks.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Core.dll",
+        "buildTransitive/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "lib/MonoAndroid10.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/MonoAndroid10.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/MonoAndroid10.0/FormsViewGroup.dll",
+        "lib/MonoAndroid10.0/FormsViewGroup.pdb",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Core.dll",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Core.pdb",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Core.xml",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Platform.Android.dll",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Platform.Android.pdb",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Platform.dll",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Xaml.dll",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Xaml.pdb",
+        "lib/MonoAndroid10.0/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.Mac/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/Xamarin.Mac/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Core.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Platform.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Platform.macOS.dll",
+        "lib/Xamarin.Mac/Xamarin.Forms.Xaml.dll",
+        "lib/Xamarin.iOS10/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/Xamarin.iOS10/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Core.xml",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Platform.iOS.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.dll",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.pdb",
+        "lib/Xamarin.iOS10/Xamarin.Forms.Xaml.xml",
+        "lib/Xamarin.iOS10/ar/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ca/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/cs/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/da/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/de/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/el/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/es/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/fi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/fr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/he/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/hu/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/id/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/it/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ja/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ko/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ms/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/nb/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/nl/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pl/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pt-BR/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/pt/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ro/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/ru/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/sk/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/sv/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/th/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/tr/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/uk/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/vi/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-HK/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-Hans/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/Xamarin.iOS10/zh-Hant/Xamarin.Forms.Platform.iOS.resources.dll",
+        "lib/netstandard1.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/netstandard1.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Core.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Core.pdb",
+        "lib/netstandard1.0/Xamarin.Forms.Core.xml",
+        "lib/netstandard1.0/Xamarin.Forms.Platform.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.dll",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.pdb",
+        "lib/netstandard1.0/Xamarin.Forms.Xaml.xml",
+        "lib/netstandard2.0/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/netstandard2.0/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Core.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Core.pdb",
+        "lib/netstandard2.0/Xamarin.Forms.Core.xml",
+        "lib/netstandard2.0/Xamarin.Forms.Platform.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.dll",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.pdb",
+        "lib/netstandard2.0/Xamarin.Forms.Xaml.xml",
+        "lib/tizen40/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/tizen40/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/tizen40/Xamarin.Forms.Core.dll",
+        "lib/tizen40/Xamarin.Forms.Core.pdb",
+        "lib/tizen40/Xamarin.Forms.Core.xml",
+        "lib/tizen40/Xamarin.Forms.Platform.Tizen.dll",
+        "lib/tizen40/Xamarin.Forms.Platform.Tizen.pdb",
+        "lib/tizen40/Xamarin.Forms.Platform.dll",
+        "lib/tizen40/Xamarin.Forms.Xaml.dll",
+        "lib/tizen40/Xamarin.Forms.Xaml.pdb",
+        "lib/tizen40/Xamarin.Forms.Xaml.xml",
+        "lib/uap10.0.14393/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/uap10.0.14393/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/uap10.0.14393/Properties/Xamarin.Forms.Platform.UAP.rd.xml",
+        "lib/uap10.0.14393/Xamarin.Forms.Core.dll",
+        "lib/uap10.0.14393/Xamarin.Forms.Core.pdb",
+        "lib/uap10.0.14393/Xamarin.Forms.Core.xml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP.dll",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP.pdb",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP.pri",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/CollectionView/ItemsViewStyles.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FlyoutPageControlStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsAutoSuggestBoxStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsCheckBoxStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsCommandBarStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsEmbeddedPageWrapper.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsFlyout.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsProgressBarStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/FormsTextBoxStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/MasterDetailControlStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/DensityStyles/Compact.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/Themes/generic.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PageControlStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PickerStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/PromptDialog.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Resources.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Shell/ShellPageWrapper.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/SliderStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/StepperControl.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/TabbedPageStyle.xaml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.UAP/Xamarin.Forms.Platform.UAP.xr.xml",
+        "lib/uap10.0.14393/Xamarin.Forms.Platform.dll",
+        "lib/uap10.0.14393/Xamarin.Forms.Xaml.dll",
+        "lib/uap10.0.14393/Xamarin.Forms.Xaml.pdb",
+        "lib/uap10.0.14393/Xamarin.Forms.Xaml.xml",
+        "lib/uap10.0.16299/Design/Xamarin.Forms.Core.Design.dll",
+        "lib/uap10.0.16299/Design/Xamarin.Forms.Xaml.Design.dll",
+        "lib/uap10.0.16299/Properties/Xamarin.Forms.Platform.UAP.rd.xml",
+        "lib/uap10.0.16299/Xamarin.Forms.Core.dll",
+        "lib/uap10.0.16299/Xamarin.Forms.Core.pdb",
+        "lib/uap10.0.16299/Xamarin.Forms.Core.xml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP.dll",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP.pdb",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP.pri",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/CollectionView/ItemsViewStyles.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FlyoutPageControlStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsAutoSuggestBoxStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsCheckBoxStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsCommandBarStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsEmbeddedPageWrapper.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsFlyout.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsProgressBarStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/FormsTextBoxStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/MasterDetailControlStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/DensityStyles/Compact.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Microsoft.UI.Xaml/Themes/generic.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PageControlStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PickerStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/PromptDialog.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Resources.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Shell/ShellPageWrapper.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Shell/ShellStyles.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/SliderStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/StepperControl.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/TabbedPageStyle.xaml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.UAP/Xamarin.Forms.Platform.UAP.xr.xml",
+        "lib/uap10.0.16299/Xamarin.Forms.Platform.dll",
+        "lib/uap10.0.16299/Xamarin.Forms.Xaml.dll",
+        "lib/uap10.0.16299/Xamarin.Forms.Xaml.pdb",
+        "lib/uap10.0.16299/Xamarin.Forms.Xaml.xml",
+        "xamarin.forms.5.0.0.2196.nupkg.sha512",
+        "xamarin.forms.nuspec"
+      ]
+    },
+    "Archon.DataAccessLayer/1.0.0": {
+      "type": "project",
+      "path": "../Archon.DataAccessLayer/Archon.DataAccessLayer.csproj",
+      "msbuildProject": "../Archon.DataAccessLayer/Archon.DataAccessLayer.csproj"
+    },
+    "Archon.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Archon/Archon.Shared/Archon.Shared.csproj",
+      "msbuildProject": "../Archon/Archon.Shared/Archon.Shared.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "Archon.DataAccessLayer >= 1.0.0",
+      "Swashbuckle.AspNetCore >= 6.2.3"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Jonathan\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon.WebAPI\\Archon.WebAPI.csproj",
+      "projectName": "Archon.WebAPI",
+      "projectPath": "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon.WebAPI\\Archon.WebAPI.csproj",
+      "packagesPath": "C:\\Users\\Jonathan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon.WebAPI\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Jonathan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {
+            "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon.DataAccessLayer\\Archon.DataAccessLayer.csproj": {
+              "projectPath": "C:\\Users\\Jonathan\\Desktop\\yohanna familia\\Archon.DataAccessLayer\\Archon.DataAccessLayer.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Swashbuckle.AspNetCore": {
+            "target": "Package",
+            "version": "[6.2.3, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.308\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
