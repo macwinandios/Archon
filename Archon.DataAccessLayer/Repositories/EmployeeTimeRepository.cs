@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Archon.DataAccessLayer.Repositories
-{//IGetRepository<IEmployeeTimeViewModel>, IPostRepository<IEmployeeTimeViewModel>
+{
     public class EmployeeTimeRepository : IEmployeeTimeRepository<IEmployeeTimeViewModel>,IRepository<IEmployeeTimeViewModel>
     {
         public async Task ClockInAsync(IEmployeeTimeViewModel viewModel)
@@ -39,7 +39,7 @@ namespace Archon.DataAccessLayer.Repositories
                 {
                     command.CommandText = "SELECT COUNT(*) FROM dbo.HoursAndPay WHERE Username =   @Username";
                     command.Parameters.AddWithValue("@Username", viewModel.Username);
-                    //this needs to have an id so add id to  IEmployeeTimeViewModel
+                    //this may need to have an id so add id to  IEmployeeTimeViewModel
                     int count = (int)command.ExecuteScalar();
                     if (count > 0)
                     {
@@ -65,18 +65,7 @@ namespace Archon.DataAccessLayer.Repositories
             }
         }
 
-
-        //ADMINMONITORPAY WILL USE THE FOLLOWING 4: GETALLASYNC, GETBYIDORUSERNAME AND DELETE, PUT
-        public Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
-        {
-            throw new NotImplementedException();
-
-        }
         
-        public Task GetByIdOrUsername(IEmployeeTimeViewModel viewModel, int id)
-        {
-            throw new NotImplementedException();
-        }
         public async Task GetByIdOrUsername(IEmployeeTimeViewModel viewModel, string username)
         {
             try
@@ -97,9 +86,9 @@ namespace Archon.DataAccessLayer.Repositories
 
                         Username = clientReader["Username"].ToString(),
                         HourlyWage = Convert.ToSingle(clientReader["HourlyWage"]),
-                        DateClockedIn = Convert.ToDateTime(clientReader["DateClockedIn"]).DayOfWeek,
+                        DateClockedIn = Convert.ToDateTime(clientReader["DateClockedIn"]),
                         ClockedInAt = Convert.ToDateTime(clientReader["ClockedInAt"]),
-                        DateClockedOut = Convert.ToDateTime(clientReader["DateClockedOut"]).DayOfWeek,
+                        DateClockedOut = Convert.ToDateTime(clientReader["DateClockedOut"]),
                         ClockedOutAt = Convert.ToDateTime(clientReader["ClockedOutAt"]),
                         DurationOfClockIn = TimeSpan.Parse((string)clientReader["DurationOfClockIn"]),
                         TotalTimeClockedInToday = TimeSpan.Parse((string)clientReader["TotalTimeClockedInToday"]),
@@ -110,21 +99,6 @@ namespace Archon.DataAccessLayer.Repositories
                 }
                 clientReader.Close();
                 SqlModel.SqlConnection.Close();
-                //if (clientReader.Read())
-                //{
-                //    viewModel.Username = clientReader["Username"].ToString();
-
-
-                //    SqlModel.SqlConnection.Close();
-                //}
-                //else
-                //{
-                //    await Application.Current.MainPage.DisplayAlert("USERNAME NOT FOUND", "IN DATABASE", "OK");
-                //    SqlModel.SqlConnection.Close();
-                //}
-
-                //clientReader.Close();
-                //SqlModel.SqlConnection.Close();
             }
             catch (Exception ex)
             {
@@ -218,81 +192,44 @@ namespace Archon.DataAccessLayer.Repositories
             }
         }
 
-        public Task PutAsync(IEmployeeTimeViewModel viewModel)
+        public async Task PutAsync(IEmployeeTimeViewModel viewModel)
+        {
+            try
+            {
+                using (var command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = @"UPDATE [dbo].[HoursAndPay]
+                                   SET [Username] = @Username, [DateClockedIn] = @DateClockedIn, [ClockedInAt] = @ClockedInAt,[DateClockedOut] = @DateClockedOut, [ClockedOutAt] = @ClockedOutAt,[DurationOfClockIn] = @DurationOfClockIn,[TotalTimeClockedInToday] = @TotalTimeClockedInToday, [TotalTimeClockedInThisWeek] = @TotalTimeClockedInThisWeek, [HourlyWage] = @HourlyWage
+                                   WHERE [Username] = @Username";
+                    command.Parameters.AddWithValue("@Username", viewModel.Username);
+                    command.Parameters.AddWithValue("@DateClockedIn", viewModel.DateClockedIn.ToString());
+                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToString());
+                    command.Parameters.AddWithValue("@DateClockedOut", viewModel.DateClockedOut.ToString());
+                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToString());
+                    command.Parameters.AddWithValue("@DurationOfClockIn", viewModel.DurationOfClockIn.ToString());
+                    command.Parameters.AddWithValue("@TotalTimeClockedInToday", viewModel.TotalTimeClockedInToday.ToString());
+                    command.Parameters.AddWithValue("@TotalTimeClockedInThisWeek", viewModel.TotalTimeClockedInThisWeek.ToString());
+                    command.Parameters.AddWithValue("@HourlyWage", viewModel.HourlyWage.ToString());
+
+                    //await command.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Not YEt", ex.Message, "OK");
+            }
+        }
+        public Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public Task GetByIdOrUsername(IEmployeeTimeViewModel viewModel, int id)
         {
             throw new NotImplementedException();
         }
     }
 
-
-    //THE FOLLOWING WILL BE USED BY ADMIN IN THE ADMINMONITORPAY REPOSITORY. SAVING IT HERE.
-
-
-    //using (var command = SqlModel.SqlConnection.CreateCommand())
-    //{
-    //    command.CommandText = @"UPDATE [dbo].[EmployeeTime]
-    //                   SET [DateClockedIn] = @DateClockedIn, [ClockedInAt] = @ClockedInAt,
-    //                       [DateClockedOut] = @DateClockedOut, [ClockedOutAt] = @ClockedOutAt,
-    //                       [DurationOfClockIn] = @DurationOfClockIn,
-    //                       [TotalTimeClockedInToday] = @TotalTimeClockedInToday,
-    //                       [TotalTimeClockedInThisWeek] = @TotalTimeClockedInThisWeek
-    //                   WHERE [Username] = @Username";
-    //    command.Parameters.AddWithValue("@DateClockedIn", viewModel.DateClockedIn.ToShortDateString());
-    //    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToShortTimeString());
-    //    command.Parameters.AddWithValue("@DateClockedOut", viewModel.DateClockedOut.ToShortDateString());
-    //    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToShortTimeString());
-    //    command.Parameters.AddWithValue("@DurationOfClockIn", viewModel.DurationOfClockIn.ToString());
-    //    command.Parameters.AddWithValue("@TotalTimeClockedInToday", viewModel.TotalTimeClockedInToday.ToString());
-    //    command.Parameters.AddWithValue("@TotalTimeClockedInThisWeek", viewModel.TotalTimeClockedInThisWeek.ToString());
-    //    command.Parameters.AddWithValue("@Username", viewModel.Username);
-
-    //    await command.ExecuteNonQueryAsync();
-    //}
-
-
-
-    // THE FOLLOWING USES SYSTEM.DATA IN ORDER TO USE ADD INSTEAD OF ADDWITHVALUE
-    //WILL IMPLEMENT SOON.
-
-
-    // update existing user
-    //            //    using (var updateCommand = SqlModel.SqlConnection.CreateCommand())
-    //            //    {
-    //            //        updateCommand.CommandText = @"UPDATE EmployeeTime SET ClockedOutAt = @ClockedOutAt, DurationOfClockIn = DurationOfClockIn + @DurationOfClockIn, TotalTimeClockedInToday = TotalTimeClockedInToday + @TotalTimeClockedInToday, TotalTimeClockedInThisWeek = TotalTimeClockedInThisWeek + @TotalTimeClockedInThisWeek" +
-    //            //        "WHERE Username = @Username";
-
-    //            //        updateCommand.Parameters.Add("@ClockedOutAt", SqlDbType.Time).Value = viewModel.ClockedOutAt.TimeOfDay;
-    //            //        updateCommand.Parameters.Add("@DurationOfClockIn", SqlDbType.Time).Value = viewModel.DurationOfClockIn.TotalHours;
-    //            //        updateCommand.Parameters.Add("@TotalTimeClockedInToday", SqlDbType.Time).Value = viewModel.TotalTimeClockedInToday.TotalHours;
-    //            //        updateCommand.Parameters.Add("@TotalTimeClockedInThisWeek", SqlDbType.Time).Value = viewModel.TotalTimeClockedInThisWeek;
-    //            //    updateCommand.Parameters.Add("@TotalTimeClockedInToday", SqlDbType.Time).Value = viewModel.TotalTimeClockedInToday.TotalHours;
-    //            //        updateCommand.Parameters.Add("@TotalTimeClockedInThisWeek", SqlDbType.Time).Value = viewModel.TotalTimeClockedInThisWeek.TotalHours;
-    //            //        //updateCommand.Parameters.Add("@TotalEarnedThisWeek", SqlDbType.Money).Value = viewModel.TotalEarnedThisWeek;
-    //            //        //updateCommand.Parameters.Add("@HourlyWage", SqlDbType.Money).Value = viewModel.HourlyWage;
-    //            //        await updateCommand.ExecuteNonQueryAsync();
-    //            //    }
-    //            //}
-
-
-
-    //                using (var insertCommand = SqlModel.SqlConnection.CreateCommand())
-    //                {
-    //                    insertCommand.CommandText = @"INSERT INTO [dbo].[EmployeeTime] ([Username],[DateClockedIn], [ClockedInAt], [DateClockedOut], [ClockedOutAt], [DurationOfClockIn], [TotalTimeClockedInToday], [TotalTimeClockedInThisWeek])
-    //                                                   VALUES (@Username, @DateClockedIn, @ClockedInAt, @DateClockedOut, @ClockedOutAt, @DurationOfClockIn, @TotalTimeClockedInToday, @TotalTimeClockedInThisWeek)";
-
-    //                    insertCommand.Parameters.Add("@Username", SqlDbType.VarChar).Value = viewModel.Username;
-    //                    insertCommand.Parameters.Add("@DateClockedIn", SqlDbType.VarChar).Value = viewModel.DateClockedIn.Date.ToShortDateString();
-    //                    insertCommand.Parameters.Add("@ClockedInAt", SqlDbType.VarChar).Value = viewModel.ClockedInAt.TimeOfDay.ToString();
-    //                    insertCommand.Parameters.Add("@DateClockedOut", SqlDbType.VarChar).Value = viewModel.DateClockedOut.Date.ToShortDateString();
-    //                    insertCommand.Parameters.Add("@ClockedOutAt", SqlDbType.VarChar).Value = viewModel.ClockedOutAt.TimeOfDay;
-    //                    insertCommand.Parameters.Add("@DurationOfClockIn", SqlDbType.VarChar).Value = viewModel.DurationOfClockIn.TotalHours;
-    //                    insertCommand.Parameters.Add("@TotalTimeClockedInToday", SqlDbType.VarChar).Value = viewModel.TotalTimeClockedInToday.TotalHours;
-    //                    insertCommand.Parameters.Add("@TotalTimeClockedInThisWeek", SqlDbType.VarChar).Value = viewModel.TotalTimeClockedInThisWeek.TotalHours;
-    //                    //insertCommand.Parameters.Add("@TotalEarnedThisWeek", SqlDbType.Money).Value = viewModel.TotalWagesEarnedThisWeek;
-    //                    //insertCommand.Parameters.Add("@HourlyWage", SqlDbType.Money).Value = viewModel.HourlyWage;
-    //                    await insertCommand.ExecuteNonQueryAsync();
-    //}
-
-    ///
 
 }

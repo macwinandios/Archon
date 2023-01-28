@@ -11,10 +11,10 @@ namespace Archon.DataAccessLayer.Models
         public DateTime CurrentTime { get; set; }
         public DateTime ClockedInAt { get; set; }
         public DateTime ClockedOutAt { get; set; }
-        public DayOfWeek DateClockedIn { get; set; }
+        public DateTime DateClockedIn { get; set; }
         public float HourlyWage { get; set; }
         public float TotalWagesEarnedThisWeek { get; set; }
-        public DayOfWeek DateClockedOut { get; set; }
+        public DateTime DateClockedOut { get; set; }
         public TimeSpan DurationOfClockIn { get; set; }
         public TimeSpan TotalTimeClockedInToday { get; set; }
         public TimeSpan TotalTimeClockedInThisWeek { get; set; }
