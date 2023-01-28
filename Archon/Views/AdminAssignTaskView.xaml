@@ -2,11 +2,129 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Archon.Views.AdminAssignTaskView">
+    <ContentPage.BindingContext>
+        <Binding Source="{StaticResource Locator}" Path="AdminAssignTaskViewModel"/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <ScrollView>
+            
+        
+        <StackLayout VerticalOptions="CenterAndExpand" 
+                     HorizontalOptions="CenterAndExpand">
             <Label Text="Welcome to admin assign task view!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+                 />
+                <Label
+                Text="Username:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter Username"
+                   Text="{Binding Username}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+                <Label
+                Text="Number Of Assigned Tasks:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Label  
+                Text="{Binding NumberOfAssignedTasks}"
+                FontSize="Medium"
+                TextColor="Black" />
+            
+                <Label
+                Text="DateOfAssignedTask:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Label 
+                Text="{Binding DateOfAssignedTask, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
+                FontSize="Medium" 
+                TextColor="Black" />
+                <Label
+                Text="TaskIsComplete:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Label 
+                Text="{Binding TaskIsComplete}" 
+                FontSize="Medium"
+                TextColor="Black" />
+                <Label
+                Text="TaskDescription:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter TaskDescription"
+                   Text="{Binding TaskDescription}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+                <Label
+                Text="TaskTitle:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter TaskTitle"
+                   Text="{Binding TaskTitle}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+                <Label
+                Text="TaskWasAssignedTo:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter TaskWasAssignedTo"
+                   Text="{Binding TaskWasAssignedTo}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+                <Label
+                Text="Completed Notes:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter Completed Notes"
+                   Text="{Binding TaskCompletedNotes}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+
+
+                <Button Text="Assign A Task"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding AssignTaskCommand}"/>
+            <Button Text="Logout"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding PopToLogoutCommand}"/>
+            <Button Text="Go To PAY MONITOR"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding PushToAdminMonitorPayViewCommand}"/>
+            <Button Text="Go To COMPLETED TASK VIEW"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand}"/>
+            <Button Text="Get All Tasks"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding GetAllTasksCommand}"/>
+            <Button Text="Get Task By Username"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding GetTaskByIdOrUsernameCommand}"/>
+            <Button Text="Update A Task"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding UpdateTaskCommand}"/>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

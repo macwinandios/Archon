@@ -41,19 +41,15 @@ namespace Archon.ViewModels
 
 
         public EmployeeTimeViewModel() { }
-        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IRepository<IEmployeeTimeViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository)
+        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IRepository<IEmployeeTimeViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository, IAdminAssignTaskViewModel adminAssignTaskViewModel)
         {
             _iLoginViewModel = loginViewModel;
             _iEmployeeTimeRepository = iEmployeeTimeRepository;
             _iRepository = iRepository;
             _iTaskRepository = iTaskRepository;
+            _adminAssignTaskViewModel = adminAssignTaskViewModel;
         }
         public ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection { get; set; } = new ObservableCollection<IEmployeeTimeModel>();
-        public IAdminAssignTaskViewModel AdminAssignTaskViewModel
-        {
-            get => _adminAssignTaskViewModel;
-            set => SetProperty(ref _adminAssignTaskViewModel, value);
-        }
 
         public bool IsClockedIn
         {
@@ -174,7 +170,7 @@ namespace Archon.ViewModels
         {
             try
             {
-                await _iTaskRepository.GetAssignedTaskEmployee(AdminAssignTaskViewModel, Username);
+                await _iTaskRepository.GetAssignedTaskEmployee(_adminAssignTaskViewModel, Username);
             }
             catch (Exception ex)
             {

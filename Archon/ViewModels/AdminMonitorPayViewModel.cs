@@ -2,6 +2,7 @@
 using Archon.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -11,6 +12,7 @@ namespace Archon.ViewModels
     public class AdminMonitorPayViewModel : ViewModelBase, IAdminMonitorPayViewModel
     {
         bool _isClockedIn;
+        bool _userDetailsIsVisible;
         float _hourlyWage;
         float _wagesEarned;
         DateTime _currentTime;
@@ -21,7 +23,6 @@ namespace Archon.ViewModels
         TimeSpan _durationOfClockIn;
         TimeSpan _totalTimeClockedInToday;
         TimeSpan _totalTimeClockedInThisWeek;
-
         ICommand _getAllTimeDetailsForUserCommand;
         ICommand _updateTimeDetailCommand;
         ICommand _deleteTimeDetailCommand;
@@ -35,6 +36,20 @@ namespace Archon.ViewModels
         {
             _iEmployeeTimeViewModel = iEmployeeViewModel;
             _iRepository = iRepository;
+        }
+        public ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection
+        {
+            get => _iEmployeeTimeViewModel.HoursAndPayCollection;
+            set
+            {
+                _iEmployeeTimeViewModel.HoursAndPayCollection = value;
+                OnPropertyChanged(nameof(HoursAndPayCollection));
+            }
+        }
+        public bool UserDetailsIsVisible
+        {
+            get => _userDetailsIsVisible;
+            set => SetProperty(ref _userDetailsIsVisible, value);
         }
         public bool IsClockedIn
         {
@@ -122,6 +137,7 @@ namespace Archon.ViewModels
         private async void GetAllTimeDetailsForUser()
         {
             await _iRepository.GetByIdOrUsername(_iEmployeeTimeViewModel, Username);
+            UserDetailsIsVisible = true;
         }
     }
 }

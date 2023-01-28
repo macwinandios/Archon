@@ -89,7 +89,15 @@ namespace Archon.ViewModels
             if (await _iLoginRepository.Login(this))
 
             {
-                await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
+                if(CompanyId == 123)
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
+                }
+                if (CompanyId == 999)
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new AdminAssignTaskView());
+                }
+                //await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
             }
         }
         public async void SignUpAsync()

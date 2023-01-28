@@ -102,7 +102,7 @@ namespace Archon.ViewModels
 
         public ICommand PushToAdminMonitorPayViewCommand => _pushToAdminMonitorPayViewCommand ?? (_pushToAdminMonitorPayViewCommand = new Command(PushToAdminMonitorPayView));
         public ICommand GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand => _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand ?? (_getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand = new Command(GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView));
-        public ICommand GetAllTasksCommand => _getAllTasks ?? (_getAllTasks = new Command(GetAllTasks));
+        public ICommand GetAllTasksCommand => _getAllTasks ?? (_getAllTasks = new Command(GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView));
         public ICommand GetTaskByIdOrUsernameCommand => _getTaskByIdOrUsername ?? (_getTaskByIdOrUsername = new Command(GetTaskByIdOrUsername));
 
         public ICommand UpdateTaskCommand => _updateTask ?? (_updateTask = new Command(UpdateTask));
@@ -125,6 +125,7 @@ namespace Archon.ViewModels
         private async void AssignTask()
         {
             await _iRepository.PostAsync(this);
+            NumberOfAssignedTasks++;
         }
         private async void GetAllTasks()
         {
