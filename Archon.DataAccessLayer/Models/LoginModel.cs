@@ -13,7 +13,6 @@ namespace Archon.DataAccessLayer
         public string Username { get; set; }
         public string Password { get; set; }
         public bool IsLoggedIn { get; set; }
-        public ObservableCollection<ILoginModel> UserList { get; set; }
         
     }
 }
