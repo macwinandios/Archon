@@ -1,0 +1,13 @@
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\bin\Debug\netstandard2.0\Archon.DataAccessLayer.deps.json
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\bin\Debug\netstandard2.0\Archon.DataAccessLayer.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\bin\Debug\netstandard2.0\Archon.DataAccessLayer.pdb
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.csproj.AssemblyReference.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.AssemblyInfoInputs.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.AssemblyInfo.cs
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.pdb
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\bin\Debug\netstandard2.0\Archon.Shared.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\bin\Debug\netstandard2.0\Archon.Shared.pdb
+C:\Users\Jonathan\Desktop\yohanna familia\Archon.DataAccessLayer\obj\Debug\netstandard2.0\Archon.DataAccessLayer.csproj.CopyComplete
