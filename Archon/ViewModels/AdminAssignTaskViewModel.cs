@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using Archon.Views;
+using System.Collections.ObjectModel;
 
 namespace Archon.ViewModels
 {
@@ -21,21 +22,25 @@ namespace Archon.ViewModels
         private string _taskCompletedNotes;
         private string _taskWasAssignedTo;
 
-        ICommand _pushToMonitorPayView;
+        ICommand _pushToAdminMonitorPayViewCommand;
         ICommand _popToLogout;
         ICommand _assignTask;
-        ICommand _pushToAdminCompletedTaskDetails;
+        ICommand _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand;
+        ICommand _employeeUpdateAssignedTaskTableCommand;
+
         ICommand _getAllTasks;
         ICommand _getTaskByIdOrUsername;
         ICommand _updateTask;
         ICommand _deleteTask;
         private readonly IRepository<IAdminAssignTaskViewModel> _iRepository;
+        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> _iTaskRepository;
         public AdminAssignTaskViewModel() { }
-        public AdminAssignTaskViewModel(IRepository<IAdminAssignTaskViewModel> iRepository)
+        public AdminAssignTaskViewModel(IRepository<IAdminAssignTaskViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository)
         {
             _iRepository = iRepository;
+            _iTaskRepository = iTaskRepository;
         }
-
+        public ObservableCollection<IAdminAssignTaskModel> TaskCollection { get; set; } = new ObservableCollection<IAdminAssignTaskModel>();
         public int Id
         {
             get => _id;
@@ -95,12 +100,27 @@ namespace Archon.ViewModels
         public ICommand AssignTaskCommand => _assignTask ?? (_assignTask = new Command(AssignTask));
         public ICommand PopToLogoutCommand => _popToLogout ?? (_popToLogout = new Command(PopToLogout));
 
-        public ICommand PushToMonitorPayViewCommand => _pushToMonitorPayView ?? (_pushToMonitorPayView = new Command(PushToMonitorPayView));
-        public ICommand PushToAdminCompletedTaskDetailsCommand => _pushToAdminCompletedTaskDetails ?? (_pushToAdminCompletedTaskDetails = new Command(PushToAdminCompletedTaskDetails));
+        public ICommand PushToAdminMonitorPayViewCommand => _pushToAdminMonitorPayViewCommand ?? (_pushToAdminMonitorPayViewCommand = new Command(PushToAdminMonitorPayView));
+        public ICommand GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand => _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand ?? (_getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand = new Command(GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView));
         public ICommand GetAllTasksCommand => _getAllTasks ?? (_getAllTasks = new Command(GetAllTasks));
         public ICommand GetTaskByIdOrUsernameCommand => _getTaskByIdOrUsername ?? (_getTaskByIdOrUsername = new Command(GetTaskByIdOrUsername));
 
         public ICommand UpdateTaskCommand => _updateTask ?? (_updateTask = new Command(UpdateTask));
+        public ICommand EmployeeUpdateAssignedTaskTableCommand => _employeeUpdateAssignedTaskTableCommand ?? (_employeeUpdateAssignedTaskTableCommand = new Command(EmployeeUpdateAssignedTaskTable));
+
+        private async void EmployeeUpdateAssignedTaskTable()
+        {
+            try
+            {
+                await _iTaskRepository.UpdateAssignedTaskEmployee(this, Username);
+
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
+        }
+
         public ICommand DeleteTaskCommand => _deleteTask ?? (_deleteTask = new Command(DeleteTask));
         private async void AssignTask()
         {
@@ -130,15 +150,21 @@ namespace Archon.ViewModels
         {
             await Application.Current.MainPage.Navigation.PushAsync(new LoginView());
         }
-        //missing VM
-        private async void PushToMonitorPayView(object obj)
+        private async void PushToAdminMonitorPayView(object obj)
         {
-            throw new NotImplementedException();
+            await Application.Current.MainPage.Navigation.PushAsync(new AdminMonitorPayView());
         }
-        //missing VM
-        private async void PushToAdminCompletedTaskDetails(object obj)
+        private async void GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _iRepository.GetByIdOrUsername(this, Username);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
+            await Application.Current.MainPage.Navigation.PushAsync(new AdminCompletedTaskView());
         }
     }
 }

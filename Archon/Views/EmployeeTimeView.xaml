@@ -33,11 +33,17 @@
                     />
 
 
-            <Button Text="SEE TIME DETAILS"
-                    Command="{Binding GoToEmployeeDetailsPageCommand}"
+            <Button Text="TIME AND PAY DETAILS"
+                    Command="{Binding GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand}"
                     TextColor="Red"
                     FontSize="Medium"
                     />
+            <Button Text="ASSIGNED TASKS"
+                    Command="{Binding GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand}"
+                    TextColor="Red"
+                    FontSize="Medium"
+                    />
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

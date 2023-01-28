@@ -21,26 +21,20 @@ namespace Archon.ViewModels
         TimeSpan _durationOfClockIn;
         TimeSpan _totalTimeClockedInToday;
         TimeSpan _totalTimeClockedInThisWeek;
+
         ICommand _getAllTimeDetailsForUserCommand;
         ICommand _updateTimeDetailCommand;
         ICommand _deleteTimeDetailCommand;
-        string _username;
 
         public readonly IEmployeeTimeViewModel _iEmployeeTimeViewModel;
 
-        //i may need the username from loginvm MAYBE
-        private readonly IGetRepository<IEmployeeTimeViewModel> _iGetRepository;
-        private readonly IPutRepository<IEmployeeTimeViewModel> _iPutRepository;
-        private readonly IDeleteRepository<IEmployeeTimeViewModel> _iDeleteRepository;
-
+        private readonly IRepository<IEmployeeTimeViewModel> _iRepository;
 
         public AdminMonitorPayViewModel() { }
-        public AdminMonitorPayViewModel( IGetRepository<IEmployeeTimeViewModel> iGetRepository, IPutRepository<IEmployeeTimeViewModel> iPutRepository, IDeleteRepository<IEmployeeTimeViewModel> iDeleteRepository, IEmployeeTimeViewModel iEmployeeViewModel)
+        public AdminMonitorPayViewModel(IEmployeeTimeViewModel iEmployeeViewModel, IRepository<IEmployeeTimeViewModel> iRepository)
         {
-            _iGetRepository = iGetRepository;
-            _iPutRepository = iPutRepository;
-            _iDeleteRepository = iDeleteRepository;
             _iEmployeeTimeViewModel = iEmployeeViewModel;
+            _iRepository = iRepository;
         }
         public bool IsClockedIn
         {
@@ -101,8 +95,6 @@ namespace Archon.ViewModels
 
         public string Username
         {
-            //get => _username;
-            //set => SetProperty(ref _username, value);
             get => _iEmployeeTimeViewModel.Username;
             set
             {
@@ -119,17 +111,17 @@ namespace Archon.ViewModels
 
         private async void DeleteTimeDetail()
         {
-            await _iDeleteRepository.DeleteAsync(_iEmployeeTimeViewModel);
+            await _iRepository.DeleteAsync(_iEmployeeTimeViewModel);
 
         }
         private async void UpdateTimeDetail()
         {
-            await _iPutRepository.PutAsync(_iEmployeeTimeViewModel);
+            await _iRepository.PutAsync(_iEmployeeTimeViewModel);
 
         }
         private async void GetAllTimeDetailsForUser()
         {
-            await _iGetRepository.GetByIdOrUsername(_iEmployeeTimeViewModel, Username);
+            await _iRepository.GetByIdOrUsername(_iEmployeeTimeViewModel, Username);
         }
     }
 }

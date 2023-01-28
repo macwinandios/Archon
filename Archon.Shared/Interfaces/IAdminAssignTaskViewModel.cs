@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Archon.Shared.Interfaces
@@ -15,5 +16,6 @@ namespace Archon.Shared.Interfaces
         string TaskTitle { get; set; }
         string TaskCompletedNotes { get; set; }
         string TaskWasAssignedTo { get; set; }
+        ObservableCollection<IAdminAssignTaskModel> TaskCollection { get; set; }
     }
 }

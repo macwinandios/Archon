@@ -14,8 +14,6 @@ namespace Archon.ViewModels
     public class EmployeeTimeViewModel : ViewModelBase, IEmployeeTimeViewModel
     {
         bool _isClockedIn;
-        ICommand _clockIn;
-        ICommand _clockOut;
         DateTime _currentTime;
         DateTime _clockedInAt;
         DateTime _clockedOutAt;
@@ -23,23 +21,39 @@ namespace Archon.ViewModels
         DateTime _dateClockedOut;
         float _hourlyWage;
         float _totalWagesEarnedThisWeek;
-        TimeSpan _durationOfClockIn;
-        ICommand _goToEmployeeDetailsPage;
+
+        ICommand _clockIn;
+        ICommand _clockOut;
+        ICommand _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand;
+        ICommand _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand;
         ICommand _logoutCommand;
+
+        TimeSpan _durationOfClockIn;
         TimeSpan _totalTimeClockedInToday;
         TimeSpan _totalTimeClockedInThisWeek;
+        private IAdminAssignTaskViewModel _adminAssignTaskViewModel;
         private readonly ILoginViewModel _iLoginViewModel;
+
         private readonly IEmployeeTimeRepository<IEmployeeTimeViewModel> _iEmployeeTimeRepository;
-        private readonly IPostRepository<IEmployeeTimeViewModel> _iPostRepository;
+        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> _iTaskRepository;
+        private readonly IRepository<IEmployeeTimeViewModel> _iRepository;
+
+
 
         public EmployeeTimeViewModel() { }
-        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IPostRepository<IEmployeeTimeViewModel> iPostRepository)
+        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IRepository<IEmployeeTimeViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository)
         {
             _iLoginViewModel = loginViewModel;
             _iEmployeeTimeRepository = iEmployeeTimeRepository;
-            _iPostRepository = iPostRepository;
+            _iRepository = iRepository;
+            _iTaskRepository = iTaskRepository;
         }
-
+        public ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection { get; set; } = new ObservableCollection<IEmployeeTimeModel>();
+        public IAdminAssignTaskViewModel AdminAssignTaskViewModel
+        {
+            get => _adminAssignTaskViewModel;
+            set => SetProperty(ref _adminAssignTaskViewModel, value);
+        }
 
         public bool IsClockedIn
         {
@@ -109,12 +123,15 @@ namespace Archon.ViewModels
             }
         }
 
+
         public ICommand ClockInCommand => _clockIn ?? (_clockIn = new Command(ClockInAsync));
         public ICommand ClockOutCommand => _clockOut ?? (_clockOut = new Command(ClockOutAsync));
-        public ICommand GoToEmployeeDetailsPageCommand => _goToEmployeeDetailsPage ?? (_goToEmployeeDetailsPage = new Command(GoToEmployeeDetailsPageAsync));
+        
+        public ICommand GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand => _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand ?? (_getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand = new Command(GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView));
+        public ICommand GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand => _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand ?? (_getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand = new Command(GetFromAdminAssignTaskTableAndPushToEmployeeTaskView));
         public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(LogoutAsync));
 
-        
+
         private void ClockInAsync()
         {
             
@@ -131,7 +148,8 @@ namespace Archon.ViewModels
         {
             try
             {
-                _iPostRepository.PostAsync(this);
+                _iRepository.PostAsync(this);
+
             }
             catch (Exception ex)
             {
@@ -139,9 +157,30 @@ namespace Archon.ViewModels
             }
             
         }
-        private async void GoToEmployeeDetailsPageAsync()
+        private async void GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()
         {
+            try
+            {
+                await _iRepository.GetByIdOrUsername(this, Username);
+
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
             await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeDetailsView());
+        }
+        private async void GetFromAdminAssignTaskTableAndPushToEmployeeTaskView()
+        {
+            try
+            {
+                await _iTaskRepository.GetAssignedTaskEmployee(AdminAssignTaskViewModel, Username);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
+            await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTaskView());
         }
         private async void LogoutAsync()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Archon.Shared.Interfaces
@@ -17,5 +18,7 @@ namespace Archon.Shared.Interfaces
         TimeSpan TotalTimeClockedInToday { get; set; }
         TimeSpan TotalTimeClockedInThisWeek { get; set; }
         string Username { get; set; }
+        ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection { get; set; }
+
     }
 }

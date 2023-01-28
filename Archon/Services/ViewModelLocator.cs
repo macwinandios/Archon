@@ -25,15 +25,11 @@ namespace Archon.Services
 
             //EMPLOYEE TIME REPOSITORY
             _container.Register<IEmployeeTimeRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
-            _container.Register<IPostRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
-            _container.Register<IGetRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
+            _container.Register<IRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
 
             //ADMINASSIGNTASK REPOSITORY
             _container.Register<IRepository<IAdminAssignTaskViewModel>, AdminAssignTaskRepository>();
-
-            //ADMIN MONITOR PAY REPOTISORY
-
-
+                _container.Register<IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel>, AdminAssignTaskRepository>();
 
             //EMPLOYEE TIME VIEWMODEL
             _container.Register<IEmployeeTimeViewModel, EmployeeTimeViewModel>();

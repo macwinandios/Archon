@@ -11,7 +11,5 @@ namespace Archon.Shared.Interfaces
         string Username { get; set; }
         string Password { get; set; }
 
-        ObservableCollection<ILoginModel> UserList { get; set; }
-
     }
 }
