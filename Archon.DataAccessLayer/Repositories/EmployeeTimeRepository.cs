@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Archon.DataAccessLayer.Repositories
-{
-    public class EmployeeTimeRepository : IEmployeeTimeRepository<IEmployeeTimeViewModel>, IPostRepository<IEmployeeTimeViewModel>, IGetRepository<IEmployeeTimeViewModel>
+{//IGetRepository<IEmployeeTimeViewModel>, IPostRepository<IEmployeeTimeViewModel>
+    public class EmployeeTimeRepository : IEmployeeTimeRepository<IEmployeeTimeViewModel>,IRepository<IEmployeeTimeViewModel>
     {
         public async Task ClockInAsync(IEmployeeTimeViewModel viewModel)
         {
@@ -28,7 +28,45 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-        //ADMINMONITORPAY WILL USE THE FOLLOWING TWO GETALLASYNC AND GETBYIDORUSERNAME
+
+        public async Task DeleteAsync(IEmployeeTimeViewModel viewModel)
+        {
+            try
+            {
+                await SqlModel.SqlConnection.OpenAsync();
+
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT COUNT(*) FROM dbo.HoursAndPay WHERE Username =   @Username";
+                    command.Parameters.AddWithValue("@Username", viewModel.Username);
+                    //this needs to have an id so add id to  IEmployeeTimeViewModel
+                    int count = (int)command.ExecuteScalar();
+                    if (count > 0)
+                    {
+                        command.CommandText = "DELETE FROM dbo.HoursAndPay WHERE Username = @Username";
+                        command.ExecuteNonQuery();
+                        await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY DELETED", "CLICK OK TO CONTINUE", "OK");
+                        //viewModel.Id = null;
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("INVALID Username", "ID NOT FOUND IN DATABASE", "OK");
+                        //viewModel.Id = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+            }
+        }
+
+
+        //ADMINMONITORPAY WILL USE THE FOLLOWING 4: GETALLASYNC, GETBYIDORUSERNAME AND DELETE, PUT
         public Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
         {
             throw new NotImplementedException();
@@ -45,24 +83,48 @@ namespace Archon.DataAccessLayer.Repositories
             {
                 SqlModel.SqlConnection.Open();
 
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.EmployeeTime WHERE Username = @Username", SqlModel.SqlConnection);
+                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.HoursAndPay WHERE Username = @Username", SqlModel.SqlConnection);
                 clientCommand.Parameters.AddWithValue("@Username", username);
 
                 SqlDataReader clientReader = clientCommand.ExecuteReader();
+                viewModel.HoursAndPayCollection.Clear();
 
-                if (clientReader.Read())
-                {
-                    viewModel.Username = clientReader["Username"].ToString();
-                    SqlModel.SqlConnection.Close();
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("USERNAME NOT FOUND", "IN DATABASE", "OK");
-                    SqlModel.SqlConnection.Close();
-                }
 
+                while (clientReader.Read())
+                {
+                    viewModel.HoursAndPayCollection.Add(new EmployeeTimeModel
+                    {
+
+                        Username = clientReader["Username"].ToString(),
+                        HourlyWage = Convert.ToSingle(clientReader["HourlyWage"]),
+                        DateClockedIn = Convert.ToDateTime(clientReader["DateClockedIn"]).DayOfWeek,
+                        ClockedInAt = Convert.ToDateTime(clientReader["ClockedInAt"]),
+                        DateClockedOut = Convert.ToDateTime(clientReader["DateClockedOut"]).DayOfWeek,
+                        ClockedOutAt = Convert.ToDateTime(clientReader["ClockedOutAt"]),
+                        DurationOfClockIn = TimeSpan.Parse((string)clientReader["DurationOfClockIn"]),
+                        TotalTimeClockedInToday = TimeSpan.Parse((string)clientReader["TotalTimeClockedInToday"]),
+                        TotalTimeClockedInThisWeek = TimeSpan.Parse((string)clientReader["TotalTimeClockedInThisWeek"]),
+                        TotalWagesEarnedThisWeek = Convert.ToSingle(clientReader["TotalWagesEarnedThisWeek"])
+                    });
+
+                }
                 clientReader.Close();
                 SqlModel.SqlConnection.Close();
+                //if (clientReader.Read())
+                //{
+                //    viewModel.Username = clientReader["Username"].ToString();
+
+
+                //    SqlModel.SqlConnection.Close();
+                //}
+                //else
+                //{
+                //    await Application.Current.MainPage.DisplayAlert("USERNAME NOT FOUND", "IN DATABASE", "OK");
+                //    SqlModel.SqlConnection.Close();
+                //}
+
+                //clientReader.Close();
+                //SqlModel.SqlConnection.Close();
             }
             catch (Exception ex)
             {
@@ -154,6 +216,11 @@ namespace Archon.DataAccessLayer.Repositories
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
             }
+        }
+
+        public Task PutAsync(IEmployeeTimeViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -112,7 +112,7 @@ namespace Archon.DataAccessLayer
                     model.UserList.Clear();
                     while (clientReader.Read())
                     {
-                        model.UserList.Add(new LoginModel
+                        model.UserList.Insert(0,new LoginModel
                         {
                             Username = clientReader["Username"].ToString(),
                             Password = clientReader["Password"].ToString(),
