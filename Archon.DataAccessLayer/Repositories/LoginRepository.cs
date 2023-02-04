@@ -33,7 +33,7 @@ namespace Archon.DataAccessLayer
                         SqlModel.SqlConnection.Close();
                         return true;
                     }
-                    if(viewModel.CompanyId != 123)
+                    if (viewModel.CompanyId != 123)
                     {
                         SqlModel.SqlConnection.Close();
                         await Application.Current.MainPage.DisplayAlert("INVALID COMPANY ID", "PLEASE ENTER YOUR COMPANY'S ID", "OK");
@@ -280,7 +280,7 @@ namespace Archon.DataAccessLayer
                 SqlModel.SqlConnection.Open();
 
                 SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Login WHERE Username = @Username", SqlModel.SqlConnection);
-                clientCommand.Parameters.AddWithValue("@Id", username);
+                clientCommand.Parameters.AddWithValue("@Username", username);
 
                 SqlDataReader clientReader = clientCommand.ExecuteReader();
 
@@ -291,7 +291,7 @@ namespace Archon.DataAccessLayer
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
+                    await Application.Current.MainPage.DisplayAlert("INVALID Username", "Username NOT FOUND IN DATABASE", "OK");
                     SqlModel.SqlConnection.Close();
                 }
 

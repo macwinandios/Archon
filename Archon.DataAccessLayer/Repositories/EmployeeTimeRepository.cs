@@ -37,21 +37,20 @@ namespace Archon.DataAccessLayer.Repositories
 
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
-                    command.CommandText = "SELECT COUNT(*) FROM dbo.HoursAndPay WHERE Username =   @Username";
-                    command.Parameters.AddWithValue("@Username", viewModel.Username);
-                    //this may need to have an id so add id to  IEmployeeTimeViewModel
+                    command.CommandText = "SELECT COUNT(*) FROM dbo.HoursAndPay WHERE Id =   @Id";
+                    command.Parameters.AddWithValue("@Id", viewModel.Id);
                     int count = (int)command.ExecuteScalar();
                     if (count > 0)
                     {
-                        command.CommandText = "DELETE FROM dbo.HoursAndPay WHERE Username = @Username";
+                        command.CommandText = "DELETE FROM dbo.HoursAndPay WHERE Id =   @Id";
                         command.ExecuteNonQuery();
                         await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY DELETED", "CLICK OK TO CONTINUE", "OK");
-                        //viewModel.Id = null;
+                        viewModel.Id = null;
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("INVALID Username", "ID NOT FOUND IN DATABASE", "OK");
-                        //viewModel.Id = null;
+                        await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
+                        viewModel.Id = null;
                     }
                 }
             }
@@ -93,7 +92,8 @@ namespace Archon.DataAccessLayer.Repositories
                         DurationOfClockIn = TimeSpan.Parse((string)clientReader["DurationOfClockIn"]),
                         TotalTimeClockedInToday = TimeSpan.Parse((string)clientReader["TotalTimeClockedInToday"]),
                         TotalTimeClockedInThisWeek = TimeSpan.Parse((string)clientReader["TotalTimeClockedInThisWeek"]),
-                        TotalWagesEarnedThisWeek = Convert.ToSingle(clientReader["TotalWagesEarnedThisWeek"])
+                        TotalWagesEarnedThisWeek = Convert.ToSingle(clientReader["TotalWagesEarnedThisWeek"]),
+                        Id = Convert.ToInt32(clientReader["Id"])
                     });
 
                 }
@@ -157,7 +157,6 @@ namespace Archon.DataAccessLayer.Repositories
                                 viewModel.TotalTimeClockedInToday = totalDuration + viewModel.DurationOfClockIn;
                                 viewModel.TotalTimeClockedInThisWeek = totalTimeThisWeek + viewModel.TotalTimeClockedInToday;
                                 //Calculate total wages earned this week
-                                //viewModel.HourlyWage = hourlyWage;
                                 viewModel.TotalWagesEarnedThisWeek = (float)Math.Round(wages + (viewModel.TotalTimeClockedInThisWeek.TotalHours * viewModel.HourlyWage), 2);
                             }
                         }
@@ -196,22 +195,18 @@ namespace Archon.DataAccessLayer.Repositories
         {
             try
             {
+                SqlModel.SqlConnection.Open();
+
                 using (var command = SqlModel.SqlConnection.CreateCommand())
                 {
                     command.CommandText = @"UPDATE [dbo].[HoursAndPay]
-                                   SET [Username] = @Username, [DateClockedIn] = @DateClockedIn, [ClockedInAt] = @ClockedInAt,[DateClockedOut] = @DateClockedOut, [ClockedOutAt] = @ClockedOutAt,[DurationOfClockIn] = @DurationOfClockIn,[TotalTimeClockedInToday] = @TotalTimeClockedInToday, [TotalTimeClockedInThisWeek] = @TotalTimeClockedInThisWeek, [HourlyWage] = @HourlyWage
-                                   WHERE [Username] = @Username";
-                    command.Parameters.AddWithValue("@Username", viewModel.Username);
-                    command.Parameters.AddWithValue("@DateClockedIn", viewModel.DateClockedIn.ToString());
-                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToString());
-                    command.Parameters.AddWithValue("@DateClockedOut", viewModel.DateClockedOut.ToString());
-                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToString());
-                    command.Parameters.AddWithValue("@DurationOfClockIn", viewModel.DurationOfClockIn.ToString());
-                    command.Parameters.AddWithValue("@TotalTimeClockedInToday", viewModel.TotalTimeClockedInToday.ToString());
-                    command.Parameters.AddWithValue("@TotalTimeClockedInThisWeek", viewModel.TotalTimeClockedInThisWeek.ToString());
-                    command.Parameters.AddWithValue("@HourlyWage", viewModel.HourlyWage.ToString());
+                                   SET [ClockedInAt] = @ClockedInAt, [ClockedOutAt] = @ClockedOutAt WHERE [Id] = @Id";
 
-                    //await command.ExecuteNonQueryAsync();
+                    command.Parameters.AddWithValue("@Id", viewModel.Id.ToString());
+                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToString());
+                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToString());
+                    await command.ExecuteNonQueryAsync();
+                    await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TIME", "OK");
                 }
             }
             catch (Exception ex)
@@ -222,12 +217,52 @@ namespace Archon.DataAccessLayer.Repositories
         public Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
         {
             throw new NotImplementedException();
-
         }
 
-        public Task GetByIdOrUsername(IEmployeeTimeViewModel viewModel, int id)
+        public async Task GetByIdOrUsername(IEmployeeTimeViewModel viewModel, int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                SqlModel.SqlConnection.Open();
+
+                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.HoursAndPay WHERE Id = @Id", SqlModel.SqlConnection);
+                clientCommand.Parameters.AddWithValue("@Id", id);
+
+                SqlDataReader clientReader = clientCommand.ExecuteReader();
+                viewModel.HoursAndPayCollection.Clear();
+
+
+                while (clientReader.Read())
+                {
+                    viewModel.HoursAndPayCollection.Add(new EmployeeTimeModel
+                    {
+
+                        Username = clientReader["Username"].ToString(),
+                        HourlyWage = Convert.ToSingle(clientReader["HourlyWage"]),
+                        DateClockedIn = Convert.ToDateTime(clientReader["DateClockedIn"]),
+                        ClockedInAt = Convert.ToDateTime(clientReader["ClockedInAt"]),
+                        DateClockedOut = Convert.ToDateTime(clientReader["DateClockedOut"]),
+                        ClockedOutAt = Convert.ToDateTime(clientReader["ClockedOutAt"]),
+                        DurationOfClockIn = TimeSpan.Parse((string)clientReader["DurationOfClockIn"]),
+                        TotalTimeClockedInToday = TimeSpan.Parse((string)clientReader["TotalTimeClockedInToday"]),
+                        TotalTimeClockedInThisWeek = TimeSpan.Parse((string)clientReader["TotalTimeClockedInThisWeek"]),
+                        TotalWagesEarnedThisWeek = Convert.ToSingle(clientReader["TotalWagesEarnedThisWeek"]),
+                        Id = Convert.ToInt32(clientReader["Id"])
+                    });
+
+                }
+                clientReader.Close();
+                SqlModel.SqlConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                SqlModel.SqlConnection.Close();
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+            }
         }
     }
 

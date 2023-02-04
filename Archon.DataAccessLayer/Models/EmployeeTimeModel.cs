@@ -8,6 +8,7 @@ namespace Archon.DataAccessLayer.Models
 {
     public class EmployeeTimeModel : IEmployeeTimeModel
     {
+        public int Id { get; set; }
         public DateTime CurrentTime { get; set; }
         public DateTime ClockedInAt { get; set; }
         public DateTime ClockedOutAt { get; set; }
