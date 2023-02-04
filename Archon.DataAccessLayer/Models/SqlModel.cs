@@ -23,7 +23,7 @@ namespace Archon.DataAccessLayer.Models
             byte[] _encryptedBytes = _sHA1CryptoServiceProvider.ComputeHash(_stringBytes);
             return Convert.ToBase64String(_encryptedBytes);
         }
-        public static string ServerName { get; set; } = "172.19.208.1";
+        public static string ServerName { get; set; } = "172.31.0.1";
         public static string DatabaseName { get; set; } = "Archon";
         //public static string DatabaseName { get; set; } = "CompanyDB";
         public static string ServerUsername { get; set; } = "Johnny";
