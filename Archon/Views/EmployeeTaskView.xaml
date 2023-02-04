@@ -17,8 +17,19 @@
             <Label Text="Update Task COmpletedNOtes"
                    FontSize="Large"
                    FontAttributes="Bold"/>
-            <Entry Placeholder="enter new details"
+            <Entry Placeholder="enter id"
+                   Text="{Binding Id}"/>
+            <Entry Placeholder="Enter Completion Notes"
                    Text="{Binding TaskCompletedNotes}"/>
+            <Label
+                Text="Was the Task completed?" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+            <CheckBox IsChecked="{Binding TaskIsComplete}"
+                          Color="Red"
+                          BackgroundColor="LightBlue"/>
 
             <ListView ItemsSource="{Binding TaskCollection}"
                      HasUnevenRows="True">
@@ -27,6 +38,7 @@
                         <ViewCell>
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -122,6 +134,17 @@
                                           Grid.Column="1"
                                           Text="{Binding TaskWasAssignedTo}"
                                           FontSize="Medium"
+                                          TextColor="Black" />
+                                <Label Grid.Row="8" 
+                                      Grid.Column="0" 
+                                      Text="Id:" 
+                                      FontSize="Medium" 
+                                      TextColor="Black" 
+                                      FontAttributes="Bold"/>
+                                <Label Grid.Row="8" 
+                                          Grid.Column="1" 
+                                          Text="{Binding Id}"
+                                          FontSize="Medium" 
                                           TextColor="Black" />
 
 

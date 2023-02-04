@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="Archon.Views.AdminAssignTaskView">
     <ContentPage.BindingContext>
         <Binding Source="{StaticResource Locator}" Path="AdminAssignTaskViewModel"/>
@@ -23,37 +24,18 @@
                    Text="{Binding Username}"
                    FontSize="Medium"
                    PlaceholderColor="Black"/>
-                <Label
-                Text="Number Of Assigned Tasks:" 
-                FontSize="Medium" 
-                TextColor="Black" 
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
-                <Label  
-                Text="{Binding NumberOfAssignedTasks}"
-                FontSize="Medium"
-                TextColor="Black" />
-            
+
                 <Label
                 Text="DateOfAssignedTask:" 
                 FontSize="Medium" 
                 TextColor="Black" 
                 FontAttributes="Bold"
                 HorizontalOptions="Center"/>
-                <Label 
-                Text="{Binding DateOfAssignedTask, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
-                FontSize="Medium" 
-                TextColor="Black" />
-                <Label
-                Text="TaskIsComplete:" 
-                FontSize="Medium" 
-                TextColor="Black" 
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
-                <Label 
-                Text="{Binding TaskIsComplete}" 
-                FontSize="Medium"
-                TextColor="Black" />
+                <DatePicker Date="{Binding DateOfAssignedTask}"
+                            MinimumDate="{x:Static system:DateTime.Today }"
+                        Format="d"
+                        TextColor="Red"
+                        HorizontalOptions="FillAndExpand"/>
                 <Label
                 Text="TaskDescription:" 
                 FontSize="Medium" 
@@ -84,16 +66,7 @@
                    Text="{Binding TaskWasAssignedTo}"
                    FontSize="Medium"
                    PlaceholderColor="Black"/>
-                <Label
-                Text="Completed Notes:" 
-                FontSize="Medium" 
-                TextColor="Black" 
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
-                <Entry Placeholder="Enter Completed Notes"
-                   Text="{Binding TaskCompletedNotes}"
-                   FontSize="Medium"
-                   PlaceholderColor="Black"/>
+                
 
 
                 <Button Text="Assign A Task"
@@ -108,15 +81,11 @@
                     TextColor="Red"
                     FontAttributes="Bold"
                     Command="{Binding PushToAdminMonitorPayViewCommand}"/>
-            <Button Text="Go To COMPLETED TASK VIEW"
+                <Button Text="Get All Tasks"
                     TextColor="Red"
                     FontAttributes="Bold"
                     Command="{Binding GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand}"/>
-            <Button Text="Get All Tasks"
-                    TextColor="Red"
-                    FontAttributes="Bold"
-                    Command="{Binding GetAllTasksCommand}"/>
-            <Button Text="Get Task By Username"
+                <Button Text="Get Task By Username"
                     TextColor="Red"
                     FontAttributes="Bold"
                     Command="{Binding GetTaskByIdOrUsernameCommand}"/>
@@ -124,7 +93,143 @@
                     TextColor="Red"
                     FontAttributes="Bold"
                     Command="{Binding UpdateTaskCommand}"/>
-        </StackLayout>
+                <Button Text="Delete A Task"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Command="{Binding DeleteTaskCommand}"/>
+                <Label
+                Text="Id to Update or Delete:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+                <Entry Placeholder="Enter Id"
+                   Text="{Binding Id}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
+                <ListView ItemsSource="{Binding TaskCollection}"
+                     HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Row="0" 
+                                      Grid.Column="0" 
+                                      Text="Username:" 
+                                      FontSize="Medium" 
+                                      TextColor="Black" 
+                                      FontAttributes="Bold"/>
+                                    <Label Grid.Row="0" 
+                                          Grid.Column="1" 
+                                          Text="{Binding Username}"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="1"
+                                          Grid.Column="0" 
+                                          Text="NumberOfAssignedTasks" 
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="1" 
+                                          Grid.Column="1" 
+                                          Text="{Binding NumberOfAssignedTasks}"
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="2"
+                                          Grid.Column="0" 
+                                          Text="DateOfAssignedTask"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="2" 
+                                          Grid.Column="1" 
+                                          Text="{Binding DateOfAssignedTask, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="3"
+                                          Grid.Column="0" 
+                                          Text="TaskIsComplete"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="3"
+                                          Grid.Column="1" 
+                                          Text="{Binding TaskIsComplete}" 
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="4"
+                                          Grid.Column="0"
+                                          Text="TaskDescription"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="4" 
+                                          Grid.Column="1"
+                                          Text="{Binding TaskDescription}"
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="5"
+                                          Grid.Column="0"
+                                          Text="TaskTitle"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="5"
+                                          Grid.Column="1" 
+                                          Text="{Binding TaskTitle}" 
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="6" 
+                                          Grid.Column="0"
+                                          Text="TaskCompletedNotes"
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="6"
+                                          Grid.Column="1"
+                                          Text="{Binding TaskCompletedNotes}"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="7"
+                                          Grid.Column="0"
+                                          Text="TaskWasAssignedTo"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+                                    <Label Grid.Row="7" 
+                                          Grid.Column="1"
+                                          Text="{Binding TaskWasAssignedTo}"
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="8" 
+                                      Grid.Column="0" 
+                                      Text="Id:" 
+                                      FontSize="Medium" 
+                                      TextColor="Black" 
+                                      FontAttributes="Bold"/>
+                                    <Label Grid.Row="8" 
+                                          Grid.Column="1" 
+                                          Text="{Binding Id}"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
+
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

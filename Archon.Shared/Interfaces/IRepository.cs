@@ -13,7 +13,6 @@ namespace Archon.Shared.Interfaces
         Task GetByIdOrUsername(T viewModel, int id);
         Task GetByIdOrUsername(T viewModel, string username);
         Task PutAsync(T viewModel);
-        //Task<bool> Login(ILoginViewModel viewModel);
 
     }
 }

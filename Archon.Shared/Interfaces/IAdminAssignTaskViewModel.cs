@@ -7,9 +7,9 @@ namespace Archon.Shared.Interfaces
 {
     public interface IAdminAssignTaskViewModel
     {
-        int Id { get; set; }
+        int? Id { get; set; }
         string Username { get; set; }
-        int NumberOfAssignedTasks { get; set; }
+        int? NumberOfAssignedTasks { get; set; }
         DateTime DateOfAssignedTask { get; set; }
         bool TaskIsComplete { get; set; }
         string TaskDescription { get; set; }

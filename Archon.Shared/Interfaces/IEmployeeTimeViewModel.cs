@@ -7,6 +7,7 @@ namespace Archon.Shared.Interfaces
 {
     public interface IEmployeeTimeViewModel
     {
+        int? Id { get; set; }
         DateTime CurrentTime { get; set; }
         DateTime ClockedInAt { get; set; }
         DateTime ClockedOutAt { get; set; }

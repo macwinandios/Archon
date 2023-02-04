@@ -55,6 +55,11 @@
                     TextColor="Red"
                     Command="{Binding LoginCommand}"
                     />
+            <Entry Placeholder="Id to Update or Delete"
+                   Text="{Binding Id}"
+                   FontSize="Large"
+                   TextColor="Blue"
+                   />
             <ListView
                         HasUnevenRows="True"
                         ItemsSource="{Binding UserList}"

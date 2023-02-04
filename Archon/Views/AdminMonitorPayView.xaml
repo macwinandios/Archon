@@ -3,22 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Archon.Views.AdminMonitorPayView">
     <ContentPage.BindingContext>
-        <Binding Source="{StaticResource Locator}" Path="AdminMonitorPayViewModel"/>
+        <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
+      <ScrollView>
         <StackLayout>
             <Button Text="Get All Time Details For User"
-                    Command="{Binding GetAllTimeDetailsForUserCommand}"
+                    Command="{Binding AdminGetAllTimeDetailsForUserCommand}"
                     TextColor="Red"
                     FontSize="Medium"
                     />
             <Button Text="Update Time Detail"
-                    Command="{Binding UpdateTimeDetailCommand}"
+                    Command="{Binding AdminUpdateTimeDetailCommand}"
                     TextColor="Red"
                     FontSize="Medium"
                     />
             <Button Text="Delete Time Detail"
-                    Command="{Binding DeleteTimeDetailCommand}"
+                    Command="{Binding AdminDeleteTimeDetailCommand}"
                     TextColor="Red"
                     FontSize="Medium"
                     />
@@ -27,9 +28,32 @@
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" 
                    PlaceholderColor="Red"/>
+            <Label
+                Text="Id to Update or Delete:" 
+                FontSize="Medium" 
+                TextColor="Black" 
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+            <Entry Placeholder="Enter Id"
+                   Text="{Binding Id}"
+                   FontSize="Medium"
+                   PlaceholderColor="Black"/>
             
             
-            <StackLayout HorizontalOptions="Center" 
+                <Label 
+                   Text="Update Time Clocked In" 
+                   FontSize="Medium" 
+                   TextColor="Black" />
+                <TimePicker Time="{Binding ClockedInAt}"/>
+            
+                <Label 
+                   Text="Update Time Clocked Out" 
+                   FontSize="Medium" 
+                   TextColor="Black" />
+                <TimePicker Time="{Binding ClockedOutAt}"/>
+
+
+                <StackLayout HorizontalOptions="Center" 
                      VerticalOptions="Center"
                      IsVisible="{Binding UserDetailsIsVisible}">
 
@@ -53,6 +77,7 @@
                             <ViewCell>
                                 <Grid>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -160,6 +185,16 @@
                                           Text="{Binding TotalWagesEarnedThisWeek,StringFormat='${0:N2}'}"
                                           FontSize="Medium" 
                                           TextColor="Black" />
+                                    <Label Grid.Row="9"
+                                          Grid.Column="0"
+                                          Text="Id"
+                                          FontSize="Medium"
+                                          TextColor="Black" />
+                                    <Label Grid.Row="9" 
+                                          Grid.Column="1" 
+                                          Text="{Binding Id}"
+                                          FontSize="Medium" 
+                                          TextColor="Black" />
 
 
                                 </Grid>
@@ -172,6 +207,6 @@
 
             </StackLayout>
         </StackLayout>
-        
+      </ScrollView>
     </ContentPage.Content>
 </ContentPage>

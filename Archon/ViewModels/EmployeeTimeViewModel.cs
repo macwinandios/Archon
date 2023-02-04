@@ -13,6 +13,7 @@ namespace Archon.ViewModels
 {
     public class EmployeeTimeViewModel : ViewModelBase, IEmployeeTimeViewModel
     {
+        int? _id;
         bool _isClockedIn;
         DateTime _currentTime;
         DateTime _clockedInAt;
@@ -27,6 +28,11 @@ namespace Archon.ViewModels
         ICommand _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand;
         ICommand _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand;
         ICommand _logoutCommand;
+
+        //Three ADMIN Commands
+        ICommand _adminGetAllTimeDetailsForUserCommand;
+        ICommand _adminUpdateTimeDetailCommand;
+        ICommand _adminDeleteTimeDetailCommand;
 
         TimeSpan _durationOfClockIn;
         TimeSpan _totalTimeClockedInToday;
@@ -50,7 +56,11 @@ namespace Archon.ViewModels
             _adminAssignTaskViewModel = adminAssignTaskViewModel;
         }
         public ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection { get; set; } = new ObservableCollection<IEmployeeTimeModel>();
-
+        public int? Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
         public bool IsClockedIn
         {
             get => _isClockedIn;
@@ -127,7 +137,29 @@ namespace Archon.ViewModels
         public ICommand GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand => _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand ?? (_getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand = new Command(GetFromAdminAssignTaskTableAndPushToEmployeeTaskView));
         public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(LogoutAsync));
 
+        //Three Admin Command Initialization
+        public ICommand AdminGetAllTimeDetailsForUserCommand => _adminGetAllTimeDetailsForUserCommand ?? (_adminGetAllTimeDetailsForUserCommand = new Command(GetAllTimeDetailsForUser));
 
+        public ICommand AdminUpdateTimeDetailCommand => _adminUpdateTimeDetailCommand ?? (_adminUpdateTimeDetailCommand = new Command(UpdateTimeDetail));
+
+        public ICommand AdminDeleteTimeDetailCommand => _adminDeleteTimeDetailCommand ?? (_adminDeleteTimeDetailCommand = new Command(DeleteTimeDetail));
+
+        //Three Admin Methods
+        private async void DeleteTimeDetail()
+        {
+            await _iRepository.DeleteAsync(this);
+        }
+        private async void UpdateTimeDetail()
+        {
+            await _iRepository.PutAsync(this);
+
+        }
+        private async void GetAllTimeDetailsForUser()
+        {
+            await _iRepository.GetByIdOrUsername(this, Username);
+        }
+
+        //Employee Methods
         private void ClockInAsync()
         {
             

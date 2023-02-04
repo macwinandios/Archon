@@ -15,7 +15,7 @@ using Xamarin.Forms;
 namespace Archon.ViewModels
 {
     public class LoginViewModel : ViewModelBase, ILoginViewModel
-    {//gittest
+    {
         int? _id;
         int? _companyId;
         string _username;
@@ -97,7 +97,6 @@ namespace Archon.ViewModels
                 {
                     await Application.Current.MainPage.Navigation.PushAsync(new AdminAssignTaskView());
                 }
-                //await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
             }
         }
         public async void SignUpAsync()

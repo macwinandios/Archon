@@ -21,8 +21,6 @@ namespace Archon.Services
             _container.Register<IRepository<ILoginViewModel>, LoginRepository>();
             _container.Register<ILoginRepository<ILoginViewModel>, LoginRepository >();
 
-
-
             //EMPLOYEE TIME REPOSITORY
             _container.Register<IEmployeeTimeRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
             _container.Register<IRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
@@ -42,16 +40,10 @@ namespace Archon.Services
             //ADMIN ASSIGN TASK VIEWMODEL
             _container.Register<IAdminAssignTaskViewModel, AdminAssignTaskViewModel>();
 
-
-            //ADMIN MONITOR PAY VIEW MODEL
-            _container.Register<IAdminMonitorPayViewModel, AdminMonitorPayViewModel>();
-
-
         }
         public ILoginViewModel LoginViewModel => _container.Resolve<ILoginViewModel>();
         public IEmployeeTimeViewModel EmployeeTimeViewModel => _container.Resolve<IEmployeeTimeViewModel>();
         public IAdminAssignTaskViewModel AdminAssignTaskViewModel => _container.Resolve<IAdminAssignTaskViewModel>();
-        public IAdminMonitorPayViewModel AdminMonitorPayViewModel => _container.Resolve<IAdminMonitorPayViewModel>();
 
     }
 }

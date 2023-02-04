@@ -8,7 +8,7 @@ namespace Archon.Shared.Interfaces
     {
         int Id { get; set; }
         string Username { get; set; }
-        int NumberOfAssignedTasks { get; set; }
+        int? NumberOfAssignedTasks { get; set; }
         DateTime DateOfAssignedTask { get; set; }
         bool TaskIsComplete { get; set; }
         string TaskDescription { get; set; }
