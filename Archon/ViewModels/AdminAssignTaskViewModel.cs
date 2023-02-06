@@ -7,30 +7,31 @@ using System.Text;
 using System.Windows.Input;
 using Archon.Views;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Archon.ViewModels
 {
     public class AdminAssignTaskViewModel : ViewModelBase, IAdminAssignTaskViewModel
     {
-        private int? _id;
-        private int? _numberOfAssignedTasks;
-        private string _username;
-        private DateTime _dateOfAssignedTask;
-        private bool _taskIsComplete;
-        private string _taskDescription;
-        private string _taskTitle;
-        private string _taskCompletedNotes;
-        private string _taskWasAssignedTo;
+        int? _id;
+        int? _numberOfAssignedTasks;
+        bool _taskIsComplete;
+        DateTime _dateOfAssignedTask;
+        string _taskDescription;
+        string _taskTitle;
+        string _taskCompletedNotes;
+        string _taskWasAssignedTo;
+        string _username;
 
         ICommand _pushToAdminMonitorPayViewCommand;
-        ICommand _popToLogout;
-        ICommand _assignTask;
+        ICommand _popToLogoutCommand;
+        ICommand _assignTaskCommand;
         ICommand _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand;
         ICommand _employeeUpdateAssignedTaskTableCommand;
+        ICommand _getTaskByIdOrUsernameCommand;
+        ICommand _updateTaskCommand;
+        ICommand _deleteTaskCommand;
 
-        ICommand _getTaskByIdOrUsername;
-        ICommand _updateTask;
-        ICommand _deleteTask;
         private readonly IRepository<IAdminAssignTaskViewModel> _iRepository;
         private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> _iTaskRepository;
         public AdminAssignTaskViewModel() { }
@@ -98,18 +99,18 @@ namespace Archon.ViewModels
         }
 
 
-        public ICommand AssignTaskCommand => _assignTask ?? (_assignTask = new Command(AssignTask));
-        public ICommand PopToLogoutCommand => _popToLogout ?? (_popToLogout = new Command(PopToLogout));
+        public ICommand AssignTaskCommand => _assignTaskCommand ?? (_assignTaskCommand = new Command(async () => await AssignTask()));
+        public ICommand PopToLogoutCommand => _popToLogoutCommand ?? (_popToLogoutCommand = new Command(async () => await PopToLogout()));
 
-        public ICommand PushToAdminMonitorPayViewCommand => _pushToAdminMonitorPayViewCommand ?? (_pushToAdminMonitorPayViewCommand = new Command(PushToAdminMonitorPayView));
-        public ICommand GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand => _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand ?? (_getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand = new Command(GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView));
-        public ICommand GetTaskByIdOrUsernameCommand => _getTaskByIdOrUsername ?? (_getTaskByIdOrUsername = new Command(GetTaskByIdOrUsername));
+        public ICommand PushToAdminMonitorPayViewCommand => _pushToAdminMonitorPayViewCommand ?? (_pushToAdminMonitorPayViewCommand = new Command(async () => await PushToAdminMonitorPayView()));
+        public ICommand GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand => _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand ?? (_getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand = new Command(async () => await GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()));
+        public ICommand GetTaskByIdOrUsernameCommand => _getTaskByIdOrUsernameCommand ?? (_getTaskByIdOrUsernameCommand = new Command(async () => await GetTaskByIdOrUsername()));
 
-        public ICommand UpdateTaskCommand => _updateTask ?? (_updateTask = new Command(UpdateTask));
-        public ICommand EmployeeUpdateAssignedTaskTableCommand => _employeeUpdateAssignedTaskTableCommand ?? (_employeeUpdateAssignedTaskTableCommand = new Command(EmployeeUpdateAssignedTaskTable));
-        public ICommand DeleteTaskCommand => _deleteTask ?? (_deleteTask = new Command(DeleteTask));
+        public ICommand UpdateTaskCommand => _updateTaskCommand ?? (_updateTaskCommand = new Command(async () => await UpdateTask()));
+        public ICommand EmployeeUpdateAssignedTaskTableCommand => _employeeUpdateAssignedTaskTableCommand ?? (_employeeUpdateAssignedTaskTableCommand = new Command(async () => await EmployeeUpdateAssignedTaskTable()));
+        public ICommand DeleteTaskCommand => _deleteTaskCommand ?? (_deleteTaskCommand = new Command(async () => await DeleteTask()));
 
-        private async void EmployeeUpdateAssignedTaskTable()
+        private async Task EmployeeUpdateAssignedTaskTable()
         {
             try
             {
@@ -122,34 +123,34 @@ namespace Archon.ViewModels
             }
         }
 
-        private async void AssignTask()
+        private async Task AssignTask()
         {
             await _iRepository.PostAsync(this);
             NumberOfAssignedTasks++;
         }
-        private async void GetTaskByIdOrUsername()
+        private async Task GetTaskByIdOrUsername()
         {
             await _iRepository.GetByIdOrUsername(this, Username);
         }
-        private async void UpdateTask()
+        private async Task UpdateTask()
         {
             await _iRepository.PutAsync(this);
 
         }
-        private async void DeleteTask()
+        private async Task DeleteTask()
         {
             await _iRepository.DeleteAsync(this);
 
         }
-        private async void PopToLogout(object obj)
+        private async Task PopToLogout()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new LoginView());
         }
-        private async void PushToAdminMonitorPayView(object obj)
+        private async Task PushToAdminMonitorPayView()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new AdminMonitorPayView());
         }
-        private async void GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()
+        private async Task GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()
         {
             try
             {
@@ -161,5 +162,7 @@ namespace Archon.ViewModels
             }
             await Application.Current.MainPage.Navigation.PushAsync(new AdminCompletedTaskView());
         }
+
+
     }
 }

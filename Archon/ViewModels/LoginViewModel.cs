@@ -20,14 +20,16 @@ namespace Archon.ViewModels
         int? _companyId;
         string _username;
         string _password;
+        bool _getUserByIdIsVisible;
+        bool _managerButtons;
+
         ICommand _signUpCommand;
         ICommand _getUsersCommand;
         ICommand _getUsersByIdCommand;
         ICommand _deleteUserCommand;
         ICommand _updateUserCommand;
         ICommand _loginCommand;
-        bool _getUserByIdIsVisible;
-        bool _managerButtons;
+        
         private readonly IRepository<ILoginViewModel> _iRepository;
         private readonly ILoginRepository<ILoginViewModel> _iLoginRepository;
 
@@ -76,14 +78,14 @@ namespace Archon.ViewModels
             get => _password;
             set => SetProperty(ref _password, value);
         }
-        public ICommand SignUpCommand => _signUpCommand ?? (_signUpCommand = new Command(SignUpAsync));
-        public ICommand DeleteCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(DeleteUserAsync));
-        public ICommand GetUsersCommand => _getUsersCommand ?? (_getUsersCommand = new Command(GetAllUsersAsync));
-        public ICommand GetUsersByIdCommand => _getUsersByIdCommand ?? (_getUsersByIdCommand = new Command(GetUsersByIdAsync));
-        public ICommand UpdateCommand => _updateUserCommand ?? (_updateUserCommand = new Command(UpdateUserAsync));
-        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new Command(LoginAsync));
+        public ICommand SignUpCommand => _signUpCommand ?? (_signUpCommand = new Command(async () => await SignUpAsync()));
+        public ICommand DeleteCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(async () => await DeleteUserAsync()));
+        public ICommand GetUsersCommand => _getUsersCommand ?? (_getUsersCommand = new Command(async () => await GetAllUsersAsync()));
+        public ICommand GetUsersByIdCommand => _getUsersByIdCommand ?? (_getUsersByIdCommand = new Command(async () => await GetUsersByIdAsync()));
+        public ICommand UpdateCommand => _updateUserCommand ?? (_updateUserCommand = new Command(async () => await UpdateUserAsync()));
+        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new Command(async () => await LoginAsync()));
 
-        public async void LoginAsync()
+        public async Task LoginAsync()
         {
 
             if (await _iLoginRepository.Login(this))
@@ -99,12 +101,12 @@ namespace Archon.ViewModels
                 }
             }
         }
-        public async void SignUpAsync()
+        public async Task SignUpAsync()
         {
             GetUserByIdIsVisible = false;
             await _iRepository.PostAsync(this);
         }
-        public async void GetAllUsersAsync()
+        public async Task GetAllUsersAsync()
         {
             GetUserByIdIsVisible = false;
             try
@@ -116,18 +118,18 @@ namespace Archon.ViewModels
                 await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
             }
         }
-        public async void GetUsersByIdAsync()
+        public async Task GetUsersByIdAsync()
         {
             GetUserByIdIsVisible = true;
             await _iRepository.GetByIdOrUsername(this, (int)Id);
 
         }
-        public async void DeleteUserAsync()
+        public async Task DeleteUserAsync()
         {
             GetUserByIdIsVisible = false;
             await _iRepository.DeleteAsync(this);
         }
-        public async void UpdateUserAsync()
+        public async Task UpdateUserAsync()
         {
             GetUserByIdIsVisible = false;
             await _iRepository.PutAsync(this);

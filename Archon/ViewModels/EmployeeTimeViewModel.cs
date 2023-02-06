@@ -8,6 +8,7 @@ using Archon.ViewModels.Base;
 using Archon.Views;
 using System.Collections.ObjectModel;
 using Archon.Services;
+using System.Threading.Tasks;
 
 namespace Archon.ViewModels
 {
@@ -22,21 +23,20 @@ namespace Archon.ViewModels
         DateTime _dateClockedOut;
         float _hourlyWage;
         float _totalWagesEarnedThisWeek;
+        TimeSpan _durationOfClockIn;
+        TimeSpan _totalTimeClockedInToday;
+        TimeSpan _totalTimeClockedInThisWeek;
 
         ICommand _clockIn;
         ICommand _clockOut;
         ICommand _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand;
         ICommand _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand;
         ICommand _logoutCommand;
-
         //Three ADMIN Commands
         ICommand _adminGetAllTimeDetailsForUserCommand;
         ICommand _adminUpdateTimeDetailCommand;
         ICommand _adminDeleteTimeDetailCommand;
 
-        TimeSpan _durationOfClockIn;
-        TimeSpan _totalTimeClockedInToday;
-        TimeSpan _totalTimeClockedInThisWeek;
         private IAdminAssignTaskViewModel _adminAssignTaskViewModel;
         private readonly ILoginViewModel _iLoginViewModel;
 
@@ -130,62 +130,45 @@ namespace Archon.ViewModels
         }
 
 
-        public ICommand ClockInCommand => _clockIn ?? (_clockIn = new Command(ClockInAsync));
-        public ICommand ClockOutCommand => _clockOut ?? (_clockOut = new Command(ClockOutAsync));
+        public ICommand ClockInCommand => _clockIn ?? (_clockIn = new Command(async () => await ClockInAsync()));
+        public ICommand ClockOutCommand => _clockOut ?? (_clockOut = new Command(async () => await ClockOutAsync()));
         
-        public ICommand GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand => _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand ?? (_getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand = new Command(GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView));
-        public ICommand GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand => _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand ?? (_getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand = new Command(GetFromAdminAssignTaskTableAndPushToEmployeeTaskView));
-        public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(LogoutAsync));
+        public ICommand GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand => _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand ?? (_getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand = new Command(async () => await GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()));
+        public ICommand GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand => _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand ?? (_getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand = new Command(async () => await GetFromAdminAssignTaskTableAndPushToEmployeeTaskView()));
+        public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(async () => await LogoutAsync()));
 
-        //Three Admin Command Initialization
-        public ICommand AdminGetAllTimeDetailsForUserCommand => _adminGetAllTimeDetailsForUserCommand ?? (_adminGetAllTimeDetailsForUserCommand = new Command(GetAllTimeDetailsForUser));
+        //Three Admin Commands
+        public ICommand AdminGetAllTimeDetailsForUserCommand => _adminGetAllTimeDetailsForUserCommand ?? (_adminGetAllTimeDetailsForUserCommand = new Command(async () => await GetAllTimeDetailsForUser()));
 
-        public ICommand AdminUpdateTimeDetailCommand => _adminUpdateTimeDetailCommand ?? (_adminUpdateTimeDetailCommand = new Command(UpdateTimeDetail));
+        public ICommand AdminUpdateTimeDetailCommand => _adminUpdateTimeDetailCommand ?? (_adminUpdateTimeDetailCommand = new Command(async () => await UpdateTimeDetail()));
 
-        public ICommand AdminDeleteTimeDetailCommand => _adminDeleteTimeDetailCommand ?? (_adminDeleteTimeDetailCommand = new Command(DeleteTimeDetail));
+        public ICommand AdminDeleteTimeDetailCommand => _adminDeleteTimeDetailCommand ?? (_adminDeleteTimeDetailCommand = new Command(async () => await DeleteTimeDetail()));
 
         //Three Admin Methods
-        private async void DeleteTimeDetail()
+        private async Task DeleteTimeDetail()
         {
             await _iRepository.DeleteAsync(this);
         }
-        private async void UpdateTimeDetail()
+        private async Task UpdateTimeDetail()
         {
             await _iRepository.PutAsync(this);
 
         }
-        private async void GetAllTimeDetailsForUser()
+        private async Task GetAllTimeDetailsForUser()
         {
             await _iRepository.GetByIdOrUsername(this, Username);
         }
 
         //Employee Methods
-        private void ClockInAsync()
+        private async Task ClockInAsync()
         {
-            
-            try
-            {
-                _iEmployeeTimeRepository.ClockInAsync(this);
-            }
-            catch (Exception ex)
-            {
-                Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-            }
+            await _iEmployeeTimeRepository.ClockInAsync(this);
         }
-        private void ClockOutAsync(object obj)
+        private async Task ClockOutAsync()
         {
-            try
-            {
-                _iRepository.PostAsync(this);
-
-            }
-            catch (Exception ex)
-            {
-                Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-            }
-            
+              await _iRepository.PostAsync(this);
         }
-        private async void GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()
+        private async Task GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()
         {
             try
             {
@@ -198,7 +181,7 @@ namespace Archon.ViewModels
             }
             await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeDetailsView());
         }
-        private async void GetFromAdminAssignTaskTableAndPushToEmployeeTaskView()
+        private async Task GetFromAdminAssignTaskTableAndPushToEmployeeTaskView()
         {
             try
             {
@@ -210,7 +193,7 @@ namespace Archon.ViewModels
             }
             await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTaskView());
         }
-        private async void LogoutAsync()
+        private async Task LogoutAsync()
         {
             await Application.Current.MainPage.Navigation.PopAsync();
 
