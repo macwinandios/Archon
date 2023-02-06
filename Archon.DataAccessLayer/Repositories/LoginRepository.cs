@@ -27,7 +27,7 @@ namespace Archon.DataAccessLayer
                     command.Parameters.AddWithValue("@Password", hashedPassword);
 
                     int count = (int)await command.ExecuteScalarAsync();
-
+                    
                     if (count > 0 && viewModel.CompanyId == 123 || viewModel.CompanyId == 999)
                     {
                         SqlModel.SqlConnection.Close();
@@ -143,6 +143,10 @@ namespace Archon.DataAccessLayer
             {
                 if (string.IsNullOrEmpty(viewModel.Username) || string.IsNullOrEmpty(viewModel.Password))
                 {
+                    await Application.Current.MainPage.DisplayAlert("NOT A VALID USERNAME OR PASSWORD", "YOU MUST ENTER VALID CREDENTIALS", "OK");
+                    viewModel.CompanyId = null;
+                    viewModel.Username = string.Empty;
+                    viewModel.Password = string.Empty;
                     return;
                 }
 
@@ -164,6 +168,7 @@ namespace Archon.DataAccessLayer
                             viewModel.Username = string.Empty;
                             viewModel.Password = string.Empty;
                         }
+
                         else
                         {
                             reader.Close();

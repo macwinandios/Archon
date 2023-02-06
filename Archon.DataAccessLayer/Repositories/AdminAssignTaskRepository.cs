@@ -57,21 +57,31 @@ namespace Archon.DataAccessLayer.Repositories
 
                 SqlDataReader clientReader = clientCommand.ExecuteReader();
                 viewModel.TaskCollection.Clear();
+
                 while (clientReader.Read())
                 {
-                    viewModel.TaskCollection.Insert(0, new AdminAssignTaskModel
+                    try
                     {
+                        viewModel.TaskCollection.Insert(0, new AdminAssignTaskModel
+                        {
 
-                        Username = clientReader["Username"].ToString(),
-                        NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
-                        DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
-                        TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
-                        TaskDescription = clientReader["TaskDescription"].ToString(),
-                        TaskTitle = clientReader["TaskTitle"].ToString(),
-                        TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
-                        TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString(),
-                        Id = Convert.ToInt32(clientReader["Id"])
-                    });
+                            Username = clientReader["Username"].ToString(),
+                            NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
+                            DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
+                            TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
+                            TaskDescription = clientReader["TaskDescription"].ToString(),
+                            TaskTitle = clientReader["TaskTitle"].ToString(),
+                            TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
+                            TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString(),
+                            Id = Convert.ToInt32(clientReader["Id"])
+                        });
+                    }
+                    catch(Exception ex)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                       
+                    }
+                    
                 }
                 clientReader.Close();
                 SqlModel.SqlConnection.Close();
@@ -84,9 +94,11 @@ namespace Archon.DataAccessLayer.Repositories
             finally
             {
                 SqlModel.SqlConnection.Close();
-
             }
+
+            //return (IEnumerable<IAdminAssignTaskViewModel>)viewModel.TaskCollection;
             return (IEnumerable<IAdminAssignTaskViewModel>)Task.CompletedTask;
+
         }
 
         public Task GetAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, string username)
@@ -99,8 +111,7 @@ namespace Archon.DataAccessLayer.Repositories
                 clientCommand.Parameters.AddWithValue("@Username", username);
 
                 SqlDataReader clientReader = clientCommand.ExecuteReader();
-                //viewModel.TaskCollection.Clear();
-
+                viewModel.TaskCollection.Clear();
 
                 while (clientReader.Read())
                 {
@@ -278,44 +289,40 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-
         public async Task PutAsync(IAdminAssignTaskViewModel viewModel)
         {
             try
             {
                 SqlModel.SqlConnection.Open();
-                using (var command = SqlModel.SqlConnection.CreateCommand())
+
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
-                    command.CommandText = @"UPDATE [dbo].[Task]
-                                   SET [Username] = @Username, [NumberOfAssignedTasks] = @NumberOfAssignedTasks, [DateOfAssignedTask] = @DateOfAssignedTask,[TaskIsComplete] = @TaskIsComplete, [TaskDescription] = @TaskDescription,[TaskTitle] = @TaskTitle,[TaskCompletedNotes] = @TaskCompletedNotes, [TaskWasAssignedTo] = @TaskWasAssignedTo WHERE Id = @Id";
+                    command.CommandText = "UPDATE dbo.Task SET DateOfAssignedTask = ISNULL(@DateOfAssignedTask, DateOfAssignedTask), " +
+                                          "TaskDescription = ISNULL(@TaskDescription, TaskDescription), " +
+                                          "TaskTitle = ISNULL(@TaskTitle, TaskTitle), " +
+                                          "TaskWasAssignedTo = ISNULL(@TaskWasAssignedTo, TaskWasAssignedTo) " +
+                                          "WHERE Id = @Id";
                     command.Parameters.AddWithValue("@Id", viewModel.Id);
-
-                    command.Parameters.AddWithValue("@Username", viewModel.Username != null ? viewModel.Username : "putmethodinassignproblem");
-                    //simplified null check is below "coalesace" null check i think?
-                    //command.Parameters.AddWithValue("@Username", viewModel.Username ?? "");
-                    command.Parameters.AddWithValue("@NumberOfAssignedTasks", viewModel.NumberOfAssignedTasks != null ? viewModel.NumberOfAssignedTasks.ToString() : "");
-                    command.Parameters.AddWithValue("@DateOfAssignedTask", viewModel.DateOfAssignedTask != null ? viewModel.DateOfAssignedTask.ToString() : "");
-                    command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete != null ? viewModel.TaskIsComplete.ToString() : "");
-                    command.Parameters.AddWithValue("@TaskDescription", viewModel.TaskDescription != null ? viewModel.TaskDescription : "");
-                    command.Parameters.AddWithValue("@TaskTitle", viewModel.TaskTitle != null ? viewModel.TaskTitle : "");
-                    command.Parameters.AddWithValue("@TaskCompletedNotes", viewModel.TaskCompletedNotes != null ? viewModel.TaskCompletedNotes : "");
-                    command.Parameters.AddWithValue("@TaskWasAssignedTo", viewModel.TaskWasAssignedTo != null ? viewModel.TaskWasAssignedTo : "");
-
+                    command.Parameters.AddWithValue("@DateOfAssignedTask", viewModel.DateOfAssignedTask == DateTime.MinValue ? (object)DBNull.Value : viewModel.DateOfAssignedTask.ToShortDateString());
+                    command.Parameters.AddWithValue("@TaskDescription", viewModel.TaskDescription ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@TaskTitle", viewModel.TaskTitle ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@TaskWasAssignedTo", viewModel.TaskWasAssignedTo ?? (object)DBNull.Value);
 
                     await command.ExecuteNonQueryAsync();
-                    await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TASK", "OK");
-                    SqlModel.SqlConnection.Close();
+
+                    await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "THE TASK WAS UPDATED", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Not YEt", ex.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("ERROR", ex.Message, "OK");
             }
             finally
             {
                 SqlModel.SqlConnection.Close();
             }
         }
+
 
         public async Task UpdateAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, int id)
         {
