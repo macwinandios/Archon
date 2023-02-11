@@ -1,49 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="Archon.Views.EmployeeTimeView">
-    <ContentPage.BindingContext>
-        <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        
-        <StackLayout>
-            <Label>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Signed in as:  "
-                              TextColor="Red"
-                              FontSize="Medium"/>
-                        <Span Text="{Binding Username}"
-                              TextColor="Blue"
-                              FontSize="Medium"
-                              FontAttributes="Bold"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <Button Text="CLOCK IN"
-                    Command="{Binding ClockInCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            <Button Text="CLOCK OUT"
-                    Command="{Binding ClockOutCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
+ <ContentPage.BindingContext>
+     <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
+ </ContentPage.BindingContext>
 
+ <ContentPage.Content>
+  <StackLayout>
+   <StackLayout Orientation="Horizontal"
+                Margin="0,10,0,0">
+    <Label>
+     <Label.FormattedText>
+      <FormattedString>
+        <Span Text="Signed in as:  "
+              TextColor="White"
+              FontSize="Medium"
+              FontAttributes="Bold"/>
+        <Span Text="{Binding Username}"
+              TextColor="Yellow"
+              FontSize="Medium"
+              FontAttributes="Bold"/>
+      </FormattedString>
+     </Label.FormattedText>
+    </Label>
+       
+   <Button Text="LOGOUT"
+           Command="{Binding LogoutCommand}"
+           HorizontalOptions="EndAndExpand"/>
+   </StackLayout>
 
-            <Button Text="TIME AND PAY DETAILS"
-                    Command="{Binding GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            <Button Text="ASSIGNED TASKS"
-                    Command="{Binding GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            
-        </StackLayout>
-    </ContentPage.Content>
+   <Label Text="{Binding StringFormat='{0:D}'}"
+          BindingContext="{x:Static sys:DateTime.Today}"
+          HorizontalOptions="CenterAndExpand"
+          FontSize="Large"/>
+      
+   <Button Text="CLOCK IN"
+           Command="{Binding ClockInCommand}"
+           IsVisible="{Binding IsClockInButtonVisible}"/>
+
+   <Button Text="CLOCK OUT"
+           Command="{Binding ClockOutCommand}"
+           IsVisible="{Binding IsClockOutButtonVisible}"/>
+      
+   <Button Text="TIME AND PAY DETAILS"
+           Command="{Binding GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand}"/>
+
+   <Button Text="ASSIGNED TASKS"
+           Command="{Binding GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand}"/>
+      
+  </StackLayout>
+ </ContentPage.Content>
 </ContentPage>

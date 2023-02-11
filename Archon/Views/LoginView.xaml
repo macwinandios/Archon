@@ -1,117 +1,113 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="Archon.Views.LoginView">
-    <ContentPage.BindingContext>
-        <Binding Source="{StaticResource Locator}" Path="LoginViewModel"/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-        <StackLayout>
-            <Entry Placeholder="COMPANY ID"
-                   Text="{Binding CompanyId}"
-                   FontSize="Large"
-                   TextColor="Blue"
-                   />
-            <Entry Placeholder="Username"
-                   Text="{Binding Username}"
-                   FontSize="Large"
-                   TextColor="Blue"
-                   />
-            <Entry Placeholder="Password"
-                   Text="{Binding Password}"
-                   FontSize="Large"
-                   TextColor="Blue"
-                   />
-            <Entry Placeholder="ID"
-                   Text="{Binding Id}"
-                   FontSize="Large"
-                   TextColor="Blue"
-                   />
-            <Button Text="SIGN ME UP!"
-                    TextColor="Red"
-                    Command="{Binding SignUpCommand}"
-                    />
-            <Button Text="DELETE USER"
-                    TextColor="Red"
-                    Command="{Binding DeleteCommand}"
-                    IsVisible="{Binding ManagerButtons}"
-                    />
-            <Button Text="UPDATE USER"
-                    TextColor="Red"
-                    Command="{Binding UpdateCommand}"
-                    IsVisible="{Binding ManagerButtons}"
-                    />
-            <Button Text="GET USERS"
-                    TextColor="Red"
-                    Command="{Binding GetUsersCommand}"
-                    IsVisible="{Binding ManagerButtons}"
-                    />
-            <Button Text="GET USERS BY ID"
-                    TextColor="Red"
-                    Command="{Binding GetUsersByIdCommand}"
-                    IsVisible="{Binding ManagerButtons}"
-                    />
-            <Button Text="LOGIN"
-                    TextColor="Red"
-                    Command="{Binding LoginCommand}"
-                    />
-            <Entry Placeholder="Id to Update or Delete"
-                   Text="{Binding Id}"
-                   FontSize="Large"
-                   TextColor="Blue"
-                   />
-            <ListView
-                        HasUnevenRows="True"
-                        ItemsSource="{Binding UserList}"
-                        >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Vertical">
+ <ContentPage.BindingContext>
+     <Binding Source="{StaticResource Locator}" Path="LoginViewModel"/>
+ </ContentPage.BindingContext>
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="20"
-                                            Text="CLIENT NAME"
-                                            TextColor="Blue" />
+ <ContentPage.Content>
+  <StackLayout>
+   <Frame CornerRadius="80"
+          HasShadow="True"
+          BackgroundColor="#4203AB"
+          Margin="10">
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="18"
-                                            MinimumWidthRequest="100"
-                                            Text="{Binding Username}"
-                                            TextColor="Black" />
+   <Image Source="ArchonText.png"
+          HeightRequest="200"
+          HorizontalOptions="CenterAndExpand"/>
+   </Frame>
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="20"
-                                            Text="PASSWORD"
-                                            TextColor="Blue" />
+   <Label Text="{Binding StringFormat='{0:D}'}"
+          BindingContext="{x:Static sys:DateTime.Today}"
+          HorizontalOptions="CenterAndExpand"
+          FontSize="Large"/>
+      
+   <Entry Placeholder="Company Id"
+          Text="{Binding CompanyId}"/>
+      
+   <Entry Placeholder="Username"
+          Text="{Binding Username}"/>
+      
+   <Entry Placeholder="Password"
+          Text="{Binding Password}"/>
+      
+   <Entry Placeholder="Id"
+          Text="{Binding Id}"/>
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="18"
-                                            MinimumWidthRequest="100"
-                                            Text="{Binding Password}"
-                                            TextColor="Black" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="20"
-                                            Text="ID"
-                                            TextColor="Blue" />
+                </Grid.RowDefinitions>
 
-                                <Label
-                                            FontAttributes="Bold"
-                                            FontSize="18"
-                                            MinimumWidthRequest="100"
-                                            Text="{Binding Id}"
-                                            TextColor="Black" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-    </ContentPage.Content>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+   <Button Text="SIGN ME UP!"
+           Command="{Binding SignUpCommand}"/>
+      
+   <Button Text="LOGIN"
+           Command="{Binding LoginCommand}"/>
+
+   <Button Text="DELETE USER"
+           Command="{Binding DeleteCommand}"
+           IsVisible="{Binding ManagerButtons}"/>
+      
+   <Button Text="UPDATE USER"
+           Command="{Binding UpdateCommand}"
+           IsVisible="{Binding ManagerButtons}"/>
+      
+   <Button Text="GET USERS"
+           Command="{Binding GetUsersCommand}"
+           IsVisible="{Binding ManagerButtons}"/>
+
+   <Button Text="GET USERS BY ID"
+           Command="{Binding GetUsersByIdCommand}"
+           IsVisible="{Binding ManagerButtons}"/>
+
+   <Entry Placeholder="Id to Update or Delete"
+          Text="{Binding Id}"/>
+      
+   <ListView HasUnevenRows="True"
+             ItemsSource="{Binding UserList}">
+    <ListView.ItemTemplate>
+     <DataTemplate>
+      <ViewCell>
+       <StackLayout Orientation="Vertical">
+
+        <Label Text="Username:"/>
+
+        <Label MinimumWidthRequest="100"
+               Text="{Binding Username}"/>
+
+        <Label Text="Password:"/>
+
+        <Label MinimumWidthRequest="100"
+               Text="{Binding Password}"/>
+
+        <Label Text="Id:"/>
+
+        <Label MinimumWidthRequest="100"
+               Text="{Binding Id}"/>
+       </StackLayout>
+      </ViewCell>
+     </DataTemplate>
+    </ListView.ItemTemplate>
+   </ListView>
+  </StackLayout>
+ </ContentPage.Content>
 </ContentPage>

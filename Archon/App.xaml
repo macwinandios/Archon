@@ -5,5 +5,49 @@
              x:Class="Archon.App">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator"/>
+
+        <ResourceDictionary>
+            
+             <!--Colors--> 
+            <Color x:Key="BackgroundColor">#250289</Color>
+            <Color x:Key="PrimaryColor">#4203AB</Color>
+            <Color x:Key="SecondaryColor">#314e52</Color>
+            <Color x:Key="TextColor">White</Color>
+
+             <!--Implicit styles-->
+            <Style TargetType="{x:Type ContentPage}" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+                <Setter Property="NavigationPage.HasNavigationBar" Value="False"/>
+            </Style>
+
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}"/>
+                <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="CornerRadius" Value="30"/>
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="BorderColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="BorderWidth" Value="5"/>
+
+            </Style>
+
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+            </Style>
+            
+            <Style TargetType="{x:Type Entry}">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            </Style>
+            
+
+        </ResourceDictionary>
     </Application.Resources>
+
 </Application>

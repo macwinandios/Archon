@@ -10,6 +10,9 @@ namespace Archon.Shared.Interfaces
         int? Id { get; set; }
         DateTime CurrentTime { get; set; }
         DateTime ClockedInAt { get; set; }
+        TimeSpan UpdatedClockInTime { get; set; }
+        TimeSpan UpdatedClockOutTime { get; set; }
+
         DateTime ClockedOutAt { get; set; }
         DateTime DateClockedIn { get; set; }
         DateTime DateClockedOut { get; set; }

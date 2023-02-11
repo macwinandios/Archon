@@ -641,3 +641,4 @@ C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Android\bin\Debug\Archon
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Android\obj\Debug\120\android\assets\Archon.DataAccessLayer.dll
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Android\obj\Debug\120\android\assets\Archon.DataAccessLayer.pdb
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Android\obj\Debug\120\android\assets\System.Data.SqlClient.dll
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon.Android\obj\Debug\120\res\drawable\archontext.png

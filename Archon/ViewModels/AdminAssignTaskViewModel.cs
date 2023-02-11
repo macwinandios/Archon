@@ -24,7 +24,8 @@ namespace Archon.ViewModels
         string _username;
 
         ICommand _pushToAdminMonitorPayViewCommand;
-        ICommand _popToLogoutCommand;
+        ICommand _popToAdminAssignTaskViewCommand;
+        ICommand _logoutCommand;
         ICommand _assignTaskCommand;
         ICommand _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand;
         ICommand _employeeUpdateAssignedTaskTableCommand;
@@ -100,9 +101,10 @@ namespace Archon.ViewModels
 
 
         public ICommand AssignTaskCommand => _assignTaskCommand ?? (_assignTaskCommand = new Command(async () => await AssignTask()));
-        public ICommand PopToLogoutCommand => _popToLogoutCommand ?? (_popToLogoutCommand = new Command(async () => await PopToLogout()));
+        public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(async () => await PopToLogin()));
 
         public ICommand PushToAdminMonitorPayViewCommand => _pushToAdminMonitorPayViewCommand ?? (_pushToAdminMonitorPayViewCommand = new Command(async () => await PushToAdminMonitorPayView()));
+        public ICommand PopToAdminAssignTaskViewCommand => _popToAdminAssignTaskViewCommand ?? (_popToAdminAssignTaskViewCommand = new Command(async () => await PopToAdminAssignTaskView()));
         public ICommand GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand => _getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand ?? (_getValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand = new Command(async () => await GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()));
         public ICommand GetTaskByIdOrUsernameCommand => _getTaskByIdOrUsernameCommand ?? (_getTaskByIdOrUsernameCommand = new Command(async () => await GetTaskByIdOrUsername()));
 
@@ -131,6 +133,8 @@ namespace Archon.ViewModels
         private async Task GetTaskByIdOrUsername()
         {
             await _iRepository.GetByIdOrUsername(this, Username);
+            await Application.Current.MainPage.Navigation.PushAsync(new AdminCompletedTaskView());
+
         }
         private async Task UpdateTask()
         {
@@ -142,13 +146,17 @@ namespace Archon.ViewModels
             await _iRepository.DeleteAsync(this);
 
         }
-        private async Task PopToLogout()
+        private async Task PopToLogin()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new LoginView());
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
         private async Task PushToAdminMonitorPayView()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new AdminMonitorPayView());
+        }
+        private async Task PopToAdminAssignTaskView()
+        {
+            await Application.Current.MainPage.Navigation.PopAsync();
         }
         private async Task GetAllValuesFromAssignedTaskTableAndPushToAdminCompletedTaskView()
         {

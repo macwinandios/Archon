@@ -2,211 +2,192 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Archon.Views.AdminMonitorPayView">
-    <ContentPage.BindingContext>
-        <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
-    </ContentPage.BindingContext>
-    <ContentPage.Content>
-      <ScrollView>
-        <StackLayout>
-            <Button Text="Get All Time Details For User"
-                    Command="{Binding AdminGetAllTimeDetailsForUserCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            <Button Text="Update Time Detail"
-                    Command="{Binding AdminUpdateTimeDetailCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            <Button Text="Delete Time Detail"
-                    Command="{Binding AdminDeleteTimeDetailCommand}"
-                    TextColor="Red"
-                    FontSize="Medium"
-                    />
-            <Entry Text="{Binding Username}"
-                   Placeholder="Enter A Username"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" 
-                   PlaceholderColor="Red"/>
-            <Label
-                Text="Id to Update or Delete:" 
-                FontSize="Medium" 
-                TextColor="Black" 
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
-            <Entry Placeholder="Enter Id"
-                   Text="{Binding Id}"
-                   FontSize="Medium"
-                   PlaceholderColor="Black"/>
-            
-            
-                <Label 
-                   Text="Update Time Clocked In" 
-                   FontSize="Medium" 
-                   TextColor="Black" />
-                <TimePicker Time="{Binding ClockedInAt}"/>
-            
-                <Label 
-                   Text="Update Time Clocked Out" 
-                   FontSize="Medium" 
-                   TextColor="Black" />
-                <TimePicker Time="{Binding ClockedOutAt}"/>
+  <ContentPage.BindingContext>
+      <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
+  </ContentPage.BindingContext>
+    
+  <ContentPage.Content>
+   <ScrollView>
+    <StackLayout>
+     <StackLayout Orientation="Horizontal"
+                  Margin="0,10,0,0">
+      <Label>
+       <Label.FormattedText>
+        <FormattedString>
+         <Span Text="Signed in as:  "
+               TextColor="White"
+               FontSize="Medium"
+               FontAttributes="Bold"/>
+         <Span Text="{Binding Username}"
+               TextColor="Yellow"
+               FontSize="Medium"
+               FontAttributes="Bold"/>
+         </FormattedString>
+        </Label.FormattedText>
+       </Label>
 
+     <Button Text="GO BACK"
+             Command="{Binding PopToAdminAssignTaskViewCommand}"
+             HorizontalOptions="EndAndExpand"/>
+      </StackLayout>
+        
+     <Button Text="Get All Time Details For User"
+             Command="{Binding AdminGetAllTimeDetailsForUserCommand}"/>
+        
+     <Button Text="Update Time Detail"
+             Command="{Binding AdminUpdateTimeDetailCommand}"/>
+        
+     <Button Text="Delete Time Detail"
+             Command="{Binding AdminDeleteTimeDetailCommand}"/>
 
-                <StackLayout HorizontalOptions="Center" 
-                     VerticalOptions="Center"
-                     IsVisible="{Binding UserDetailsIsVisible}">
+     <Label Text="Username:"/>
+        
+     <Entry Text="{Binding Username}"
+            Placeholder="Enter A Username"/>
+        
+     <Label Text="Id to Update or Delete:"/>
 
-                <Label Text="Hours And Pay Details For:" 
-                   FontSize="Large" 
-                   TextColor="Black" 
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"
-                   TextDecorations="Underline"/>
-                <Label Text="{Binding Username}" 
-                   FontSize="Large" 
-                   TextColor="Black" 
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"/>
-
-
-                <ListView ItemsSource="{Binding HoursAndPayCollection}"
-                     HasUnevenRows="True">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label Grid.Row="0" 
-                                      Grid.Column="0" 
-                                      Text="Username:" 
-                                      FontSize="Medium" 
-                                      TextColor="Black" 
-                                      FontAttributes="Bold"/>
-                                    <Label Grid.Row="0" 
-                                          Grid.Column="1" 
-                                          Text="{Binding Username}"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="1"
-                                          Grid.Column="0" 
-                                          Text="Hourly Wage" 
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="1" 
-                                          Grid.Column="1" 
-                                          Text="{Binding HourlyWage}"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="2"
-                                          Grid.Column="0" 
-                                          Text="Day Clocked In"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="2" 
-                                          Grid.Column="1" 
-                                          Text="{Binding DateClockedIn, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="3"
-                                          Grid.Column="0" 
-                                          Text="Time Of Clock In"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="3"
-                                          Grid.Column="1" 
-                                          Text="{Binding ClockedInAt}" 
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="4"
-                                          Grid.Column="0"
-                                          Text="Time Of Clock Out"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="4" 
-                                          Grid.Column="1"
-                                          Text="{Binding ClockedOutAt}"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="5"
-                                          Grid.Column="0"
-                                          Text="Duration Of Clock In"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="5"
-                                          Grid.Column="1" 
-                                          Text="{Binding DurationOfClockIn, StringFormat='{{0:hh\\:mm\\:ss}'}" 
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="6" 
-                                          Grid.Column="0"
-                                          Text="Total Time Clocked In Today"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="6"
-                                          Grid.Column="1"
-                                          Text="{Binding TotalTimeClockedInToday,StringFormat='{}{0:hh\\:mm\\:ss}'}"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="7"
-                                          Grid.Column="0"
-                                          Text="Total Time Clocked In This Week"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="7" 
-                                          Grid.Column="1"
-                                          Text="{Binding TotalTimeClockedInThisWeek,StringFormat='{}{0:hh\\:mm\\:ss}'}"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="8"
-                                          Grid.Column="0"
-                                          Text="Total Wages Earned This Week"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="8" 
-                                          Grid.Column="1" 
-                                          Text="{Binding TotalWagesEarnedThisWeek,StringFormat='${0:N2}'}"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-                                    <Label Grid.Row="9"
-                                          Grid.Column="0"
-                                          Text="Id"
-                                          FontSize="Medium"
-                                          TextColor="Black" />
-                                    <Label Grid.Row="9" 
-                                          Grid.Column="1" 
-                                          Text="{Binding Id}"
-                                          FontSize="Medium" 
-                                          TextColor="Black" />
-
-
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-
-
-            </StackLayout>
-        </StackLayout>
-      </ScrollView>
-    </ContentPage.Content>
+     <Entry Placeholder="Enter Id"
+            Text="{Binding Id}"/>
+        
+     <Label Text="Update Time Clocked In"/>
+        
+     <TimePicker Time="{Binding UpdatedClockInTime}"
+                 TextColor="White"
+                 FontAttributes="Bold"/>
+      
+     <Label Text="Update Time Clocked Out"/>
+        
+     <TimePicker Time="{Binding UpdatedClockOutTime}"
+                 TextColor="White"
+                 FontAttributes="Bold"/>
+  
+  
+     <StackLayout HorizontalOptions="Center" 
+                  VerticalOptions="Center"
+                  IsVisible="{Binding UserDetailsIsVisible}">
+  
+     <Label Text="Hours And Pay Details For:"/>
+         
+     <Label Text="{Binding Username}"/>
+  
+  
+      <ListView ItemsSource="{Binding HoursAndPayCollection}"
+               HasUnevenRows="True">
+       <ListView.ItemTemplate>
+        <DataTemplate>
+         <ViewCell>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+              
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+  
+            <Label Grid.Row="0" 
+                   Grid.Column="0" 
+                   Text="Username:"/>
+              
+            <Label Grid.Row="0" 
+                   Grid.Column="1" 
+                   Text="{Binding Username}"/>
+              
+            <Label Grid.Row="1"
+                   Grid.Column="0" 
+                   Text="Hourly Wage:"/>
+              
+            <Label Grid.Row="1" 
+                   Grid.Column="1" 
+                   Text="{Binding HourlyWage}"/>
+              
+            <Label Grid.Row="2"
+                   Grid.Column="0" 
+                   Text="Day Clocked In:"/>
+              
+            <Label Grid.Row="2" 
+                   Grid.Column="1" 
+                   Text="{Binding DateClockedIn, 
+                   StringFormat='{0:dddd, MMMM dd,yyyy}'}"/>
+              
+            <Label Grid.Row="3"
+                   Grid.Column="0" 
+                   Text="Time Of Clock In:"/>
+              
+            <Label Grid.Row="3"
+                   Grid.Column="1" 
+                   Text="{Binding ClockedInAt}"/>
+              
+            <Label Grid.Row="4"
+                   Grid.Column="0"
+                   Text="Time Of Clock Out:"/>
+              
+            <Label Grid.Row="4" 
+                   Grid.Column="1"
+                   Text="{Binding ClockedOutAt}"/>
+              
+            <Label Grid.Row="5"
+                   Grid.Column="0"
+                   Text="Duration Of Clock In:"/>
+              
+            <Label Grid.Row="5"
+                   Grid.Column="1" 
+                   Text="{Binding DurationOfClockIn, 
+                   StringFormat='{{0:hh\\:mm\:ss}'}"/>
+              
+            <Label Grid.Row="6" 
+                   Grid.Column="0"
+                   Text="Total Time Today:"/>
+              
+            <Label Grid.Row="6"
+                   Grid.Column="1"
+                   Text="{Binding TotalTimeClockedInToday,
+                   StringFormat='{}{0:hh\:m\\:ss}'}"/>
+              
+            <Label Grid.Row="7"
+                   Grid.Column="0"
+                   Text="Total Time This Week:"/>
+              
+            <Label Grid.Row="7" 
+                   Grid.Column="1"
+                   Text="{Binding TotalTimeClockedInThisWeek,
+                   StringFormat='{{0:hh\\:m\:ss}'}"/>
+              
+            <Label Grid.Row="8"
+                   Grid.Column="0"
+                   Text="Wages For This Week:"/>
+              
+            <Label Grid.Row="8" 
+                   Grid.Column="1" 
+                   Text="{Binding TotalWagesEarnedThisWeek,
+                   StringFormat='${0:N2}'}"/>
+              
+            <Label Grid.Row="9"
+                   Grid.Column="0"
+                   Text="Id:"/>
+              
+            <Label Grid.Row="9" 
+                   Grid.Column="1" 
+                   Text="{Binding Id}"/>
+  
+          </Grid>
+         </ViewCell>
+        </DataTemplate>
+       </ListView.ItemTemplate>
+      </ListView>
+     </StackLayout>
+    </StackLayout>
+   </ScrollView>
+  </ContentPage.Content>
 </ContentPage>
