@@ -190,7 +190,6 @@ namespace Archon.DataAccessLayer.Repositories
                 await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
             }
         }
-
         public async Task PutAsync(IEmployeeTimeViewModel viewModel)
         {
             try
@@ -203,11 +202,14 @@ namespace Archon.DataAccessLayer.Repositories
                                    SET [ClockedInAt] = @ClockedInAt, [ClockedOutAt] = @ClockedOutAt WHERE [Id] = @Id";
 
                     command.Parameters.AddWithValue("@Id", viewModel.Id.ToString());
-                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToString());
-                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToString());
+                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToShortTimeString());
+                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToShortTimeString());
                     await command.ExecuteNonQueryAsync();
                     await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TIME", "OK");
+
                 }
+
+                SqlModel.SqlConnection.Close();
             }
             catch (Exception ex)
             {
