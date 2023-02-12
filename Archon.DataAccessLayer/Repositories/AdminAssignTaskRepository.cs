@@ -76,12 +76,12 @@ namespace Archon.DataAccessLayer.Repositories
                             Id = Convert.ToInt32(clientReader["Id"])
                         });
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-                       
+
                     }
-                    
+
                 }
                 clientReader.Close();
                 SqlModel.SqlConnection.Close();
@@ -95,12 +95,9 @@ namespace Archon.DataAccessLayer.Repositories
             {
                 SqlModel.SqlConnection.Close();
             }
-
-            //return (IEnumerable<IAdminAssignTaskViewModel>)viewModel.TaskCollection;
             return (IEnumerable<IAdminAssignTaskViewModel>)Task.CompletedTask;
 
         }
-
         public Task GetAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, string username)
         {
             try
@@ -257,7 +254,6 @@ namespace Archon.DataAccessLayer.Repositories
                             var numberOfAssignedTasksInDataBase = int.Parse(reader.GetString(0));
                             viewModel.NumberOfAssignedTasks = numberOfAssignedTasksInDataBase + 1;
                         }
-
                     }
                     viewModel.NumberOfAssignedTasks = viewModel.NumberOfAssignedTasks;
 
