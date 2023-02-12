@@ -124,7 +124,16 @@ namespace Archon.ViewModels
         }
         public TimeSpan DurationOfClockIn
         {
-            get => _durationOfClockIn = ClockedOutAt - ClockedInAt;
+            get
+            {
+                if (ClockedOutAt != DateTime.MinValue)
+                {
+                    _durationOfClockIn = ClockedOutAt - ClockedInAt;
+                }
+                else _durationOfClockIn = UpdatedClockOutTime - UpdatedClockInTime;
+
+                return _durationOfClockIn;
+            }
             set => SetProperty(ref _durationOfClockIn, value);
         }
         public TimeSpan TotalTimeClockedInToday
@@ -243,7 +252,7 @@ namespace Archon.ViewModels
         {
             await Application.Current.MainPage.Navigation.PopAsync();
         }
-
+        
 
     }
 }

@@ -38,9 +38,9 @@
           HorizontalOptions="CenterAndExpand"
           FontSize="Large"/>
        
-    <Label Text="Enter A Username:"/>
+    <Label Text="Assign Task To:"/>
     
-    <Entry Placeholder="Enter Username"
+    <Entry Placeholder="---Username---"
            Text="{Binding Username}"/>
 
     <Label Text="Choose Date Of Assigned Task:"/>
@@ -52,19 +52,19 @@
            TextColor="Yellow"
            HorizontalOptions="FillAndExpand"/>
     
-    <Label Text="TaskDescription:"/>
+    <Label Text="Task Description:"/>
     
-    <Entry Placeholder="Enter TaskDescription"
+    <Entry Placeholder="---Description---"
            Text="{Binding TaskDescription}"/>
     
-    <Label Text="TaskTitle:"/>
+    <Label Text="Task Title:"/>
     
-    <Entry Placeholder="Enter TaskTitle"
+    <Entry Placeholder="---TaskTitle---"
            Text="{Binding TaskTitle}"/>
     
-    <Label Text="TaskWasAssignedTo:"/>
+    <Label Text="Task Was Assigned To:"/>
 
-    <Entry Placeholder="Enter TaskWasAssignedTo"
+    <Entry Placeholder="--Task Was Assigned To--"
            Text="{Binding TaskWasAssignedTo}"/>
 
     <Button Text="Assign A Task"
