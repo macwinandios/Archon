@@ -115,15 +115,11 @@ namespace Archon.DataAccessLayer.Repositories
         
         public async Task PostAsync(IEmployeeTimeViewModel viewModel)
         {
-            if (viewModel.ClockedOutAt == null || viewModel.ClockedInAt == null)
-            {
-                await Application.Current.MainPage.DisplayAlert("MUST CLOCK IN", "THEN CLOCK OUT", "OK");
-            }
             try
             {
                 viewModel.ClockedOutAt = DateTime.Now;
                 await SqlModel.SqlConnection.OpenAsync();
-                using (var command = SqlModel.SqlConnection.CreateCommand())
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
                     // First query the database to get the previous time entries for the current user
 
@@ -132,7 +128,7 @@ namespace Archon.DataAccessLayer.Repositories
                     command.Parameters.AddWithValue("@DateClockedIn", viewModel.DateClockedIn.ToShortDateString());
                     command.Parameters.AddWithValue("@DateClockedOut", viewModel.DateClockedOut.ToShortDateString());
                     
-                    using (var reader = await command.ExecuteReaderAsync())
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         viewModel.TotalTimeClockedInToday = viewModel.DurationOfClockIn;
                         TimeSpan totalDuration = new TimeSpan();
@@ -192,31 +188,99 @@ namespace Archon.DataAccessLayer.Repositories
         }
         public async Task PutAsync(IEmployeeTimeViewModel viewModel)
         {
+            if(viewModel.Id == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Must Enter a Valid Id", "Smh", "OK");
+                return;
+            }
             try
             {
                 SqlModel.SqlConnection.Open();
 
                 using (var command = SqlModel.SqlConnection.CreateCommand())
                 {
-                    command.CommandText = @"UPDATE [dbo].[HoursAndPay]
-                                   SET [ClockedInAt] = @ClockedInAt, [ClockedOutAt] = @ClockedOutAt WHERE [Id] = @Id";
 
-                    command.Parameters.AddWithValue("@Id", viewModel.Id.ToString());
-                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.ClockedInAt.ToShortTimeString());
-                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.ClockedOutAt.ToShortTimeString());
+                    command.CommandText = @"UPDATE [dbo].[HoursAndPay]
+                               SET [ClockedInAt] = ISNULL(@ClockedInAt, ClockedInAt), [ClockedOutAt] = ISNULL(@ClockedOutAt, ClockedOutAt) WHERE [Id] = @Id";
+                    command.Parameters.AddWithValue("@Id", viewModel.Id);
+
+                    command.Parameters.AddWithValue("@ClockedInAt", viewModel.UpdatedClockInTime == TimeSpan.Zero ? (object)DBNull.Value : viewModel.UpdatedClockInTime.ToString());
+                    command.Parameters.AddWithValue("@ClockedOutAt", viewModel.UpdatedClockOutTime == TimeSpan.Zero ? (object)DBNull.Value : viewModel.UpdatedClockOutTime.ToString());
+                    
+                    await command.ExecuteNonQueryAsync();
+
+                    ///////////////FIRST UPDATE THEN READ, THEN UPDATE AGAIN///////////
+                    command.CommandText = "SELECT ClockedInAt, ClockedOutAt, DurationOfClockIn, TotalTimeClockedInToday, TotalTimeClockedInThisWeek, TotalWagesEarnedThisWeek FROM [dbo].[HoursAndPay] WHERE Id = @Id";
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        viewModel.TotalTimeClockedInToday = viewModel.DurationOfClockIn;
+
+                        TimeSpan totalDuration = new TimeSpan();
+                        TimeSpan totalTimeThisWeek = new TimeSpan();
+                        float totalwages = new float();
+                        while (await reader.ReadAsync())
+                        {
+                            DateTime clockedInAtInTable = DateTime.Parse(reader.GetString(0));
+                            DateTime clockedOutAtInTable = DateTime.Parse(reader.GetString(1));
+                            var durationInTable = TimeSpan.Parse(reader.GetString(2));
+                            var totalTimeClockedInTodayInTable = TimeSpan.Parse(reader.GetString(3));
+                            var totalTimeClockedInThisWeekInTable = TimeSpan.Parse(reader.GetString(4));
+                            var totalWagesEarnedThisWeekInTable = float.Parse(reader.GetString(5));
+
+                            totalDuration = totalDuration.Add(durationInTable);
+                            totalTimeThisWeek = totalTimeThisWeek.Add(totalTimeClockedInTodayInTable);
+                            totalwages += totalWagesEarnedThisWeekInTable;
+
+                            if (durationInTable != viewModel.UpdatedClockOutTime - viewModel.UpdatedClockInTime)
+                            {
+                                viewModel.DurationOfClockIn = viewModel.UpdatedClockOutTime - viewModel.UpdatedClockInTime;
+                                durationInTable = viewModel.DurationOfClockIn;
+
+                            }
+                            if (durationInTable != viewModel.UpdatedClockOutTime - clockedInAtInTable.TimeOfDay)
+                            {
+                                viewModel.DurationOfClockIn = viewModel.UpdatedClockOutTime - clockedInAtInTable.TimeOfDay;
+                            }
+                            if (durationInTable != viewModel.UpdatedClockInTime + clockedOutAtInTable.TimeOfDay)
+                            {
+                                viewModel.DurationOfClockIn = viewModel.UpdatedClockInTime + clockedOutAtInTable.TimeOfDay;
+                            }
+
+                            viewModel.TotalTimeClockedInToday = totalDuration + viewModel.DurationOfClockIn;
+
+                            viewModel.TotalTimeClockedInThisWeek = totalTimeThisWeek + viewModel.TotalTimeClockedInToday;
+
+                            viewModel.TotalWagesEarnedThisWeek = (float)Math.Round(totalwages + (viewModel.TotalTimeClockedInThisWeek.TotalHours * viewModel.HourlyWage), 2);
+                        }
+                    }
+                    command.Parameters.Clear();
+
+                    command.CommandText = @"UPDATE [dbo].[HoursAndPay]
+                               SET [DurationOfClockIn] = ISNULL(@DurationOfClockIn, DurationOfClockIn),[TotalTimeClockedInToday] = ISNULL(@TotalTimeClockedInToday, TotalTimeClockedInToday),[TotalTimeClockedInThisWeek] = ISNULL(@TotalTimeClockedInThisWeek, TotalTimeClockedInThisWeek),[TotalWagesEarnedThisWeek] = ISNULL(@TotalWagesEarnedThisWeek, TotalWagesEarnedThisWeek) WHERE [Id] = @Id";
+                    command.Parameters.AddWithValue("@Id", viewModel.Id);
+
+                    command.Parameters.AddWithValue("@DurationOfClockIn", viewModel.DurationOfClockIn == TimeSpan.Zero ? (object)DBNull.Value : viewModel.DurationOfClockIn.ToString());
+                    command.Parameters.AddWithValue("@TotalTimeClockedInToday", viewModel.TotalTimeClockedInToday == TimeSpan.Zero ? (object)DBNull.Value : viewModel.TotalTimeClockedInToday.ToString());
+                    command.Parameters.AddWithValue("@TotalTimeClockedInThisWeek", viewModel.TotalTimeClockedInThisWeek == TimeSpan.Zero ? (object)DBNull.Value : viewModel.TotalTimeClockedInThisWeek.ToString());
+                    command.Parameters.AddWithValue("@TotalWagesEarnedThisWeek", viewModel.TotalWagesEarnedThisWeek == 0 ? (object)DBNull.Value : viewModel.TotalWagesEarnedThisWeek.ToString());
+
                     await command.ExecuteNonQueryAsync();
                     await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TIME", "OK");
 
-                }
 
+                }
                 SqlModel.SqlConnection.Close();
+
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Not YEt", ex.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("ERROR", ex.Message, "OK");
             }
+
         }
-        public Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
+        
+        public async Task<IEnumerable<IEmployeeTimeViewModel>> GetAllAsync(IEmployeeTimeViewModel viewModel)
         {
             throw new NotImplementedException();
         }

@@ -18,6 +18,14 @@ namespace Archon.DataAccessLayer
         {
             try
             {
+                if (string.IsNullOrEmpty(viewModel.Username) || string.IsNullOrEmpty(viewModel.Password))
+                {
+                    await Application.Current.MainPage.DisplayAlert("NOT A VALID USERNAME OR PASSWORD", "YOU MUST ENTER VALID CREDENTIALS", "OK");
+                    viewModel.CompanyId = null;
+                    viewModel.Username = string.Empty;
+                    viewModel.Password = string.Empty;
+                    return false;
+                }
                 await SqlModel.SqlConnection.OpenAsync();
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
@@ -42,6 +50,7 @@ namespace Archon.DataAccessLayer
                         viewModel.CompanyId = null;
                         return false;
                     }
+
                     else
                     {
                         SqlModel.SqlConnection.Close();
@@ -100,28 +109,31 @@ namespace Archon.DataAccessLayer
         }
 
 
-        public async Task<IEnumerable<ILoginViewModel>> GetAllAsync(ILoginViewModel model)
+        public async Task<IEnumerable<ILoginViewModel>> GetAllAsync(ILoginViewModel viewModel)
         {
             try
             {
-                    SqlModel.SqlConnection.Open();
+                SqlModel.SqlConnection.Open();
 
-                    SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Login", SqlModel.SqlConnection);
-
-                    SqlDataReader clientReader = clientCommand.ExecuteReader();
-                    model.UserList.Clear();
-                    while (clientReader.Read())
+                using (SqlCommand command = new SqlCommand("SELECT * FROM dbo.Login", SqlModel.SqlConnection))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        model.UserList.Insert(0,new LoginModel
+                        viewModel.UserList.Clear();
+                        while (reader.Read())
                         {
-                            Username = clientReader["Username"].ToString(),
-                            Password = clientReader["Password"].ToString(),
-                            Id = Convert.ToInt32(clientReader["Id"])
-                        });
+                            viewModel.UserList.Insert(0, new LoginModel
+                            {
+                                Username = reader["Username"].ToString(),
+                                Password = reader["Password"].ToString(),
+                                Id = Convert.ToInt32(reader["Id"])
+                            });
 
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
                     }
-                    clientReader.Close();
-                    SqlModel.SqlConnection.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -134,7 +146,6 @@ namespace Archon.DataAccessLayer
 
             }
             return (IEnumerable<ILoginViewModel>)Task.CompletedTask;
-
         }
         
         public async Task PostAsync(ILoginViewModel viewModel)
@@ -149,7 +160,15 @@ namespace Archon.DataAccessLayer
                     viewModel.Password = string.Empty;
                     return;
                 }
-
+                if (viewModel.CompanyId != 123)
+                {
+                    SqlModel.SqlConnection.Close();
+                    await Application.Current.MainPage.DisplayAlert("INVALID COMPANY ID", "PLEASE ENTER YOUR COMPANY'S ID", "OK");
+                    viewModel.CompanyId = null;
+                    viewModel.Username = string.Empty;
+                    viewModel.Password = string.Empty;
+                    return;
+                }
                 await SqlModel.SqlConnection.OpenAsync();
 
                 using (SqlCommand command = new SqlCommand("SELECT * FROM dbo.Login WHERE LOWER(Username) = LOWER(@Username) AND LOWER(Password) = LOWER(@Password)", SqlModel.SqlConnection))
