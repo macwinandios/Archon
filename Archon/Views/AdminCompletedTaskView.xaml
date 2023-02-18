@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
              xmlns:local="clr-namespace:Archon.ViewModels"
              x:Class="Archon.Views.AdminCompletedTaskView">
   <ContentPage.BindingContext>
@@ -9,27 +11,10 @@
 
  <ContentPage.Content>
    <StackLayout>
-    <StackLayout Orientation="Horizontal"
-                 Margin="0,10,0,0">
-     <Label>
-      <Label.FormattedText>
-       <FormattedString>
-        <Span Text="Signed in as:  "
-              TextColor="White"
-              FontSize="Medium"
-              FontAttributes="Bold"/>
-        <Span Text="{Binding Username}"
-              TextColor="Yellow"
-              FontSize="Medium"
-              FontAttributes="Bold"/>
-        </FormattedString>
-       </Label.FormattedText>
-      </Label>
-
-     <Button Text="GO BACK"
-             Command="{Binding PopToAdminAssignTaskViewCommand}"
-             HorizontalOptions="EndAndExpand"/>
-    </StackLayout>
+    <Button Text="GO BACK"
+            Command="{Binding PopToAdminAssignTaskViewCommand}"
+            HorizontalOptions="EndAndExpand"
+            Margin="0,10"/>
        
     <ListView ItemsSource="{Binding TaskCollection}"
               HasUnevenRows="True">
@@ -38,7 +23,6 @@
           <ViewCell>
             <Grid>
              <Grid.RowDefinitions>
-               <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
                <RowDefinition Height="Auto"/>
@@ -57,15 +41,15 @@
 
               <Label Grid.Row="0" 
                      Grid.Column="0" 
-                     Text="Username:"/>
+                     Text="Assigned To:"/>
                 
               <Label Grid.Row="0" 
                      Grid.Column="1" 
-                     Text="{Binding Username}" />
+                     Text="{Binding TaskWasAssignedTo}" />
                 
               <Label Grid.Row="1"
                      Grid.Column="0" 
-                     Text="NumberOfAssignedTasks"/>
+                     Text="# Of Assigned Tasks:"/>
                 
               <Label Grid.Row="1" 
                      Grid.Column="1" 
@@ -73,7 +57,7 @@
                 
               <Label Grid.Row="2"
                      Grid.Column="0" 
-                     Text="DateOfAssignedTask"/>
+                     Text="Date Of Task:"/>
                 
               <Label Grid.Row="2" 
                      Grid.Column="1" 
@@ -82,7 +66,7 @@
                 
               <Label Grid.Row="3"
                      Grid.Column="0" 
-                     Text="TaskIsComplete"/>
+                     Text="Task Complete?"/>
                 
               <Label Grid.Row="3"
                      Grid.Column="1" 
@@ -90,7 +74,7 @@
                 
               <Label Grid.Row="4"
                      Grid.Column="0"
-                     Text="TaskDescription"/>
+                     Text="Task Description:"/>
                 
               <Label Grid.Row="4" 
                      Grid.Column="1"
@@ -98,7 +82,7 @@
                 
               <Label Grid.Row="5"
                      Grid.Column="0"
-                     Text="TaskTitle"/>
+                     Text="Task Title:"/>
                 
               <Label Grid.Row="5"
                      Grid.Column="1" 
@@ -106,25 +90,17 @@
                 
               <Label Grid.Row="6" 
                      Grid.Column="0"
-                     Text="TaskCompletedNotes"/>
-                
+                     Text="Completion Notes:"/>
+
               <Label Grid.Row="6"
                      Grid.Column="1"
                      Text="{Binding TaskCompletedNotes}"/>
-                
-              <Label Grid.Row="7"
-                     Grid.Column="0"
-                     Text="TaskWasAssignedTo"/>
-                
+
               <Label Grid.Row="7" 
-                     Grid.Column="1"
-                     Text="{Binding TaskWasAssignedTo}"/>
-                
-              <Label Grid.Row="8" 
                      Grid.Column="0" 
                      Text="Id:"/>
                 
-              <Label Grid.Row="8" 
+              <Label Grid.Row="7" 
                      Grid.Column="1" 
                      Text="{Binding Id}"/>
                 

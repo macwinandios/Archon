@@ -20,7 +20,6 @@ namespace Archon.ViewModels
         int? _companyId;
         string _username;
         string _password;
-        bool _getUserByIdIsVisible;
         bool _managerButtons;
 
         ICommand _signUpCommand;
@@ -29,7 +28,10 @@ namespace Archon.ViewModels
         ICommand _deleteUserCommand;
         ICommand _updateUserCommand;
         ICommand _loginCommand;
-        
+        ICommand _pushToLoginDetailsViewCommand;
+        ICommand _popToLoginViewCommand;
+
+
         private readonly IRepository<ILoginViewModel> _iRepository;
         private readonly ILoginRepository<ILoginViewModel> _iLoginRepository;
 
@@ -39,15 +41,11 @@ namespace Archon.ViewModels
             _iRepository = iRepository;
             _iLoginRepository = iLoginRepository;
         }
+        public ObservableCollection<ILoginModel> UserList { get; set; } = new ObservableCollection<ILoginModel>();
         public bool ManagerButtons
         {
             get => _managerButtons;
             set => SetProperty(ref _managerButtons, value);
-        }
-        public bool GetUserByIdIsVisible
-        {
-            get => _getUserByIdIsVisible;
-            set => SetProperty(ref _getUserByIdIsVisible, value);
         }
         public string Username
         {
@@ -84,6 +82,29 @@ namespace Archon.ViewModels
         public ICommand GetUsersByIdCommand => _getUsersByIdCommand ?? (_getUsersByIdCommand = new Command(async () => await GetUsersByIdAsync()));
         public ICommand UpdateCommand => _updateUserCommand ?? (_updateUserCommand = new Command(async () => await UpdateUserAsync()));
         public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new Command(async () => await LoginAsync()));
+        public ICommand PushToLoginDetailsViewCommand => _pushToLoginDetailsViewCommand ?? (_pushToLoginDetailsViewCommand = new Command(async () => await PushToLoginDetailsViewAsync()));
+        public ICommand PopToLoginViewCommand => _popToLoginViewCommand ?? (_popToLoginViewCommand = new Command(async () => await PopToLoginViewAsync()));
+
+        private async Task PopToLoginViewAsync()
+        {
+            await Application.Current.MainPage.Navigation.PopAsync();
+            Username = String.Empty;
+            Password = String.Empty;
+            CompanyId = null;
+        }
+
+        private async Task PushToLoginDetailsViewAsync()
+        {
+            if (await _iLoginRepository.Login(this))
+            {
+                if (CompanyId == 999)
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new LoginDetailsView());
+
+                    Username = String.Empty;
+                }
+            }
+        }
 
         public async Task LoginAsync()
         {
@@ -98,43 +119,50 @@ namespace Archon.ViewModels
                 if (CompanyId == 999)
                 {
                     await Application.Current.MainPage.Navigation.PushAsync(new AdminAssignTaskView());
+                    Username = String.Empty;
                 }
             }
         }
         public async Task SignUpAsync()
         {
-            GetUserByIdIsVisible = false;
             await _iRepository.PostAsync(this);
         }
         public async Task GetAllUsersAsync()
         {
-            GetUserByIdIsVisible = false;
             try
             {
                 await _iRepository.GetAllAsync(this);
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
             }
         }
         public async Task GetUsersByIdAsync()
         {
-            GetUserByIdIsVisible = true;
-            await _iRepository.GetByIdOrUsername(this, (int)Id);
-
+            try
+            {
+                if (Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Must Enter a Valid Id", "Try Again", "OK");
+                    return;
+                }
+                await _iRepository.GetByIdOrUsername(this, (int)Id);
+            }
+            catch(Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
+            }
         }
         public async Task DeleteUserAsync()
         {
-            GetUserByIdIsVisible = false;
             await _iRepository.DeleteAsync(this);
         }
         public async Task UpdateUserAsync()
         {
-            GetUserByIdIsVisible = false;
             await _iRepository.PutAsync(this);
         }
 
-        public ObservableCollection<ILoginModel> UserList { get; set; } = new ObservableCollection<ILoginModel>();
+        
     }
 }

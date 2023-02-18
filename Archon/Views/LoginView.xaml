@@ -10,7 +10,7 @@
  </ContentPage.BindingContext>
 
  <ContentPage.Content>
-  <StackLayout>
+ <StackLayout>
    <Frame CornerRadius="80"
           HasShadow="True"
           BackgroundColor="#4203AB"
@@ -34,80 +34,18 @@
       
    <Entry Placeholder="Password"
           Text="{Binding Password}"/>
-      
-   <Entry Placeholder="Id"
-          Text="{Binding Id}"/>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-            </Grid>
    <Button Text="SIGN ME UP!"
            Command="{Binding SignUpCommand}"/>
       
    <Button Text="LOGIN"
            Command="{Binding LoginCommand}"/>
 
-   <Button Text="DELETE USER"
-           Command="{Binding DeleteCommand}"
+   <Button Text="GO TO LOGIN DETAILS"
+           Command="{Binding PushToLoginDetailsViewCommand}"
            IsVisible="{Binding ManagerButtons}"/>
-      
-   <Button Text="UPDATE USER"
-           Command="{Binding UpdateCommand}"
-           IsVisible="{Binding ManagerButtons}"/>
-      
-   <Button Text="GET USERS"
-           Command="{Binding GetUsersCommand}"
-           IsVisible="{Binding ManagerButtons}"/>
-
-   <Button Text="GET USERS BY ID"
-           Command="{Binding GetUsersByIdCommand}"
-           IsVisible="{Binding ManagerButtons}"/>
-
-   <Entry Placeholder="Id to Update or Delete"
-          Text="{Binding Id}"/>
-      
-   <ListView HasUnevenRows="True"
-             ItemsSource="{Binding UserList}">
-    <ListView.ItemTemplate>
-     <DataTemplate>
-      <ViewCell>
-       <StackLayout Orientation="Vertical">
-
-        <Label Text="Username:"/>
-
-        <Label MinimumWidthRequest="100"
-               Text="{Binding Username}"/>
-
-        <Label Text="Password:"/>
-
-        <Label MinimumWidthRequest="100"
-               Text="{Binding Password}"/>
-
-        <Label Text="Id:"/>
-
-        <Label MinimumWidthRequest="100"
-               Text="{Binding Id}"/>
-       </StackLayout>
-      </ViewCell>
-     </DataTemplate>
-    </ListView.ItemTemplate>
-   </ListView>
-  </StackLayout>
+   <Label Text="Don't have an account?"/>
+   <Label Text="Enter a your Company's Id, a Username and Password and click SIGNUP!"/>
+ </StackLayout>
  </ContentPage.Content>
 </ContentPage>

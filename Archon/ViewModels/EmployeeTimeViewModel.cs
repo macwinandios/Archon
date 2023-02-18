@@ -18,6 +18,8 @@ namespace Archon.ViewModels
         bool _isClockedIn;
         bool _isClockInButtonVisible = true;
         bool _isClockOutButtonVisible = false;
+        bool _isHoursAndPayCollectionVisibleForAdmin;
+
         DateTime _currentTime;
         DateTime _clockedInAt;
         TimeSpan _updatedClockInTime;
@@ -71,10 +73,10 @@ namespace Archon.ViewModels
             get => _id;
             set => SetProperty(ref _id, value);
         }
-        public bool IsClockedIn
+        public bool IsHoursAndPayCollectionVisibleForAdmin
         {
-            get => _isClockedIn;
-            set => SetProperty(ref _isClockedIn, value);
+            get => _isHoursAndPayCollectionVisibleForAdmin;
+            set => SetProperty(ref _isHoursAndPayCollectionVisibleForAdmin, value);
         }
         public bool IsClockInButtonVisible
         {
@@ -92,11 +94,7 @@ namespace Archon.ViewModels
             get => _hourlyWage;
             set => SetProperty(ref _hourlyWage, value);
         }
-        public float TotalWagesEarnedThisWeek
-        {
-            get => _totalWagesEarnedThisWeek;
-            set => SetProperty(ref _totalWagesEarnedThisWeek, value);
-        }
+        
         public DateTime CurrentTime
         {
             get => _currentTime;
@@ -114,12 +112,12 @@ namespace Archon.ViewModels
         }
         public DateTime DateClockedIn
         {
-            get => _dateClockedIn = ClockedInAt.Date;
+            get => _dateClockedIn;
             set => SetProperty(ref _dateClockedIn, value);
         }
         public DateTime DateClockedOut
         {
-            get => _dateClockedOut = ClockedOutAt.Date;
+            get => _dateClockedOut;
             set => SetProperty(ref _dateClockedOut, value);
         }
         public TimeSpan DurationOfClockIn
@@ -130,6 +128,7 @@ namespace Archon.ViewModels
                 {
                     _durationOfClockIn = ClockedOutAt - ClockedInAt;
                 }
+
                 else _durationOfClockIn = UpdatedClockOutTime - UpdatedClockInTime;
 
                 return _durationOfClockIn;
@@ -143,11 +142,17 @@ namespace Archon.ViewModels
         }
         public TimeSpan TotalTimeClockedInThisWeek
         {
-            get
-            {
-                return _totalTimeClockedInToday;
-            }
+            get => _totalTimeClockedInThisWeek;
             set => SetProperty(ref _totalTimeClockedInThisWeek, value);
+        }
+        public float TotalWagesEarnedThisWeek
+        {
+            get 
+            {
+                _totalWagesEarnedThisWeek = (float)Math.Round(TotalTimeClockedInThisWeek.TotalHours * HourlyWage, 2);
+                return _totalWagesEarnedThisWeek;
+            }
+            set => SetProperty(ref _totalWagesEarnedThisWeek, value);
         }
         public TimeSpan UpdatedClockInTime
         {
@@ -198,6 +203,7 @@ namespace Archon.ViewModels
         }
         private async Task GetAllTimeDetailsForUser()
         {
+            IsHoursAndPayCollectionVisibleForAdmin = true;
             await _iRepository.GetByIdOrUsername(this, Username);
         }
 

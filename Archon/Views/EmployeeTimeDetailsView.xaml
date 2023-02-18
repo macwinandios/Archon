@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
              x:Class="Archon.Views.EmployeeTimeDetailsView">
  <ContentPage.BindingContext>
      <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
@@ -31,12 +33,17 @@
             HorizontalOptions="EndAndExpand"/>
    </StackLayout>
 
-   <Label Text="Hours And Pay Details For:"/>
+   <Label>
+    <Label.FormattedText>
+     <FormattedString>
+      <Span Text="Hours And Pay Details For:   "/>
+      <Span Text="{Binding Username}"
+            TextColor="Yellow"/>
+     </FormattedString>
+    </Label.FormattedText>
+   </Label>
 
-   <Label Text="{Binding Username}"
-          HorizontalOptions="CenterAndExpand"/>
-      
-    <ListView ItemsSource="{Binding HoursAndPayCollection}"
+            <ListView ItemsSource="{Binding HoursAndPayCollection}"
               HasUnevenRows="True">
      <ListView.ItemTemplate>
       <DataTemplate>

@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="Archon.Views.AdminMonitorPayView">
   <ContentPage.BindingContext>
       <Binding Source="{StaticResource Locator}" Path="EmployeeTimeViewModel"/>
@@ -9,28 +12,11 @@
   <ContentPage.Content>
    <ScrollView>
     <StackLayout>
-     <StackLayout Orientation="Horizontal"
-                  Margin="0,10,0,0">
-      <Label>
-       <Label.FormattedText>
-        <FormattedString>
-         <Span Text="Signed in as:  "
-               TextColor="White"
-               FontSize="Medium"
-               FontAttributes="Bold"/>
-         <Span Text="{Binding Username}"
-               TextColor="Yellow"
-               FontSize="Medium"
-               FontAttributes="Bold"/>
-         </FormattedString>
-        </Label.FormattedText>
-       </Label>
-
      <Button Text="GO BACK"
              Command="{Binding PopToAdminAssignTaskViewCommand}"
-             HorizontalOptions="EndAndExpand"/>
-      </StackLayout>
-        
+             HorizontalOptions="EndAndExpand"
+             Margin="0,10"/>
+
      <Button Text="Get All Time Details For User"
              Command="{Binding AdminGetAllTimeDetailsForUserCommand}"/>
         
@@ -40,40 +26,65 @@
      <Button Text="Delete Time Detail"
              Command="{Binding AdminDeleteTimeDetailCommand}"/>
 
-     <Label Text="Username:"/>
+     <Label Text="Username:"
+            HorizontalOptions="CenterAndExpand"/>
         
-     <Entry Text="{Binding Username}"
-            Placeholder="Enter A Username"/>
+     <Entry 
+         Placeholder="-Enter A Username-"
+         Text="{Binding Username}"/>
         
-     <Label Text="Id to Update or Delete:"/>
+     <Label Text="Id to Update or Delete:"
+            HorizontalOptions="CenterAndExpand"/>
 
-     <Entry Placeholder="Enter Id"
+     <Entry Placeholder="-Enter Id-"
             Text="{Binding Id}"/>
+
+     <Label Text="What Date Are You Updating:"
+            HorizontalOptions="CenterAndExpand"/>
         
-     <Label Text="Update Time Clocked In"/>
+     <DatePicker 
+           Date="{Binding DateClockedOut}"
+           MinimumDate="01/01/2023"
+           MaximumDate="{x:Static sys:DateTime.Today}"
+           Format="d"
+           TextColor="Yellow"
+           HorizontalOptions="CenterAndExpand"
+           FontAttributes="Bold"/>
+
+     <Label Text="Update Time Clocked In:"
+            HorizontalOptions="CenterAndExpand"/>
         
      <TimePicker Time="{Binding UpdatedClockInTime}"
-                 TextColor="White"
-                 FontAttributes="Bold"/>
+                 TextColor="Yellow"
+                 FontAttributes="Bold"
+                 HorizontalOptions="CenterAndExpand"/>
       
-     <Label Text="Update Time Clocked Out"/>
+     <Label Text="Update Time Clocked Out:"
+            HorizontalOptions="CenterAndExpand"/>
         
      <TimePicker Time="{Binding UpdatedClockOutTime}"
-                 TextColor="White"
-                 FontAttributes="Bold"/>
+                 TextColor="Yellow"
+                 FontAttributes="Bold"
+                 HorizontalOptions="CenterAndExpand"/>
   
   
      <StackLayout HorizontalOptions="Center" 
                   VerticalOptions="Center"
                   IsVisible="{Binding UserDetailsIsVisible}">
-  
-     <Label Text="Hours And Pay Details For:"/>
-         
-     <Label Text="{Binding Username}"/>
-  
-  
-      <ListView ItemsSource="{Binding HoursAndPayCollection}"
-               HasUnevenRows="True">
+
+     <Label>
+       <Label.FormattedText>
+          <FormattedString>
+            <Span Text="Hours And Pay Details For:   "/>
+            <Span Text="{Binding Username}"
+                  TextColor="Yellow"/>
+          </FormattedString>
+       </Label.FormattedText>
+     </Label>
+
+     <ListView ItemsSource="{Binding HoursAndPayCollection}"
+               HasUnevenRows="True"
+               IsVisible="{Binding IsHoursAndPayCollectionVisibleForAdmin}">
        <ListView.ItemTemplate>
         <DataTemplate>
          <ViewCell>

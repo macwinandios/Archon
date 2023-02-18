@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              x:Class="Archon.Views.AdminAssignTaskView">
  <ContentPage.BindingContext>
@@ -10,86 +12,76 @@
  <ContentPage.Content>
   <ScrollView>
    <StackLayout>
-       
-    <StackLayout Orientation="Horizontal"
-                 Margin="0,10,0,0">
-     <Label>
-      <Label.FormattedText>
-       <FormattedString>
-        <Span Text="Signed in as:  "
-              TextColor="White"
-              FontSize="Medium"
-              FontAttributes="Bold"/>
-        <Span Text="{Binding Username}"
-              TextColor="Yellow"
-              FontSize="Medium"
-              FontAttributes="Bold"/>
-       </FormattedString>
-      </Label.FormattedText>
-     </Label>
-
-     <Button Text="LOGOUT"
-             Command="{Binding LogoutCommand}"
-             HorizontalOptions="EndAndExpand"/>
-    </StackLayout>
+    <Button Text="LOGOUT"
+            Command="{Binding LogoutCommand}"
+            HorizontalOptions="EndAndExpand"
+            Margin="0,10"/>
        
     <Label Text="{Binding StringFormat='{0:D}'}"
-          BindingContext="{x:Static sys:DateTime.Today}"
-          HorizontalOptions="CenterAndExpand"
-          FontSize="Large"/>
+           BindingContext="{x:Static sys:DateTime.Today}"
+           HorizontalOptions="CenterAndExpand"
+           FontSize="Large"/>
        
-    <Label Text="Assign Task To:"/>
+    <Label Text="Assign Task To:"
+           HorizontalOptions="CenterAndExpand"/>
     
-    <Entry Placeholder="---Username---"
-           Text="{Binding Username}"/>
+    <Entry Placeholder="-Enter Username-"
+           Text="{Binding TaskWasAssignedTo}"/>
 
-    <Label Text="Choose Date Of Assigned Task:"/>
+    <Label Text="Choose Date Of Assigned Task:"
+           HorizontalOptions="CenterAndExpand"/>
     
     <DatePicker 
            Date="{Binding DateOfAssignedTask}"
            MinimumDate="{x:Static sys:DateTime.Today }"
            Format="d"
            TextColor="Yellow"
-           HorizontalOptions="FillAndExpand"/>
+           HorizontalOptions="CenterAndExpand"
+           FontAttributes="Bold"/>
     
-    <Label Text="Task Description:"/>
+    <Label Text="Task Description:"
+           HorizontalOptions="CenterAndExpand"/>
     
-    <Entry Placeholder="---Description---"
+    <Entry Placeholder="-Enter a Description-"
            Text="{Binding TaskDescription}"/>
     
-    <Label Text="Task Title:"/>
+    <Label Text="Task Title:"
+           HorizontalOptions="CenterAndExpand"/>
     
-    <Entry Placeholder="---TaskTitle---"
+    <Entry Placeholder="-Enter a Title-"
            Text="{Binding TaskTitle}"/>
     
-    <Label Text="Task Was Assigned To:"/>
+    <Label Text="Task Was Assigned To:"
+           HorizontalOptions="CenterAndExpand"/>
+       
+    <Label Text="{Binding TaskWasAssignedTo}"
+           HorizontalOptions="CenterAndExpand"
+           TextColor="Yellow"/>
+       
+    <Label Text="Id to Update or Delete:"
+           HorizontalOptions="CenterAndExpand"/>
 
-    <Entry Placeholder="--Task Was Assigned To--"
-           Text="{Binding TaskWasAssignedTo}"/>
-
-    <Button Text="Assign A Task"
+    <Entry Placeholder="-Enter Id-"
+           Text="{Binding Id}"/>
+       
+    <Button Text="Assign Task"
             Command="{Binding AssignTaskCommand}"/>
+                    
+    <Button Text="Update Task"
+            Command="{Binding UpdateTaskCommand}"/>
 
-    <Button Text="Go To PAY MONITOR"
-            Command="{Binding PushToAdminMonitorPayViewCommand}"/>
-
+    
+    <Button Text="Delete Task"
+            Command="{Binding DeleteTaskCommand}"/>
+       
     <Button Text="Get All Tasks"
             Command="{Binding GetValuesFromAssignedTaskTableAndPushToAdminCompletedTaskViewCommand}"/>
 
     <Button Text="Get Task By Username"
             Command="{Binding GetTaskByIdOrUsernameCommand}"/>
-    
-    <Button Text="Update A Task"
-            Command="{Binding UpdateTaskCommand}"/>
-    
-    <Button Text="Delete A Task"
-            Command="{Binding DeleteTaskCommand}"/>
-    
-    <Label Text="Id to Update or Delete:"/>
-    
-    <Entry Placeholder="Enter Id"
-       Text="{Binding Id}"/>
-             
+
+    <Button Text="Go To PAY MONITOR"
+            Command="{Binding PushToAdminMonitorPayViewCommand}"/>
    </StackLayout>
   </ScrollView>
  </ContentPage.Content>

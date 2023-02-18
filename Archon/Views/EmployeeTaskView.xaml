@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
              x:Class="Archon.Views.EmployeeTaskView">
  <ContentPage.BindingContext>
      <Binding Source="{StaticResource Locator}" Path="AdminAssignTaskViewModel"/>
@@ -9,43 +11,34 @@
  <ContentPage.Content>
   <StackLayout HorizontalOptions="Center" 
                VerticalOptions="Center">
-      
-   <StackLayout Orientation="Horizontal"
-                Margin="0,10,0,0">
-    <Label>
-     <Label.FormattedText>
-      <FormattedString>
-       <Span Text="Signed in as:  "
-             TextColor="White"
-             FontSize="Medium"
-             FontAttributes="Bold"/>
-       <Span Text="{Binding Username}"
-             TextColor="Yellow"
-             FontSize="Medium"
-             FontAttributes="Bold"/>
-      </FormattedString>
-     </Label.FormattedText>
-    </Label>
 
-   <Button Text="GO BACK"
-           Command="{Binding PopToAdminAssignTaskViewCommand}"
-           HorizontalOptions="EndAndExpand"/>
-   </StackLayout>
+  <Button Text="GO BACK"
+          Command="{Binding PopToAdminAssignTaskViewCommand}"
+          HorizontalOptions="EndAndExpand"
+          Margin="0,10"/>
 
-   <Label Text="Enter Task Id To Update:"/>
+   <Label Text="Task Id You'd Like To Update:"
+          HorizontalOptions="CenterAndExpand"/>
       
-   <Entry Placeholder="Enter Id"
+   <Entry Placeholder="-Enter Id-"
           Text="{Binding Id}"/>
-   <Label Text="Enter Task Completion Notes:"/>
       
-   <Entry Placeholder="Enter Completion Notes"
+   <Label Text="Task Completion Notes:"
+          HorizontalOptions="CenterAndExpand"/>
+      
+   <Entry Placeholder="-Enter Completion Notes-"
           Text="{Binding TaskCompletedNotes}"/>
       
-   <Label Text="Check The Box If Task Was Completed:"/>
+   <Label Text="Check The Box If Task Was Completed:"
+          HorizontalOptions="CenterAndExpand"/>
       
    <CheckBox IsChecked="{Binding TaskIsComplete}"
-             Color="Red"
-             BackgroundColor="LightBlue"/>
+             Color="Yellow"
+             BackgroundColor="Black"
+             HorizontalOptions="CenterAndExpand"/>
+   <Label Text="Your Assigned Tasks:"
+          HorizontalOptions="CenterAndExpand"
+          TextDecorations="Underline"/>
 
    <ListView ItemsSource="{Binding TaskCollection}"
              HasUnevenRows="True"

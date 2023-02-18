@@ -25,3 +25,4 @@ C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon\obj\Debug\netstandard2.0
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon\obj\Debug\netstandard2.0\Views\EmployeeTaskView.xaml.g.cs
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon\obj\Debug\netstandard2.0\Views\AdminMonitorPayView.xaml.g.cs
 C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon\obj\Debug\netstandard2.0\Views\AdminAssignTaskView.xaml.g.cs
+C:\Users\Jonathan\Desktop\yohanna familia\Archon\Archon\obj\Debug\netstandard2.0\Views\LoginDetailsView.xaml.g.cs

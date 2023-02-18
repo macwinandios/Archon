@@ -132,7 +132,7 @@ namespace Archon.ViewModels
         }
         private async Task GetTaskByIdOrUsername()
         {
-            await _iRepository.GetByIdOrUsername(this, Username);
+            await _iRepository.GetByIdOrUsername(this, TaskWasAssignedTo);
             await Application.Current.MainPage.Navigation.PushAsync(new AdminCompletedTaskView());
 
         }
@@ -153,6 +153,7 @@ namespace Archon.ViewModels
         private async Task PushToAdminMonitorPayView()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new AdminMonitorPayView());
+            
         }
         private async Task PopToAdminAssignTaskView()
         {

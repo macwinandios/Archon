@@ -13,6 +13,7 @@
             <Color x:Key="PrimaryColor">#4203AB</Color>
             <Color x:Key="SecondaryColor">#314e52</Color>
             <Color x:Key="TextColor">White</Color>
+            <Color x:Key="PlaceholderColor">Yellow</Color>
 
              <!--Implicit styles-->
             <Style TargetType="{x:Type ContentPage}" ApplyToDerivedTypes="True">
@@ -40,7 +41,7 @@
             
             <Style TargetType="{x:Type Entry}">
                 <Setter Property="FontSize" Value="Medium" />
-                <Setter Property="PlaceholderColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="PlaceholderColor" Value="{StaticResource PlaceholderColor}"/>
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
                 <Setter Property="FontAttributes" Value="Bold"/>
                 <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="True"
+             x:Class="Archon.Views.LoginDetailsView">
+    <ContentPage.BindingContext>
+        <Binding Source="{StaticResource Locator}" Path="LoginViewModel"/>
+    </ContentPage.BindingContext>
+
+ <ContentPage.Content>
+  <ScrollView>
+   <StackLayout>
+    <Button Text="GO BACK"
+            Command="{Binding PopToLoginViewCommand}"
+            HorizontalOptions="EndAndExpand"
+            Margin="0,10"/>
+       
+    <Label Text="Id to Update or Delete:"
+            HorizontalOptions="CenterAndExpand"/>
+       
+    <Entry Placeholder="-Enter Id-"
+           Text="{Binding Id}"/>
+
+
+    <Button Text="DELETE USER"
+            Command="{Binding DeleteCommand}"
+            IsVisible="{Binding ManagerButtons}"/>
+
+    <Button Text="UPDATE USER"
+            Command="{Binding UpdateCommand}"
+            IsVisible="{Binding ManagerButtons}"/>
+
+    <Button Text="GET ALL USERS"
+            Command="{Binding GetUsersCommand}"
+            IsVisible="{Binding ManagerButtons}"/>
+
+    <Button Text="GET USERS BY ID"
+            Command="{Binding GetUsersByIdCommand}"
+            IsVisible="{Binding ManagerButtons}"/>
+
+
+    <ListView HasUnevenRows="True"
+              ItemsSource="{Binding UserList}">
+     <ListView.ItemTemplate>
+      <DataTemplate>
+       <ViewCell>
+        <StackLayout>
+
+         <Label Text="Username:"/>
+
+         <Label Text="{Binding Username}"/>
+
+         <Label Text="Password:"/>
+
+         <Label Text="{Binding Password}"/>
+
+         <Label Text="Id:"/>
+
+         <Label Text="{Binding Id}"/>
+            
+        </StackLayout>
+        </ViewCell>
+      </DataTemplate>
+     </ListView.ItemTemplate>
+    </ListView>
+   </StackLayout>
+  </ScrollView>
+ </ContentPage.Content>
+</ContentPage>
