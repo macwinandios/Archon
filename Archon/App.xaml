@@ -79,7 +79,8 @@
                 <Setter Property="PlaceholderColor">
                     <Setter.Value>
                         <OnPlatform x:TypeArguments="Color" 
-                                    iOS="{StaticResource DatePickerAndPlaceholderColor}"    Android="{StaticResource DatePickerAndPlaceholderColor}"/>
+                                    iOS="{StaticResource DatePickerAndPlaceholderColor}"    
+                                    Android="{StaticResource DatePickerAndPlaceholderColor}"/>
                     </Setter.Value>
                 </Setter>
                 
