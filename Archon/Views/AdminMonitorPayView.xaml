@@ -17,6 +17,9 @@
              HorizontalOptions="EndAndExpand"
              Margin="0,10"/>
 
+     <Button Text="Get All Time Details"
+             Command="{Binding AdminGetAllTimeDetailsCommand}"/>
+        
      <Button Text="Get All Time Details For User"
              Command="{Binding AdminGetAllTimeDetailsForUserCommand}"/>
         

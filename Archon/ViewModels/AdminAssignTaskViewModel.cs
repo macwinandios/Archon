@@ -134,17 +134,14 @@ namespace Archon.ViewModels
         {
             await _iRepository.GetByIdOrUsername(this, TaskWasAssignedTo);
             await Application.Current.MainPage.Navigation.PushAsync(new AdminCompletedTaskView());
-
         }
         private async Task UpdateTask()
         {
             await _iRepository.PutAsync(this);
-
         }
         private async Task DeleteTask()
         {
             await _iRepository.DeleteAsync(this);
-
         }
         private async Task PopToLogin()
         {
@@ -153,7 +150,6 @@ namespace Archon.ViewModels
         private async Task PushToAdminMonitorPayView()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new AdminMonitorPayView());
-            
         }
         private async Task PopToAdminAssignTaskView()
         {

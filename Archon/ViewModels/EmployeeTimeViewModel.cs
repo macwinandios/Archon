@@ -15,10 +15,11 @@ namespace Archon.ViewModels
     public class EmployeeTimeViewModel : ViewModelBase, IEmployeeTimeViewModel
     {
         int? _id;
-        bool _isClockedIn;
+        bool _isClockedInNotificationVisible;
         bool _isClockInButtonVisible = true;
         bool _isClockOutButtonVisible = false;
         bool _isHoursAndPayCollectionVisibleForAdmin;
+        string _notifyUserTheyClockedIn;
 
         DateTime _currentTime;
         DateTime _clockedInAt;
@@ -44,8 +45,9 @@ namespace Archon.ViewModels
         ICommand _popToAdminAssignTaskViewCommand;
 
 
-        //Three ADMIN Commands
+        //Four ADMIN Commands
         ICommand _adminGetAllTimeDetailsForUserCommand;
+        ICommand _adminGetAllTimeDetailsCommand;
         ICommand _adminUpdateTimeDetailCommand;
         ICommand _adminDeleteTimeDetailCommand;
 
@@ -77,6 +79,21 @@ namespace Archon.ViewModels
         {
             get => _isHoursAndPayCollectionVisibleForAdmin;
             set => SetProperty(ref _isHoursAndPayCollectionVisibleForAdmin, value);
+        }
+        public string NotifyUserTheyClockedIn
+        {
+            get 
+            {
+                _notifyUserTheyClockedIn = $"Welcome Back, {Username}! \nYou Are Clocked In.";
+
+                return _notifyUserTheyClockedIn;
+            }
+            set => SetProperty(ref _notifyUserTheyClockedIn, value);
+        }
+        public bool IsClockedInNotificationVisible
+        {
+            get => _isClockedInNotificationVisible;
+            set => SetProperty(ref _isClockedInNotificationVisible, value);
         }
         public bool IsClockInButtonVisible
         {
@@ -177,21 +194,21 @@ namespace Archon.ViewModels
 
         public ICommand ClockInCommand => _clockIn ?? (_clockIn = new Command(async () => await ClockInAsync()));
         public ICommand ClockOutCommand => _clockOut ?? (_clockOut = new Command(async () => await ClockOutAsync()));
-        
         public ICommand GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand => _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand ?? (_getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand = new Command(async () => await GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()));
         public ICommand GetFromAdminAssignTaskTableAndPushToEmployeeTaskCommand => _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand ?? (_getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand = new Command(async () => await GetFromAdminAssignTaskTableAndPushToEmployeeTaskView()));
         public ICommand LogoutCommand => _logoutCommand ?? (_logoutCommand = new Command(async () => await LogoutAsync()));
         public ICommand PopToEmployeeTimeViewCommand => _popToEmployeeTimeViewCommand ?? (_popToEmployeeTimeViewCommand = new Command(async () => await PopToEmployeeTimeView()));
         public ICommand PopToAdminAssignTaskViewCommand => _popToAdminAssignTaskViewCommand ?? (_popToAdminAssignTaskViewCommand = new Command(async () => await PopToAdminAssignTaskView()));
 
-        //Three Admin Commands
+        //Four Admin Commands
         public ICommand AdminGetAllTimeDetailsForUserCommand => _adminGetAllTimeDetailsForUserCommand ?? (_adminGetAllTimeDetailsForUserCommand = new Command(async () => await GetAllTimeDetailsForUser()));
+        public ICommand AdminGetAllTimeDetailsCommand => _adminGetAllTimeDetailsCommand ?? (_adminGetAllTimeDetailsCommand = new Command(async () => await GetAllTimeDetails()));
 
         public ICommand AdminUpdateTimeDetailCommand => _adminUpdateTimeDetailCommand ?? (_adminUpdateTimeDetailCommand = new Command(async () => await UpdateTimeDetail()));
 
         public ICommand AdminDeleteTimeDetailCommand => _adminDeleteTimeDetailCommand ?? (_adminDeleteTimeDetailCommand = new Command(async () => await DeleteTimeDetail()));
 
-        //Three Admin Methods
+        //Four Admin Methods
         private async Task DeleteTimeDetail()
         {
             await _iRepository.DeleteAsync(this);
@@ -206,20 +223,35 @@ namespace Archon.ViewModels
             IsHoursAndPayCollectionVisibleForAdmin = true;
             await _iRepository.GetByIdOrUsername(this, Username);
         }
+        private async Task GetAllTimeDetails()
+        {
+            try
+            {
+                IsHoursAndPayCollectionVisibleForAdmin = true;
+                await _iRepository.GetAllAsync(this);
+            }
+            catch(Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("VIEWMODEL ERROR", ex.Message, "OK");
+            }
 
-        //Employee Methods
+        }
         private async Task ClockInAsync()
         {
             IsClockInButtonVisible = false;
             IsClockOutButtonVisible = true;
+            IsClockedInNotificationVisible = true;
+
             await _iEmployeeTimeRepository.ClockInAsync(this);
         }
         private async Task ClockOutAsync()
         {
             IsClockInButtonVisible = true;
             IsClockOutButtonVisible = false;
+            IsClockedInNotificationVisible = false;
             await _iRepository.PostAsync(this);
         }
+        
         private async Task GetFromHoursAndPayTableAndPushToEmployeeTimeDetailsView()
         {
             try

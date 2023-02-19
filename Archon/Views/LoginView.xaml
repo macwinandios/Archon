@@ -44,8 +44,12 @@
    <Button Text="GO TO LOGIN DETAILS"
            Command="{Binding PushToLoginDetailsViewCommand}"
            IsVisible="{Binding ManagerButtons}"/>
-   <Label Text="Don't have an account?"/>
-   <Label Text="Enter a your Company's Id, a Username and Password and click SIGNUP!"/>
+   <Label Text="Don't have an account?"
+          TextColor="Yellow"
+          HorizontalOptions="CenterAndExpand"/>
+   <Label Text="Enter a your Company's Id, create a Username and Password, and click SIGN ME UP!"
+          TextColor="Yellow"
+          HorizontalOptions="CenterAndExpand"/>
  </StackLayout>
  </ContentPage.Content>
 </ContentPage>

@@ -16,12 +16,17 @@
             HorizontalOptions="EndAndExpand"
             Margin="0,10"/>
        
-    <Label Text="Id to Update or Delete:"
+    <Label Text="Id to Get, Update or Delete a Username:"
             HorizontalOptions="CenterAndExpand"/>
        
     <Entry Placeholder="-Enter Id-"
            Text="{Binding Id}"/>
-
+       
+    <Label Text="Username You'd Like To Check:"
+            HorizontalOptions="CenterAndExpand"/>
+       
+    <Entry Placeholder="-Enter Username-"
+           Text="{Binding Username}"/>
 
     <Button Text="DELETE USER"
             Command="{Binding DeleteCommand}"
@@ -39,6 +44,9 @@
             Command="{Binding GetUsersByIdCommand}"
             IsVisible="{Binding ManagerButtons}"/>
 
+    <Button Text="GET USERS BY USERNAME"
+            Command="{Binding GetUsersByUsernameCommand}"
+            IsVisible="{Binding ManagerButtons}"/>
 
     <ListView HasUnevenRows="True"
               ItemsSource="{Binding UserList}">

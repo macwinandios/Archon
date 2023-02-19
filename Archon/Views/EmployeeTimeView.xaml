@@ -49,6 +49,19 @@
           HorizontalOptions="CenterAndExpand"
           FontSize="Large"/>
       
+   <Frame CornerRadius="30"
+          BackgroundColor="DarkViolet"
+          Margin="10"
+          BorderColor="White"
+          HasShadow="True"
+          IsVisible="{Binding IsClockedInNotificationVisible}">
+       
+   <Label Text="{Binding NotifyUserTheyClockedIn}"
+          IsVisible="{Binding IsClockedInNotificationVisible}"
+          TextColor="White"
+          HorizontalOptions="CenterAndExpand"
+          FontSize="Large"/>
+   </Frame>
    <Button Text="CLOCK IN"
            Command="{Binding ClockInCommand}"
            IsVisible="{Binding IsClockInButtonVisible}"/>

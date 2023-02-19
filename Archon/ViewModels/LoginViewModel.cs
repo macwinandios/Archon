@@ -25,6 +25,7 @@ namespace Archon.ViewModels
         ICommand _signUpCommand;
         ICommand _getUsersCommand;
         ICommand _getUsersByIdCommand;
+        ICommand _getUsersByUsernameCommand;
         ICommand _deleteUserCommand;
         ICommand _updateUserCommand;
         ICommand _loginCommand;
@@ -80,6 +81,7 @@ namespace Archon.ViewModels
         public ICommand DeleteCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(async () => await DeleteUserAsync()));
         public ICommand GetUsersCommand => _getUsersCommand ?? (_getUsersCommand = new Command(async () => await GetAllUsersAsync()));
         public ICommand GetUsersByIdCommand => _getUsersByIdCommand ?? (_getUsersByIdCommand = new Command(async () => await GetUsersByIdAsync()));
+        public ICommand GetUsersByUsernameCommand => _getUsersByUsernameCommand ?? (_getUsersByUsernameCommand = new Command(async () => await GetUsersByUsernameAsync()));
         public ICommand UpdateCommand => _updateUserCommand ?? (_updateUserCommand = new Command(async () => await UpdateUserAsync()));
         public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new Command(async () => await LoginAsync()));
         public ICommand PushToLoginDetailsViewCommand => _pushToLoginDetailsViewCommand ?? (_pushToLoginDetailsViewCommand = new Command(async () => await PushToLoginDetailsViewAsync()));
@@ -154,6 +156,23 @@ namespace Archon.ViewModels
                 await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
             }
         }
+        public async Task GetUsersByUsernameAsync()
+        {
+            try
+            {
+                if (Username == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Must Enter a Valid Username", "Try Again", "OK");
+                    return;
+                }
+                await _iRepository.GetByIdOrUsername(this, Username);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
+            }
+        }
+
         public async Task DeleteUserAsync()
         {
             await _iRepository.DeleteAsync(this);
