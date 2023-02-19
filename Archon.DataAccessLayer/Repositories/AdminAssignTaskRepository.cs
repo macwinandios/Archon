@@ -15,26 +15,68 @@ namespace Archon.DataAccessLayer.Repositories
         {
             try
             {
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
+                if (viewModel.TaskWasAssignedTo == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A USERNAME", "TRY AGAIN", "OK");
+                    return;
+                }
+                if (viewModel.DateOfAssignedTask == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER THE TASK DATE", "TRY AGAIN", "OK");
+                    return;
+                }
                 await SqlModel.SqlConnection.OpenAsync();
 
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
                     command.CommandText = "SELECT COUNT(*) FROM dbo.Task WHERE Id =   @Id";
+
                     command.Parameters.AddWithValue("@Id", viewModel.Id);
 
                     int count = (int)command.ExecuteScalar();
                     if (count > 0)
                     {
                         command.CommandText = "DELETE FROM dbo.Task WHERE Id = @Id";
+
                         command.ExecuteNonQuery();
+
                         await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY DELETED", "CLICK OK TO CONTINUE", "OK");
-                        //viewModel.Id = null;
                     }
                     else
                     {
                         await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
-                        //viewModel.Id = null;
                     }
+                    //Read and Update values after deleting.
+                    command.CommandText = "SELECT NumberOfAssignedTasks FROM Task WHERE Username = @Username AND DateOfAssignedTask = @DateOfAssignedTask";
+
+                    command.Parameters.AddWithValue("@Username", viewModel.TaskWasAssignedTo);
+                    command.Parameters.AddWithValue("@DateOfAssignedTask", viewModel.DateOfAssignedTask.ToShortDateString());
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            int numberOfAssignedTasksInDataBase = int.Parse(reader.GetString(0));
+
+                            viewModel.NumberOfAssignedTasks = numberOfAssignedTasksInDataBase;
+
+                            if (numberOfAssignedTasksInDataBase != int.MinValue)
+                            {
+                                viewModel.NumberOfAssignedTasks = numberOfAssignedTasksInDataBase - 1;
+                            }
+                        }
+                    }
+                    command.CommandText = "UPDATE dbo.Task SET NumberOfAssignedTasks = ISNULL(@NumberOfAssignedTasks, NumberOfAssignedTasks) " + 
+                        "WHERE Username = @Username AND DateOfAssignedTask = @DateOfAssignedTask";
+
+                    command.Parameters.AddWithValue("@NumberOfAssignedTasks", viewModel.NumberOfAssignedTasks ?? (object)DBNull.Value);
+
+                    await command.ExecuteNonQueryAsync();
                 }
             }
             catch (Exception ex)
@@ -46,45 +88,36 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-
         public async Task<IEnumerable<IAdminAssignTaskViewModel>> GetAllAsync(IAdminAssignTaskViewModel viewModel)
         {
             try
             {
-                SqlModel.SqlConnection.Open();
-
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Task", SqlModel.SqlConnection);
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-                viewModel.TaskCollection.Clear();
-
-                while (clientReader.Read())
+                await SqlModel.SqlConnection.OpenAsync();
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
-                    try
+                    command.CommandText = "SELECT * FROM dbo.Task";
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        viewModel.TaskCollection.Insert(0, new AdminAssignTaskModel
+                        viewModel.TaskCollection.Clear();
+                        while (await reader.ReadAsync())
                         {
+                             viewModel.TaskCollection.Insert(0, new AdminAssignTaskModel
+                             {
+                                 NumberOfAssignedTasks = Convert.ToInt32(reader["NumberOfAssignedTasks"]),
+                                 DateOfAssignedTask = Convert.ToDateTime(reader["DateOfAssignedTask"]),
+                                 TaskIsComplete = Convert.ToBoolean(reader["TaskIsComplete"]),
+                                 TaskDescription = reader["TaskDescription"].ToString(),
+                                 TaskTitle = reader["TaskTitle"].ToString(),
+                                 TaskCompletedNotes = reader["TaskCompletedNotes"].ToString(),
+                                 TaskWasAssignedTo = reader["TaskWasAssignedTo"].ToString(),
+                                 Id = Convert.ToInt32(reader["Id"])
+                             });
 
-                            Username = clientReader["Username"].ToString(),
-                            NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
-                            DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
-                            TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
-                            TaskDescription = clientReader["TaskDescription"].ToString(),
-                            TaskTitle = clientReader["TaskTitle"].ToString(),
-                            TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
-                            TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString(),
-                            Id = Convert.ToInt32(clientReader["Id"])
-                        });
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
                     }
-                    catch (Exception ex)
-                    {
-                        await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-
-                    }
-
                 }
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
             }
             catch (Exception ex)
             {
@@ -95,84 +128,89 @@ namespace Archon.DataAccessLayer.Repositories
             {
                 SqlModel.SqlConnection.Close();
             }
-            return (IEnumerable<IAdminAssignTaskViewModel>)Task.CompletedTask;
+            return (IEnumerable<IAdminAssignTaskViewModel>)viewModel.TaskCollection;
 
         }
-        public Task GetAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, string username)
+        public async Task GetAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, string username)
         {
             try
             {
-                SqlModel.SqlConnection.Open();
+                await SqlModel.SqlConnection.OpenAsync();
 
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Task WHERE TaskWasAssignedTo = @Username", SqlModel.SqlConnection);
-                clientCommand.Parameters.AddWithValue("@Username", username);
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-                viewModel.TaskCollection.Clear();
-
-                while (clientReader.Read())
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
-                    viewModel.TaskCollection.Insert(0,new AdminAssignTaskModel
+                    command.CommandText = "SELECT * FROM dbo.Task WHERE TaskWasAssignedTo = @Username";
+                    command.Parameters.AddWithValue("@Username", username);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        Username = clientReader["Username"].ToString(),
-                        NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
-                        DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
-                        TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
-                        TaskDescription = clientReader["TaskDescription"].ToString(),
-                        TaskTitle = clientReader["TaskTitle"].ToString(),
-                        TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
-                        TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString(),
-                        Id = Convert.ToInt32(clientReader["Id"])
-                    });
+                        viewModel.TaskCollection.Clear();
+                        while (await reader.ReadAsync())
+                        {
+                            viewModel.TaskCollection.Insert(0, new AdminAssignTaskModel
+                            {
+                                Username = reader["Username"].ToString(),
+                                NumberOfAssignedTasks = Convert.ToInt32(reader["NumberOfAssignedTasks"]),
+                                DateOfAssignedTask = Convert.ToDateTime(reader["DateOfAssignedTask"]),
+                                TaskIsComplete = Convert.ToBoolean(reader["TaskIsComplete"]),
+                                TaskDescription = reader["TaskDescription"].ToString(),
+                                TaskTitle = reader["TaskTitle"].ToString(),
+                                TaskCompletedNotes = reader["TaskCompletedNotes"].ToString(),
+                                TaskWasAssignedTo = reader["TaskWasAssignedTo"].ToString(),
+                                Id = Convert.ToInt32(reader["Id"])
+                            });
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
 
                 }
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
             }
             catch (Exception ex)
             {
-                Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
             }
             finally
             {
                 SqlModel.SqlConnection.Close();
-
             }
-            return Task.CompletedTask;
-
         }
-
         public async Task GetByIdOrUsername(IAdminAssignTaskViewModel viewModel, int id)
         {
             try
             {
-                SqlModel.SqlConnection.Open();
-
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Task WHERE Id = @Id", SqlModel.SqlConnection);
-                clientCommand.Parameters.AddWithValue("@Id", id);
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-                viewModel.TaskCollection.Clear();
-
-
-                while (clientReader.Read())
+                if (viewModel.Id == null)
                 {
-                    viewModel.TaskCollection.Add(new AdminAssignTaskModel
-                    {
-                        Id = Convert.ToInt32(clientReader["Id"]),
-                        Username = clientReader["Username"].ToString(),
-                        NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
-                        DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
-                        TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
-                        TaskDescription = clientReader["TaskDescription"].ToString(),
-                        TaskTitle = clientReader["TaskTitle"].ToString(),
-                        TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
-                        TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString()
-                    });
-
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
                 }
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
+                await SqlModel.SqlConnection.OpenAsync();
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM dbo.Task WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        viewModel.TaskCollection.Clear();
+                        while (await reader.ReadAsync())
+                        {
+                            viewModel.TaskCollection.Add(new AdminAssignTaskModel
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Username = reader["Username"].ToString(),
+                                NumberOfAssignedTasks = Convert.ToInt32(reader["NumberOfAssignedTasks"]),
+                                DateOfAssignedTask = Convert.ToDateTime(reader["DateOfAssignedTask"]),
+                                TaskIsComplete = Convert.ToBoolean(reader["TaskIsComplete"]),
+                                TaskDescription = reader["TaskDescription"].ToString(),
+                                TaskTitle = reader["TaskTitle"].ToString(),
+                                TaskCompletedNotes = reader["TaskCompletedNotes"].ToString(),
+                                TaskWasAssignedTo = reader["TaskWasAssignedTo"].ToString()
+                            });
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -187,36 +225,40 @@ namespace Archon.DataAccessLayer.Repositories
 
         public async Task GetByIdOrUsername(IAdminAssignTaskViewModel viewModel, string username)
         {
-
             try
             {
-                SqlModel.SqlConnection.Open();
-
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Task WHERE Username = @Username", SqlModel.SqlConnection);
-                clientCommand.Parameters.Add(new SqlParameter("@Username", username));
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-                viewModel.TaskCollection.Clear();
-
-
-                while (clientReader.Read())
+                if (viewModel.TaskWasAssignedTo == null)
                 {
-                    viewModel.TaskCollection.Add(new AdminAssignTaskModel
-                    {
-                        Id = Convert.ToInt32(clientReader["Id"]),
-                        Username = clientReader["Username"].ToString(),
-                        NumberOfAssignedTasks = Convert.ToInt32(clientReader["NumberOfAssignedTasks"]),
-                        DateOfAssignedTask = Convert.ToDateTime(clientReader["DateOfAssignedTask"]),
-                        TaskIsComplete = Convert.ToBoolean(clientReader["TaskIsComplete"]),
-                        TaskDescription = clientReader["TaskDescription"].ToString(),
-                        TaskTitle = clientReader["TaskTitle"].ToString(),
-                        TaskCompletedNotes = clientReader["TaskCompletedNotes"].ToString(),
-                        TaskWasAssignedTo = clientReader["TaskWasAssignedTo"].ToString()
-                    });
-
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A USERNAME", "TRY AGAIN", "OK");
+                    return;
                 }
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
+                await SqlModel.SqlConnection.OpenAsync();
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM dbo.Task WHERE Username = @Username";
+                    command.Parameters.Add(new SqlParameter("@Username", username));
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        viewModel.TaskCollection.Clear();
+                        while (await reader.ReadAsync())
+                        {
+                            viewModel.TaskCollection.Add(new AdminAssignTaskModel
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                NumberOfAssignedTasks = Convert.ToInt32(reader["NumberOfAssignedTasks"]),
+                                DateOfAssignedTask = Convert.ToDateTime(reader["DateOfAssignedTask"]),
+                                TaskIsComplete = Convert.ToBoolean(reader["TaskIsComplete"]),
+                                TaskDescription = reader["TaskDescription"].ToString(),
+                                TaskTitle = reader["TaskTitle"].ToString(),
+                                TaskCompletedNotes = reader["TaskCompletedNotes"].ToString(),
+                                TaskWasAssignedTo = reader["TaskWasAssignedTo"].ToString()
+                            });
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -228,7 +270,6 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-
         public async Task PostAsync(IAdminAssignTaskViewModel viewModel)
         {
             viewModel.NumberOfAssignedTasks = 1;
@@ -239,42 +280,49 @@ namespace Archon.DataAccessLayer.Repositories
 
             try
             {
-                SqlModel.SqlConnection.Open();
+                if (viewModel.TaskWasAssignedTo == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A USERNAME", "TRY AGAIN", "OK");
+                    return;
+                }
+                await SqlModel.SqlConnection.OpenAsync();
 
-              using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
-              {
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
                     command.CommandText = "SELECT NumberOfAssignedTasks FROM Task WHERE Username = @Username AND DateOfAssignedTask = @DateOfAssignedTask";
-                    command.Parameters.AddWithValue("@Username", viewModel.Username);
+
+                    command.Parameters.Add(new SqlParameter("Username", viewModel.TaskWasAssignedTo));
                     command.Parameters.AddWithValue("@DateOfAssignedTask", viewModel.DateOfAssignedTask.ToShortDateString());
 
-                    using (var reader = await command.ExecuteReaderAsync())
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var numberOfAssignedTasksInDataBase = int.Parse(reader.GetString(0));
+                            int numberOfAssignedTasksInDataBase = int.Parse(reader.GetString(0));
                             viewModel.NumberOfAssignedTasks = numberOfAssignedTasksInDataBase + 1;
+                            if (numberOfAssignedTasksInDataBase == int.MinValue)
+                            {
+                                viewModel.NumberOfAssignedTasks = 1;
+                            }
                         }
+                        reader.Close();
                     }
                     viewModel.NumberOfAssignedTasks = viewModel.NumberOfAssignedTasks;
 
-                    
-                    using (SqlCommand insertCommand = new SqlCommand("INSERT INTO dbo.Task VALUES (@Username, @NumberOfAssignedTasks, @DateOfAssignedTask, @TaskIsComplete, @TaskDescription, @TaskTitle, @TaskCompletedNotes, @TaskWasAssignedTo)", SqlModel.SqlConnection))
-                    {
-                        insertCommand.Parameters.Add(new SqlParameter("Username", viewModel.Username));
-                        insertCommand.Parameters.Add(new SqlParameter("NumberOfAssignedTasks", viewModel.NumberOfAssignedTasks));
-                        insertCommand.Parameters.Add(new SqlParameter("DateOfAssignedTask", viewModel.DateOfAssignedTask.ToShortDateString()));
-                        insertCommand.Parameters.Add(new SqlParameter("TaskIsComplete", viewModel.TaskIsComplete));
-                        insertCommand.Parameters.Add(new SqlParameter("TaskDescription", viewModel.TaskDescription ?? string.Empty));
-                        insertCommand.Parameters.Add(new SqlParameter("TaskTitle", viewModel.TaskTitle ?? string.Empty));
-                        insertCommand.Parameters.Add(new SqlParameter("TaskCompletedNotes", viewModel.TaskCompletedNotes ?? string.Empty));
-                        insertCommand.Parameters.Add(new SqlParameter("TaskWasAssignedTo", viewModel.TaskWasAssignedTo ?? string.Empty));
+                    command.CommandText = "INSERT INTO dbo.Task VALUES (@Username, @NumberOfAssignedTasks, @DateOfAssignedTask, @TaskIsComplete, @TaskDescription, @TaskTitle, @TaskCompletedNotes, @TaskWasAssignedTo)";
 
-                        await insertCommand.ExecuteNonQueryAsync();
+                    command.Parameters.Add(new SqlParameter("NumberOfAssignedTasks", viewModel.NumberOfAssignedTasks));
+                    command.Parameters.Add(new SqlParameter("TaskIsComplete", viewModel.TaskIsComplete));
+                    command.Parameters.Add(new SqlParameter("TaskDescription", viewModel.TaskDescription ?? string.Empty));
+                    command.Parameters.Add(new SqlParameter("TaskTitle", viewModel.TaskTitle ?? string.Empty));
+                    command.Parameters.Add(new SqlParameter("TaskCompletedNotes", viewModel.TaskCompletedNotes ?? string.Empty));
+                    command.Parameters.Add(new SqlParameter("TaskWasAssignedTo", viewModel.TaskWasAssignedTo ?? string.Empty));
+
+                        await command.ExecuteNonQueryAsync();
 
                         await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY ADDED", "YOU JUST ASSIGNED A TASK", "OK");
                         SqlModel.SqlConnection.Close();
-                    }
-              }
+                }
             }
             catch (Exception ex)
             {
@@ -285,17 +333,24 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
+
+        
         public async Task PutAsync(IAdminAssignTaskViewModel viewModel)
         {
             try
             {
-                SqlModel.SqlConnection.Open();
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
+                await SqlModel.SqlConnection.OpenAsync();
 
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
                     command.CommandText = "UPDATE dbo.Task SET DateOfAssignedTask = ISNULL(@DateOfAssignedTask, DateOfAssignedTask), " +
                                           "TaskDescription = ISNULL(@TaskDescription, TaskDescription), " +
-                                          "TaskTitle = ISNULL(@TaskTitle, TaskTitle), " +
+                                          "TaskTitle = ISNULL(@TaskTitle, TaskTitle), "  +
                                           "TaskWasAssignedTo = ISNULL(@TaskWasAssignedTo, TaskWasAssignedTo) " +
                                           "WHERE Id = @Id";
                     command.Parameters.AddWithValue("@Id", viewModel.Id);
@@ -308,6 +363,9 @@ namespace Archon.DataAccessLayer.Repositories
 
                     await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "THE TASK WAS UPDATED", "OK");
                 }
+                viewModel.TaskDescription = null;
+                viewModel.TaskWasAssignedTo = null;
+                viewModel.Id = null;
             }
             catch (Exception ex)
             {
@@ -318,20 +376,23 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-
-
         public async Task UpdateAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, int id)
         {
             try
             {
-                SqlModel.SqlConnection.Open();
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
+                await SqlModel.SqlConnection.OpenAsync();
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
 
                     command.CommandText = "UPDATE Task SET [TaskIsComplete] = @TaskIsComplete,[TaskCompletedNotes] = @TaskCompletedNotes WHERE Id = @Id";
 
                     command.Parameters.AddWithValue("@Id", viewModel.Id);
-                        command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete);
+                    command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete);
 
 
                     if (viewModel.TaskCompletedNotes != null)
@@ -342,11 +403,13 @@ namespace Archon.DataAccessLayer.Repositories
                     SqlModel.SqlConnection.Close();
 
                 }
+                viewModel.TaskCompletedNotes = null;
+                viewModel.Id = null;
+                viewModel.TaskIsComplete = false;
             }
-
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Not YEt", ex.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("Not Yet", ex.Message, "OK");
             }
             finally
             {
