@@ -49,26 +49,17 @@
            Date="{Binding DateClockedOut}"
            MinimumDate="01/01/2023"
            MaximumDate="{x:Static sys:DateTime.Today}"
-           Format="d"
-           TextColor="Yellow"
-           HorizontalOptions="CenterAndExpand"
-           FontAttributes="Bold"/>
+           Format="d"/>
 
      <Label Text="Update Time Clocked In:"
             HorizontalOptions="CenterAndExpand"/>
         
-     <TimePicker Time="{Binding UpdatedClockInTime}"
-                 TextColor="Yellow"
-                 FontAttributes="Bold"
-                 HorizontalOptions="CenterAndExpand"/>
+     <TimePicker Time="{Binding UpdatedClockInTime}"/>
       
      <Label Text="Update Time Clocked Out:"
             HorizontalOptions="CenterAndExpand"/>
         
-     <TimePicker Time="{Binding UpdatedClockOutTime}"
-                 TextColor="Yellow"
-                 FontAttributes="Bold"
-                 HorizontalOptions="CenterAndExpand"/>
+     <TimePicker Time="{Binding UpdatedClockOutTime}"/>
   
   
      <StackLayout HorizontalOptions="Center" 

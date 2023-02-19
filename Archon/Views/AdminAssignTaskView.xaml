@@ -34,10 +34,7 @@
     <DatePicker 
            Date="{Binding DateOfAssignedTask}"
            MinimumDate="{x:Static sys:DateTime.Today }"
-           Format="d"
-           TextColor="Yellow"
-           HorizontalOptions="CenterAndExpand"
-           FontAttributes="Bold"/>
+           Format="d"/>
     
     <Label Text="Task Description:"
            HorizontalOptions="CenterAndExpand"/>
@@ -80,7 +77,7 @@
     <Button Text="Get Task By Username"
             Command="{Binding GetTaskByIdOrUsernameCommand}"/>
 
-    <Button Text="Go To PAY MONITOR"
+    <Button Text="Go To Pay Monitor"
             Command="{Binding PushToAdminMonitorPayViewCommand}"/>
    </StackLayout>
   </ScrollView>
