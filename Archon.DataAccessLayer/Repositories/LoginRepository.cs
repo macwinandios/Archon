@@ -13,7 +13,176 @@ namespace Archon.DataAccessLayer
     public class LoginRepository : IRepository<ILoginViewModel>, ILoginRepository<ILoginViewModel>
     {
         public LoginRepository(){ }
+        public async Task DeleteAsync(ILoginViewModel viewModel)
+        {
+            try
+            {
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
+                await SqlModel.SqlConnection.OpenAsync();
 
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT COUNT(*) FROM dbo.Login WHERE Id =   @Id";
+
+                    command.Parameters.AddWithValue("@Id", viewModel.Id);
+
+                    int count = (int)command.ExecuteScalar();
+                    if (count > 0)
+                    {
+                        command.CommandText = "DELETE FROM dbo.Login WHERE Id = @Id";
+
+                        await command.ExecuteNonQueryAsync();
+
+                        await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY DELETED", "CLICK OK TO CONTINUE", "OK");
+                        viewModel.Id = null;
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
+                        viewModel.Id = null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+            }
+
+        }
+        public async Task GetByIdOrUsername(ILoginViewModel viewModel, int id)
+        {
+            try
+            {
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
+                await SqlModel.SqlConnection.OpenAsync();
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+
+                    command.CommandText = "SELECT * FROM dbo.Login WHERE Id = @Id";
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            viewModel.Username = reader["Username"].ToString();
+                            SqlModel.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
+                            SqlModel.SqlConnection.Close();
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                SqlModel.SqlConnection.Close();
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+            }
+        }
+        public async Task GetByIdOrUsername(ILoginViewModel viewModel, string username)
+        {
+            try
+            {
+                if (viewModel.Username == String.Empty)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID USERNAME", "TRY AGAIN", "OK");
+                    return;
+                }
+
+                await SqlModel.SqlConnection.OpenAsync();
+
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM dbo.Login WHERE Username = @Username";
+
+                    command.Parameters.AddWithValue("@Username", username);
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            await Application.Current.MainPage.DisplayAlert("This is a Valid Username", "Username WAS FOUND IN DATABASE", "OK");
+                            SqlModel.SqlConnection.Close();
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert("INVALID Username", "Username NOT FOUND IN DATABASE", "OK");
+                            SqlModel.SqlConnection.Close();
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                SqlModel.SqlConnection.Close();
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+            }
+        }
+        public async Task<IEnumerable<ILoginViewModel>> GetAllAsync(ILoginViewModel viewModel)
+        {
+            try
+            {
+                await SqlModel.SqlConnection.OpenAsync();
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+                {
+                    command.CommandText = "SELECT * FROM dbo.Login";
+                
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+
+                        viewModel.UserList.Clear();
+                        while (await reader.ReadAsync())
+                        {
+                            viewModel.UserList.Insert(0, new LoginModel
+                            {
+                                Username = reader["Username"].ToString(),
+                                Password = reader["Password"].ToString(),
+                                Id = Convert.ToInt32(reader["Id"])
+                            });
+                        }
+                        reader.Close();
+                        SqlModel.SqlConnection.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
+                SqlModel.SqlConnection.Close();
+            }
+            finally
+            {
+                SqlModel.SqlConnection.Close();
+
+            }
+            return (IEnumerable<ILoginViewModel>)viewModel.UserList;
+        }
         public async Task<bool> Login(ILoginViewModel viewModel)
         {
             try
@@ -26,7 +195,9 @@ namespace Archon.DataAccessLayer
                     viewModel.Password = string.Empty;
                     return false;
                 }
+
                 await SqlModel.SqlConnection.OpenAsync();
+
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
                     string hashedPassword = SqlModel.HashedString(viewModel.Password);
@@ -68,86 +239,6 @@ namespace Archon.DataAccessLayer
                 return false;
             }
         }
-
-
-
-
-        public async Task GetByIdOrUsername(ILoginViewModel model, int id)
-        {
-            try
-            {
-                SqlModel.SqlConnection.Open();
-
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Login WHERE Id = @Id", SqlModel.SqlConnection);
-                clientCommand.Parameters.AddWithValue("@Id", id);
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-
-                if (clientReader.Read())
-                {
-                    model.Username = clientReader["Username"].ToString();
-                    SqlModel.SqlConnection.Close();
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
-                    SqlModel.SqlConnection.Close();
-                }
-
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-                SqlModel.SqlConnection.Close();
-            }
-            finally
-            {
-                SqlModel.SqlConnection.Close();
-            }
-        }
-
-
-        public async Task<IEnumerable<ILoginViewModel>> GetAllAsync(ILoginViewModel viewModel)
-        {
-            try
-            {
-                SqlModel.SqlConnection.Open();
-
-                using (SqlCommand command = new SqlCommand("SELECT * FROM dbo.Login", SqlModel.SqlConnection))
-                {
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                    {
-                        viewModel.UserList.Clear();
-                        while (reader.Read())
-                        {
-                            viewModel.UserList.Insert(0, new LoginModel
-                            {
-                                Username = reader["Username"].ToString(),
-                                Password = reader["Password"].ToString(),
-                                Id = Convert.ToInt32(reader["Id"])
-                            });
-
-                        }
-                        reader.Close();
-                        SqlModel.SqlConnection.Close();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-                SqlModel.SqlConnection.Close();
-            }
-            finally
-            {
-                SqlModel.SqlConnection.Close();
-
-            }
-            return (IEnumerable<ILoginViewModel>)Task.CompletedTask;
-        }
-        
         public async Task PostAsync(ILoginViewModel viewModel)
         {
             try
@@ -171,8 +262,10 @@ namespace Archon.DataAccessLayer
                 }
                 await SqlModel.SqlConnection.OpenAsync();
 
-                using (SqlCommand command = new SqlCommand("SELECT * FROM dbo.Login WHERE LOWER(Username) = LOWER(@Username) AND LOWER(Password) = LOWER(@Password)", SqlModel.SqlConnection))
+                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
+                    command.CommandText = "SELECT * FROM dbo.Login WHERE LOWER(Username) = LOWER(@Username) AND LOWER(Password) = LOWER(@Password)";
+
                     command.Parameters.Add(new SqlParameter("Username", viewModel.Username));
                     command.Parameters.Add(new SqlParameter("Password", SqlModel.HashedString(viewModel.Password)));
 
@@ -187,23 +280,18 @@ namespace Archon.DataAccessLayer
                             viewModel.Username = string.Empty;
                             viewModel.Password = string.Empty;
                         }
-
                         else
                         {
                             reader.Close();
 
-                            using (SqlCommand insertCommand = new SqlCommand("INSERT INTO dbo.Login VALUES (@Username, @Password)", SqlModel.SqlConnection))
-                            {
-                                insertCommand.Parameters.Add(new SqlParameter("Username", viewModel.Username));
-                                insertCommand.Parameters.Add(new SqlParameter("Password", SqlModel.HashedString(viewModel.Password)));
+                            command.CommandText = "INSERT INTO dbo.Login VALUES (@Username, @Password)";
 
-                                await insertCommand.ExecuteNonQueryAsync();
+                            await command.ExecuteNonQueryAsync();
 
-                                await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY ADDED", "YOU MAY NOW LOGIN", "OK");
-                                viewModel.Username = string.Empty;
-                                viewModel.Password = string.Empty;
-                                SqlModel.SqlConnection.Close();
-                            }
+                            await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY ADDED", "YOU MAY NOW LOGIN", "OK");
+                            viewModel.Username = string.Empty;
+                            viewModel.Password = string.Empty;
+                            SqlModel.SqlConnection.Close();
                         }
                     }
                 }
@@ -220,48 +308,16 @@ namespace Archon.DataAccessLayer
             }
 
         }
-        public async Task DeleteAsync(ILoginViewModel viewModel)
-        {
-            try
-            {
-                await SqlModel.SqlConnection.OpenAsync();
-
-                using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
-                {
-                    command.CommandText = "SELECT COUNT(*) FROM dbo.Login WHERE Id =   @Id";
-                    command.Parameters.AddWithValue("@Id", viewModel.Id);
-
-                    int count = (int)command.ExecuteScalar();
-                    if (count > 0)
-                    {
-                        command.CommandText = "DELETE FROM dbo.Login WHERE Id = @Id";
-                        command.ExecuteNonQuery();
-                        await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY DELETED", "CLICK OK TO CONTINUE", "OK");
-                        viewModel.Id = null;
-                    }
-                    else
-                    {
-                        await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
-                        viewModel.Id = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-            }
-            finally
-            {
-                SqlModel.SqlConnection.Close();
-            }
-
-        }
-
         public async Task PutAsync(ILoginViewModel viewModel)
         {
             
             try
             {
+                if (viewModel.Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
                 await SqlModel.SqlConnection.OpenAsync();
 
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
@@ -273,9 +329,13 @@ namespace Archon.DataAccessLayer
                     if (count > 0)
                     {
                         command.CommandText = "UPDATE Login SET Username = @Username WHERE Id = @Id";
+
                         command.Parameters.AddWithValue("@Username", viewModel.Username);
+
                         await command.ExecuteNonQueryAsync();
+
                         await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "CLICK OK TO CONTINUE", "OK");
+
                         SqlModel.SqlConnection.Close();
                         viewModel.Id = null;
                         viewModel.Username = String.Empty;
@@ -283,6 +343,7 @@ namespace Archon.DataAccessLayer
                     else
                     {
                         await Application.Current.MainPage.DisplayAlert("INVALID ID", "ID NOT FOUND IN DATABASE", "OK");
+
                         SqlModel.SqlConnection.Close();
                         viewModel.Id = null;
                         viewModel.Username = String.Empty;
@@ -296,41 +357,7 @@ namespace Archon.DataAccessLayer
                 await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
             }
         }
-
-        public async Task GetByIdOrUsername(ILoginViewModel viewModel, string username)
-        {
-            try
-            {
-                SqlModel.SqlConnection.Open();
-
-                SqlCommand clientCommand = new SqlCommand("SELECT * FROM dbo.Login WHERE Username = @Username", SqlModel.SqlConnection);
-                clientCommand.Parameters.AddWithValue("@Username", username);
-
-                SqlDataReader clientReader = clientCommand.ExecuteReader();
-
-                if (clientReader.Read())
-                {
-                    viewModel.Username = clientReader["Username"].ToString();
-                    SqlModel.SqlConnection.Close();
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("INVALID Username", "Username NOT FOUND IN DATABASE", "OK");
-                    SqlModel.SqlConnection.Close();
-                }
-
-                clientReader.Close();
-                SqlModel.SqlConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
-                SqlModel.SqlConnection.Close();
-            }
-            finally
-            {
-                SqlModel.SqlConnection.Close();
-            }
-        }
+        
+        
     }
 }
