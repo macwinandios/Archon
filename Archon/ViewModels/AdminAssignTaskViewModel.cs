@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Archon.ViewModels
 {
-    public class AdminAssignTaskViewModel : ViewModelBase, IAdminAssignTaskViewModel
+    public class AdminAssignTaskViewModel : ViewModelBase, IAdminAssignTaskModel
     {
         int? _id;
         int? _numberOfAssignedTasks;
@@ -33,10 +33,10 @@ namespace Archon.ViewModels
         ICommand _updateTaskCommand;
         ICommand _deleteTaskCommand;
 
-        private readonly IRepository<IAdminAssignTaskViewModel> _iRepository;
-        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> _iTaskRepository;
+        private readonly IRepository<IAdminAssignTaskModel> _iRepository;
+        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel> _iTaskRepository;
         public AdminAssignTaskViewModel() { }
-        public AdminAssignTaskViewModel(IRepository<IAdminAssignTaskViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository)
+        public AdminAssignTaskViewModel(IRepository<IAdminAssignTaskModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel> iTaskRepository)
         {
             _iRepository = iRepository;
             _iTaskRepository = iTaskRepository;
@@ -116,8 +116,12 @@ namespace Archon.ViewModels
         {
             try
             {
+                if (Id == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("viewmodel YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+                    return;
+                }
                 await _iTaskRepository.UpdateAssignedTaskEmployee(this, (int)Id);
-
             }
             catch (Exception ex)
             {

@@ -33,7 +33,8 @@
           Text="{Binding Username}"/>
       
    <Entry Placeholder="Password"
-          Text="{Binding Password}"/>
+          Text="{Binding Password}"
+          IsPassword="True"/>
 
    <Button Text="SIGN ME UP!"
            Command="{Binding SignUpCommand}"/>

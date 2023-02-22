@@ -7,9 +7,15 @@ namespace Archon.Shared.Interfaces
 {
     public interface ILoginModel
     {
-        int Id { get; set; }
+        int? Id { get; set; }
+        int? CompanyId { get; set; }
         string Username { get; set; }
         string Password { get; set; }
+        ObservableCollection<ILoginModel> UserList { get; set; }
+        //int Id { get; set; }
+        //string Username { get; set; }
+        //string Password { get; set; }
+        //ObservableCollection<ILoginModel> UserList { get; set; }
 
     }
 }

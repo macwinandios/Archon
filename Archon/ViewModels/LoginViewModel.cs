@@ -14,8 +14,10 @@ using Xamarin.Forms;
 
 namespace Archon.ViewModels
 {
-    public class LoginViewModel : ViewModelBase, ILoginViewModel
+    
+    public class LoginViewModel : ViewModelBase, ILoginModel
     {
+
         int? _id;
         int? _companyId;
         string _username;
@@ -32,12 +34,11 @@ namespace Archon.ViewModels
         ICommand _pushToLoginDetailsViewCommand;
         ICommand _popToLoginViewCommand;
 
-
-        private readonly IRepository<ILoginViewModel> _iRepository;
-        private readonly ILoginRepository<ILoginViewModel> _iLoginRepository;
+        private readonly IRepository<ILoginModel> _iRepository;
+        private readonly ILoginRepository<ILoginModel> _iLoginRepository;
 
         public LoginViewModel() { }
-        public LoginViewModel(IRepository<ILoginViewModel> iRepository,ILoginRepository<ILoginViewModel> iLoginRepository)
+        public LoginViewModel(IRepository<ILoginModel> iRepository,ILoginRepository<ILoginModel> iLoginRepository)
         {
             _iRepository = iRepository;
             _iLoginRepository = iLoginRepository;
@@ -107,14 +108,13 @@ namespace Archon.ViewModels
                 }
             }
         }
-
-        public async Task LoginAsync()
+        private async Task LoginAsync()
         {
 
             if (await _iLoginRepository.Login(this))
 
             {
-                if(CompanyId == 123)
+                if (CompanyId == 123)
                 {
                     await Application.Current.MainPage.Navigation.PushAsync(new EmployeeTimeView());
                 }
@@ -125,11 +125,12 @@ namespace Archon.ViewModels
                 }
             }
         }
-        public async Task SignUpAsync()
+
+        private async Task SignUpAsync()
         {
             await _iRepository.PostAsync(this);
         }
-        public async Task GetAllUsersAsync()
+        private async Task GetAllUsersAsync()
         {
             try
             {
@@ -140,7 +141,8 @@ namespace Archon.ViewModels
                 await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
             }
         }
-        public async Task GetUsersByIdAsync()
+
+        private async Task GetUsersByIdAsync()
         {
             try
             {
@@ -151,11 +153,12 @@ namespace Archon.ViewModels
                 }
                 await _iRepository.GetByIdOrUsername(this, (int)Id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("VIEWMODEL EXCEPTION", ex.Message, "OK");
             }
         }
+
         public async Task GetUsersByUsernameAsync()
         {
             try
@@ -173,15 +176,15 @@ namespace Archon.ViewModels
             }
         }
 
-        public async Task DeleteUserAsync()
+        private async Task DeleteUserAsync()
         {
             await _iRepository.DeleteAsync(this);
         }
-        public async Task UpdateUserAsync()
+        private async Task UpdateUserAsync()
         {
             await _iRepository.PutAsync(this);
         }
 
-        
+
     }
 }

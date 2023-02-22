@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Archon.ViewModels
 {
-    public class EmployeeTimeViewModel : ViewModelBase, IEmployeeTimeViewModel
+    public class EmployeeTimeViewModel : ViewModelBase, IEmployeeTimeModel
     {
         int? _id;
         bool _isClockedInNotificationVisible;
@@ -51,23 +51,24 @@ namespace Archon.ViewModels
         ICommand _adminUpdateTimeDetailCommand;
         ICommand _adminDeleteTimeDetailCommand;
 
-        private readonly IAdminAssignTaskViewModel _adminAssignTaskViewModel;
-        private readonly ILoginViewModel _iLoginViewModel;
+        private readonly IAdminAssignTaskModel _adminAssignTaskModel;
+        //private readonly ILoginViewModel _iLoginViewModel;
+        private readonly ILoginModel _iLoginModel;
 
-        private readonly IEmployeeTimeRepository<IEmployeeTimeViewModel> _iEmployeeTimeRepository;
-        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> _iTaskRepository;
-        private readonly IRepository<IEmployeeTimeViewModel> _iRepository;
+        private readonly IEmployeeTimeRepository<IEmployeeTimeModel> _iEmployeeTimeRepository;
+        private readonly IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel> _iTaskRepository;
+        private readonly IRepository<IEmployeeTimeModel> _iRepository;
 
 
 
         public EmployeeTimeViewModel() { }
-        public EmployeeTimeViewModel( ILoginViewModel loginViewModel, IEmployeeTimeRepository<IEmployeeTimeViewModel> iEmployeeTimeRepository, IRepository<IEmployeeTimeViewModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel> iTaskRepository, IAdminAssignTaskViewModel adminAssignTaskViewModel)
+        public EmployeeTimeViewModel( ILoginModel loginModel, IEmployeeTimeRepository<IEmployeeTimeModel> iEmployeeTimeRepository, IRepository<IEmployeeTimeModel> iRepository, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel> iTaskRepository, IAdminAssignTaskModel adminAssignTaskModel)
         {
-            _iLoginViewModel = loginViewModel;
+            _iLoginModel = loginModel;
             _iEmployeeTimeRepository = iEmployeeTimeRepository;
             _iRepository = iRepository;
             _iTaskRepository = iTaskRepository;
-            _adminAssignTaskViewModel = adminAssignTaskViewModel;
+            _adminAssignTaskModel = adminAssignTaskModel;
         }
         public ObservableCollection<IEmployeeTimeModel> HoursAndPayCollection { get; set; } = new ObservableCollection<IEmployeeTimeModel>();
         public int? Id
@@ -183,10 +184,10 @@ namespace Archon.ViewModels
         }
         public string Username
         {
-            get => _iLoginViewModel.Username;
+            get => _iLoginModel.Username;
             set
             {
-                _iLoginViewModel.Username = value;
+                _iLoginModel.Username = value;
                 OnPropertyChanged(nameof(Username));
             }
         }
@@ -269,7 +270,7 @@ namespace Archon.ViewModels
         {
             try
             {
-                await _iTaskRepository.GetAssignedTaskEmployee(_adminAssignTaskViewModel, Username);
+                await _iTaskRepository.GetAssignedTaskEmployee(_adminAssignTaskModel, Username);
             }
             catch (Exception ex)
             {

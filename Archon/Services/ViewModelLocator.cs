@@ -18,32 +18,30 @@ namespace Archon.Services
             _container = new TinyIoCContainer();
 
             //LOGIN REPOSITORY
-            _container.Register<IRepository<ILoginViewModel>, LoginRepository>();
-            _container.Register<ILoginRepository<ILoginViewModel>, LoginRepository >();
+            _container.Register<IRepository<ILoginModel>, LoginRepository>();
+            _container.Register<ILoginRepository<ILoginModel>, LoginRepository>();
 
             //EMPLOYEE TIME REPOSITORY
-            _container.Register<IEmployeeTimeRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
-            _container.Register<IRepository<IEmployeeTimeViewModel>, EmployeeTimeRepository>();
+            _container.Register<IEmployeeTimeRepository<IEmployeeTimeModel>, EmployeeTimeRepository>();
+            _container.Register<IRepository<IEmployeeTimeModel>, EmployeeTimeRepository>();
 
             //ADMINASSIGNTASK REPOSITORY
-            _container.Register<IRepository<IAdminAssignTaskViewModel>, AdminAssignTaskRepository>();
-                _container.Register<IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel>, AdminAssignTaskRepository>();
+            _container.Register<IRepository<IAdminAssignTaskModel>, AdminAssignTaskRepository>();
+                _container.Register<IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel>, AdminAssignTaskRepository>();
 
-            //EMPLOYEE TIME VIEWMODEL
-            _container.Register<IEmployeeTimeViewModel, EmployeeTimeViewModel>();
-
+            //EMPLOYEETIME VIEWMODEL
+            _container.Register<IEmployeeTimeModel, EmployeeTimeViewModel>();
 
             //LOGIN VIEWMODEL
-            _container.Register<ILoginViewModel, LoginViewModel>();
-
+            _container.Register<ILoginModel, LoginViewModel>();
 
             //ADMIN ASSIGN TASK VIEWMODEL
-            _container.Register<IAdminAssignTaskViewModel, AdminAssignTaskViewModel>();
+            _container.Register<IAdminAssignTaskModel, AdminAssignTaskViewModel>();
 
         }
-        public ILoginViewModel LoginViewModel => _container.Resolve<ILoginViewModel>();
-        public IEmployeeTimeViewModel EmployeeTimeViewModel => _container.Resolve<IEmployeeTimeViewModel>();
-        public IAdminAssignTaskViewModel AdminAssignTaskViewModel => _container.Resolve<IAdminAssignTaskViewModel>();
+        public ILoginModel LoginViewModel => _container.Resolve<ILoginModel>();
+        public IEmployeeTimeModel EmployeeTimeViewModel => _container.Resolve<IEmployeeTimeModel>();
+        public IAdminAssignTaskModel AdminAssignTaskViewModel => _container.Resolve<IAdminAssignTaskModel>();
 
     }
 }
