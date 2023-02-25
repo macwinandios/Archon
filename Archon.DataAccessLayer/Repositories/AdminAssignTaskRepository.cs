@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace Archon.DataAccessLayer.Repositories
 {
-    public class AdminAssignTaskRepository : IRepository<IAdminAssignTaskViewModel>, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskViewModel>
+    public class AdminAssignTaskRepository : IRepository<IAdminAssignTaskModel>, IGetAndUpdateAssignedTasksEmployee<IAdminAssignTaskModel>
     {
-        public async Task DeleteAsync(IAdminAssignTaskViewModel viewModel)
+        public async Task DeleteAsync(IAdminAssignTaskModel viewModel)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task<IEnumerable<IAdminAssignTaskViewModel>> GetAllAsync(IAdminAssignTaskViewModel viewModel)
+        public async Task<IEnumerable<IAdminAssignTaskModel>> GetAllAsync(IAdminAssignTaskModel viewModel)
         {
             try
             {
@@ -128,10 +128,10 @@ namespace Archon.DataAccessLayer.Repositories
             {
                 SqlModel.SqlConnection.Close();
             }
-            return (IEnumerable<IAdminAssignTaskViewModel>)viewModel.TaskCollection;
+            return viewModel.TaskCollection;
 
         }
-        public async Task GetAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, string username)
+        public async Task GetAssignedTaskEmployee(IAdminAssignTaskModel viewModel, string username)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task GetByIdOrUsername(IAdminAssignTaskViewModel viewModel, int id)
+        public async Task GetByIdOrUsername(IAdminAssignTaskModel viewModel, int id)
         {
             try
             {
@@ -223,7 +223,7 @@ namespace Archon.DataAccessLayer.Repositories
             }
         }
 
-        public async Task GetByIdOrUsername(IAdminAssignTaskViewModel viewModel, string username)
+        public async Task GetByIdOrUsername(IAdminAssignTaskModel viewModel, string username)
         {
             try
             {
@@ -270,7 +270,7 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task PostAsync(IAdminAssignTaskViewModel viewModel)
+        public async Task PostAsync(IAdminAssignTaskModel viewModel)
         {
             viewModel.NumberOfAssignedTasks = 1;
             if (viewModel.DateOfAssignedTask == DateTime.MinValue)
@@ -335,7 +335,7 @@ namespace Archon.DataAccessLayer.Repositories
         }
 
         
-        public async Task PutAsync(IAdminAssignTaskViewModel viewModel)
+        public async Task PutAsync(IAdminAssignTaskModel viewModel)
         {
             try
             {
@@ -376,7 +376,7 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task UpdateAssignedTaskEmployee(IAdminAssignTaskViewModel viewModel, int id)
+        public async Task UpdateAssignedTaskEmployee(IAdminAssignTaskModel viewModel, int id)
         {
             try
             {
@@ -388,15 +388,20 @@ namespace Archon.DataAccessLayer.Repositories
                 await SqlModel.SqlConnection.OpenAsync();
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
-
-                    command.CommandText = "UPDATE Task SET [TaskIsComplete] = @TaskIsComplete,[TaskCompletedNotes] = @TaskCompletedNotes WHERE Id = @Id";
+                    command.CommandText = "UPDATE Task SET TaskIsComplete = ISNULL(@TaskIsComplete, TaskIsComplete), TaskCompletedNotes = ISNULL(@TaskCompletedNotes, TaskCompletedNotes)  WHERE Id = @Id";
 
                     command.Parameters.AddWithValue("@Id", viewModel.Id);
-                    command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete);
-
-
-                    if (viewModel.TaskCompletedNotes != null)
-                        command.Parameters.AddWithValue("@TaskCompletedNotes", viewModel.TaskCompletedNotes);
+                    if(viewModel.TaskIsComplete != false)
+                    {
+                        command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete);
+                    }
+                    else command.Parameters.AddWithValue("@TaskIsComplete", false);
+                    
+                        command.Parameters.AddWithValue("@TaskCompletedNotes", viewModel.TaskCompletedNotes ?? (object)DBNull.Value);
+                    //if (viewModel.TaskCompletedNotes != null)
+                    //{
+                    //    command.Parameters.AddWithValue("@TaskCompletedNotes", viewModel.TaskCompletedNotes);
+                    //}
 
                     await command.ExecuteNonQueryAsync();
                     await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TASK", "OK");
@@ -416,5 +421,45 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
+        //public async Task UpdateAssignedTaskEmployee(IAdminAssignTaskModel viewModel, int id)
+        //{
+        //    try
+        //    {
+        //        if (viewModel.Id == null)
+        //        {
+        //            await Application.Current.MainPage.DisplayAlert("YOU MUST ENTER A VALID ID", "TRY AGAIN", "OK");
+        //            return;
+        //        }
+        //        await SqlModel.SqlConnection.OpenAsync();
+        //        using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
+        //        {
+
+        //            command.CommandText = "UPDATE Task SET [TaskIsComplete] = @TaskIsComplete,[TaskCompletedNotes] = @TaskCompletedNotes WHERE Id = @Id";
+
+        //            command.Parameters.AddWithValue("@Id", viewModel.Id);
+        //            command.Parameters.AddWithValue("@TaskIsComplete", viewModel.TaskIsComplete);
+
+
+        //            if (viewModel.TaskCompletedNotes != null)
+        //                command.Parameters.AddWithValue("@TaskCompletedNotes", viewModel.TaskCompletedNotes);
+
+        //            await command.ExecuteNonQueryAsync();
+        //            await Application.Current.MainPage.DisplayAlert("SUCCESSFULLY UPDATED", "YOU JUST UPDATED A TASK", "OK");
+        //            SqlModel.SqlConnection.Close();
+
+        //        }
+        //        viewModel.TaskCompletedNotes = null;
+        //        viewModel.Id = null;
+        //        viewModel.TaskIsComplete = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await Application.Current.MainPage.DisplayAlert("Not Yet", ex.Message, "OK");
+        //    }
+        //    finally
+        //    {
+        //        SqlModel.SqlConnection.Close();
+        //    }
+        //}
     }
 }

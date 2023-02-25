@@ -8,10 +8,12 @@ using System.Text;
 namespace Archon.DataAccessLayer
 {
     public class LoginModel : ILoginModel
-    { 
-        public int Id { get; set; }
+    {
+        public int? Id { get; set; }
+        public int? CompanyId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        
+        public ObservableCollection<ILoginModel> UserList { get; set; }
+
     }
 }

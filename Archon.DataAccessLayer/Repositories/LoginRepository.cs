@@ -10,10 +10,10 @@ using Xamarin.Forms;
 
 namespace Archon.DataAccessLayer
 {
-    public class LoginRepository : IRepository<ILoginViewModel>, ILoginRepository<ILoginViewModel>
+    public class LoginRepository : IRepository<ILoginModel>, ILoginRepository<ILoginModel>
     {
         public LoginRepository(){ }
-        public async Task DeleteAsync(ILoginViewModel viewModel)
+        public async Task DeleteAsync(ILoginModel viewModel)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Archon.DataAccessLayer
             }
 
         }
-        public async Task GetByIdOrUsername(ILoginViewModel viewModel, int id)
+        public async Task GetByIdOrUsername(ILoginModel viewModel, int id)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace Archon.DataAccessLayer
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task GetByIdOrUsername(ILoginViewModel viewModel, string username)
+        public async Task GetByIdOrUsername(ILoginModel viewModel, string username)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Archon.DataAccessLayer
                 SqlModel.SqlConnection.Close();
             }
         }
-        public async Task<IEnumerable<ILoginViewModel>> GetAllAsync(ILoginViewModel viewModel)
+        public async Task<IEnumerable<ILoginModel>> GetAllAsync(ILoginModel viewModel)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace Archon.DataAccessLayer
                 using (SqlCommand command = SqlModel.SqlConnection.CreateCommand())
                 {
                     command.CommandText = "SELECT * FROM dbo.Login";
-                
+
                     using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
 
@@ -181,9 +181,10 @@ namespace Archon.DataAccessLayer
                 SqlModel.SqlConnection.Close();
 
             }
-            return (IEnumerable<ILoginViewModel>)viewModel.UserList;
+            return viewModel.UserList;
         }
-        public async Task<bool> Login(ILoginViewModel viewModel)
+
+        public async Task<bool> Login(ILoginModel viewModel)
         {
             try
             {
@@ -206,7 +207,7 @@ namespace Archon.DataAccessLayer
                     command.Parameters.AddWithValue("@Password", hashedPassword);
 
                     int count = (int)await command.ExecuteScalarAsync();
-                    
+
                     if (count > 0 && viewModel.CompanyId == 123 || viewModel.CompanyId == 999)
                     {
                         SqlModel.SqlConnection.Close();
@@ -239,7 +240,8 @@ namespace Archon.DataAccessLayer
                 return false;
             }
         }
-        public async Task PostAsync(ILoginViewModel viewModel)
+
+        public async Task PostAsync(ILoginModel viewModel)
         {
             try
             {
@@ -308,7 +310,7 @@ namespace Archon.DataAccessLayer
             }
 
         }
-        public async Task PutAsync(ILoginViewModel viewModel)
+        public async Task PutAsync(ILoginModel viewModel)
         {
             
             try
@@ -357,7 +359,5 @@ namespace Archon.DataAccessLayer
                 await Application.Current.MainPage.DisplayAlert("NOT YET", ex.Message, "OK");
             }
         }
-        
-        
     }
 }
