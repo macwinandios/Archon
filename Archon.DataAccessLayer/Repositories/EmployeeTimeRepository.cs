@@ -338,7 +338,7 @@ namespace Archon.DataAccessLayer.Repositories
 
                             totalDuration += durationInTable;
                             totalTimeClockedThisWeek += timeDayInTable;
-                            totalWagesEarnedThisWeek += wagesInTable;
+                            totalWagesEarnedThisWeek = wagesInTable;
                         }
 
                         viewModel.TotalTimeClockedInToday = totalDuration;
