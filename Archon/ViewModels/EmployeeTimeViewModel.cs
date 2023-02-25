@@ -29,14 +29,21 @@ namespace Archon.ViewModels
         DateTime _clockedOutAt;
         DateTime _dateClockedIn;
         DateTime _dateClockedOut;
+        DateTime _getPayDetailsWeekOfBeginningDate;
+        DateTime _getPayDetailsWeekOfEndingDate;
+
+
         float _hourlyWage;
         float _totalWagesEarnedThisWeek;
+        float _totalWagesEarnedForDaysChosen;
+
         TimeSpan _durationOfClockIn;
         TimeSpan _totalTimeClockedInToday;
         TimeSpan _totalTimeClockedInThisWeek;
 
         ICommand _clockIn;
         ICommand _clockOut;
+        ICommand _getPayDetailsForWeekCommand;
         ICommand _getFromHoursAndPayTableAndPushToEmployeeTimeDetailsViewCommand;
         ICommand _getFromAdminAssignTaskTableAndPushToEmployeeTaskCommand;
         ICommand _logoutCommand;
@@ -112,11 +119,20 @@ namespace Archon.ViewModels
             get => _hourlyWage;
             set => SetProperty(ref _hourlyWage, value);
         }
-        
         public DateTime CurrentTime
         {
             get => _currentTime;
             set => SetProperty(ref _currentTime, value);
+        }
+        public DateTime GetPayDetailsWeekOfBeginningDate
+        {
+            get => _getPayDetailsWeekOfBeginningDate;
+            set => SetProperty(ref _getPayDetailsWeekOfBeginningDate, value);
+        }
+        public DateTime GetPayDetailsWeekOfEndingDate
+        {
+            get => _getPayDetailsWeekOfEndingDate;
+            set => SetProperty(ref _getPayDetailsWeekOfEndingDate, value);
         }
         public DateTime ClockedInAt
         {
@@ -163,6 +179,11 @@ namespace Archon.ViewModels
             get => _totalTimeClockedInThisWeek;
             set => SetProperty(ref _totalTimeClockedInThisWeek, value);
         }
+        public float TotalWagesEarnedForDaysChosen
+        {
+            get => _totalWagesEarnedForDaysChosen;
+            set => SetProperty(ref _totalWagesEarnedForDaysChosen, value);
+        }
         public float TotalWagesEarnedThisWeek
         {
             get 
@@ -192,6 +213,20 @@ namespace Archon.ViewModels
             }
         }
 
+        public ICommand GetPayDetailsForWeekCommand => _getPayDetailsForWeekCommand ?? (_getPayDetailsForWeekCommand = new Command(async () => await GetPayDetailsForWeek()));
+
+        private async Task GetPayDetailsForWeek()
+        {
+            try
+            {
+                await _iEmployeeTimeRepository.GetTimeWorkedAsync(this, GetPayDetailsWeekOfBeginningDate, GetPayDetailsWeekOfEndingDate);
+            }
+            catch(Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("VIEWMODEL ERROR", ex.Message, "OK");
+            }
+            
+        }
 
         public ICommand ClockInCommand => _clockIn ?? (_clockIn = new Command(async () => await ClockInAsync()));
         public ICommand ClockOutCommand => _clockOut ?? (_clockOut = new Command(async () => await ClockOutAsync()));

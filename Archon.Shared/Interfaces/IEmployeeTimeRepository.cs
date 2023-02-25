@@ -8,5 +8,6 @@ namespace Archon.Shared.Interfaces
     public interface IEmployeeTimeRepository<T>
     {
         Task ClockInAsync(T viewModel);
+        Task GetTimeWorkedAsync(T viewModel, DateTime startOfWeek, DateTime endOfWeek);
     }
 }

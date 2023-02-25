@@ -18,6 +18,7 @@ namespace Archon.Shared.Interfaces
         DateTime DateClockedOut { get; set; }
         float HourlyWage { get; set; }
         float TotalWagesEarnedThisWeek { get; set; }
+        float TotalWagesEarnedForDaysChosen { get; set; }
         TimeSpan DurationOfClockIn { get; set; }
         TimeSpan TotalTimeClockedInToday { get; set; }
         TimeSpan TotalTimeClockedInThisWeek { get; set; }

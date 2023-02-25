@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              ios:Page.UseSafeArea="True"
              x:Class="Archon.Views.EmployeeTimeDetailsView">
  <ContentPage.BindingContext>
@@ -32,7 +33,39 @@
             Command="{Binding PopToEmployeeTimeViewCommand}"
             HorizontalOptions="EndAndExpand"/>
    </StackLayout>
+   <Label Text="Search By Dates:"
+          HorizontalOptions="CenterAndExpand"
+          FontSize="Large"/>
 
+   <Label Text="Search Beginning Date:"/>
+      
+   <DatePicker 
+           Date="{Binding GetPayDetailsWeekOfBeginningDate}"
+           MinimumDate="01/01/2023"
+           MaximumDate="{x:Static sys:DateTime.Today}"
+           Format="d"/>
+
+   <Label Text="Search Ending Date:"/>
+      
+   <DatePicker 
+           Date="{Binding GetPayDetailsWeekOfEndingDate}"
+           MinimumDate="01/01/2023"
+           MaximumDate="{x:Static sys:DateTime.Today}"
+           Format="d"/>
+   <Button Text="Get Details For These Dates"
+             Command="{Binding GetPayDetailsForWeekCommand}"/>
+      
+   <Label Text="Wages earned for this time period:"
+          HorizontalOptions="CenterAndExpand"
+          />
+      
+   <Label Text="{Binding TotalWagesEarnedForDaysChosen, StringFormat='{}{0:c}'}"
+          HorizontalOptions="CenterAndExpand"
+          TextColor="#05EB0A"
+          FontSize="Large"
+          FontAttributes="Bold"/>
+      
+      
    <Label>
     <Label.FormattedText>
      <FormattedString>
