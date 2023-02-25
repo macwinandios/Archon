@@ -387,6 +387,7 @@ namespace Archon.DataAccessLayer.Repositories
                 SqlModel.SqlConnection.Close();
             }
         }
+
         public async Task PutAsync(IEmployeeTimeModel viewModel)
         {
             if (viewModel.Id == null)
@@ -443,11 +444,10 @@ namespace Archon.DataAccessLayer.Repositories
                                     viewModel.DurationOfClockIn = viewModel.UpdatedClockInTime + clockedOutAtInTable.TimeOfDay;
                                 }
 
-                                viewModel.DurationOfClockIn = viewModel.UpdatedClockOutTime - viewModel.UpdatedClockInTime;
-
                                 viewModel.TotalTimeClockedInToday = viewModel.DurationOfClockIn + totalTimeCLockedInTodayIntable - timeClockedInTodayInTable;
 
-                                viewModel.TotalTimeClockedInThisWeek = viewModel.DurationOfClockIn + totalTimeCLockedInTodayIntable - timeClockedInTodayInTable;
+                                viewModel.TotalTimeClockedInThisWeek = viewModel.DurationOfClockIn + totalTimeCLockedInTodayIntable - timeClockedInTodayInTable + totalTimeClockedInThisWeekInTable;
+                                ;
 
                             }
                             reader.Close();
